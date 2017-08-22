@@ -51,16 +51,40 @@ class Shape(abc.ABC):
 class Quad(Shape):
 
     def __init__(self, theCenter, theWidth, theHeight):
+        """
+        >>> q = Quad(Bpoint(0, 0), 10, 10)
+        >>> q.Center, q.Width, q.Height
+        ((0, 0), 10, 10)
+        >>> q.Center = Bpoint(1, 1)
+        >>> q.Center
+        (1, 1)
+        >>> q.Width = 20
+        >>> q.Height = 15
+        >>> q.Width, q.Height
+        (20, 15)
+        """
         super(Quad, self).__init__(theCenter, theWidth, theHeight)
 
     def getCorners(self):
-        topLeft = self.Center.translate(-self.Width / 2, self.Height / 2)
-        topRight = self.Center.translate(self.Width / 2, self.Height / 2)
-        bottomLeft = self.Center.translate(-self.Width / 2, -self.Height / 2)
-        bottomRigth = self.Center.translate(self.Width / 2, -self.Height / 2)
+        """
+        >>> q = Quad(Bpoint(10, 10), 10, 10)
+        >>> q.getCorners()
+        ((5, 15), (15, 15), (5, 5), (15, 5))
+        """
+        topLeft = self.Center.xyTranslate(-self.Width / 2, self.Height / 2)
+        topRight = self.Center.xyTranslate(self.Width / 2, self.Height / 2)
+        bottomLeft = self.Center.xyTranslate(-self.Width / 2, -self.Height / 2)
+        bottomRigth = self.Center.xyTranslate(self.Width / 2, -self.Height / 2)
         return (topLeft, topRight, bottomLeft, bottomRigth)
 
     def isInside(self, theOther):
+        """
+        >>> q = Quad(Bpoint(10, 10), 4, 4)
+        >>> q.isInside(Bpoint(11, 11)), q.isInside(Bpoint(9, 9))
+        (True, True)
+        >>> q.isInside(Bpoint(13, 11)), q.isInside(Bpoint(10, 5))
+        (False, False)
+        """
         topLeft, topRight, bottomLeft, bottomRigth = self.getCorners()
         return (topLeft.X <= theOther.X <= topRight.X) and\
                (bottomRigth.Y <= theOther.Y <= topRight.X)
@@ -69,26 +93,74 @@ class Quad(Shape):
 class Rhomboid(Shape):
 
     def __init__(self, theCenter, theWidth, theHeight):
+        """
+        >>> r = Rhomboid(Bpoint(0, 0), 10, 10)
+        >>> r.Center, r.Width, r.Height
+        ((0, 0), 10, 10)
+        >>> r.Center = Bpoint(1, 1)
+        >>> r.Center
+        (1, 1)
+        >>> r.Width = 20
+        >>> r.Width, r.Height
+        (20, 20)
+        >>> r.Height = 15
+        >>> r.Width, r.Height
+        (15, 15)
+        """
         if theWidth == theHeight:
             super(Rhomboid, self).__init__(theCenter, theWidth, theHeight)
         else:
             raise NotImplemented
 
+    @Shape.Width.setter
+    def Width(self, theValue):
+        self._width = theValue
+        self._height = theValue
+
+    @Shape.Height.setter
+    def Height(self, theValue):
+        self._height = theValue
+        self._width = theValue
+
     def getCorners(self):
-        top = self.Center.translate(0, self.Height / 2)
-        bottom = self.Center.translate(0, -self.Height / 2)
-        left = self.Center.translate(-self.Width / 2, 0)
-        right = self.Center.translate(self.Width / 2, 0)
+        """
+        >>> r = Rhomboid(Bpoint(10, 10), 4, 4)
+        >>> r.getCorners()
+        ((10, 12), (10, 8), (8, 10), (12, 10))
+        """
+        top = self.Center.yTranslate(self.Height / 2)
+        bottom = self.Center.yTranslate(-self.Height / 2)
+        left = self.Center.xTranslate(-self.Width / 2)
+        right = self.Center.xTranslate(self.Width / 2)
         return (top, bottom, left, right)
 
     def isInside(self, theOther):
+        """
+        >>> r = Rhomboid(Bpoint(5, 5), 6, 6)
+        >>> r.isInside(Bpoint(6, 5)), r.isInside(Bpoint(6, 6)), r.isInside(Bpoint(6, 7)), r.isInside(Bpoint(6, 8))
+        (True, True, True, False)
+        >>> r.isInside(Bpoint(7, 5)), r.isInside(Bpoint(7, 6)), r.isInside(Bpoint(7, 7)), r.isInside(Bpoint(7, 8))
+        (True, True, False, False)
+        >>> r.isInside(Bpoint(8, 5)), r.isInside(Bpoint(8, 6)), r.isInside(Bpoint(8, 7)), r.isInside(Bpoint(8, 8))
+        (True, False, False, False)
+        >>> r.isInside(Bpoint(6, 4)), r.isInside(Bpoint(6, 3)), r.isInside(Bpoint(6, 2))
+        (True, True, False)
+        >>> r.isInside(Bpoint(7, 4)), r.isInside(Bpoint(7, 3)), r.isInside(Bpoint(7, 2))
+        (True, False, False)
+        >>> r.isInside(Bpoint(4, 5)), r.isInside(Bpoint(4, 6)), r.isInside(Bpoint(4, 7)), r.isInside(Bpoint(4, 8))
+        (True, True, True, False)
+        >>> r.isInside(Bpoint(3, 5)), r.isInside(Bpoint(3, 6)), r.isInside(Bpoint(3, 7)), r.isInside(Bpoint(3, 8))
+        (True, True, False, False)
+        """
         top, bottom, left, right = self.getCorners()
         if theOther in [top, bottom, left, right]:
             return True
         else:
-            p = theOther.translate(-self.Center.X, -self.Center.Y)
-            return (abs(p.X) < self.Width) and (abs(p.Y) < self.Height) and\
-                   ((self.Width - abs(p.X)) <= abs(p.Y))
+            halfWidth = int(self.Width / 2)
+            halfHeight = int(self.Height / 2)
+            p = theOther.xyTranslate(-self.Center.X, -self.Center.Y)
+            return (abs(p.X) < halfWidth) and (abs(p.Y) < halfHeight) and\
+                   (abs(p.Y) <= (halfWidth - abs(p.X)))
 
 
 class Star(Rhomboid):
