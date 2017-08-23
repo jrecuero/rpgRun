@@ -460,6 +460,72 @@ class Point(object):
         else:
             raise NotImplemented
 
+    def _moveWithCollision(self, theAttrName, theCollisions, theValue, theRange, theUpTo):
+        """Generic method that moves positional attribute X or Y to a given
+        position.
+
+        Method checks against a list of possible positions and a range with
+        the minimum and maximum values.
+
+        There is a flag that is used to move to the closest position to
+        destination or just don't move at all.
+
+        Args:
+            theAttrName (str) : String with the name of the positional
+            attribute to update. It could be 'X' or 'Y'.
+
+            theCollisions (list/tuple) : list or tuple of Points with
+            possible collisions. These points will block the movement.
+
+            theValue (int) : movement value.
+
+            theRange (Range) : range instance with the minimum and
+            maximum final position values.
+
+            theUpTo (bool) : boolean that flags if returning initial
+            position if the final one is not possible if False, or
+            move to the closest position to the destination if True.
+
+        Returns:
+
+            Point : point instance with the final movement position.
+        """
+        if type(theCollisions) in (list, tuple) and theCollisions:
+            # Keep the initial attribute value, just is case we have to roll
+            # over it, if it can not move to the final position.
+            backupValue = getattr(self, theAttrName)
+            # Get the final position, so it is checked against the range of
+            # possible values. If the result is out of limits, check if should
+            # move up to the closest position or not. If we can not move up to
+            # the closest, return the initial position.
+            moveValue = self._move(backupValue, theValue)
+            if theRange:
+                limit = theValue if theRange.Min <= moveValue < theRange.Max else None
+                if limit is None and theUpTo:
+                    if theRange.Min > moveValue:
+                        limit = backupValue - theRange.Min
+                    elif theRange.Max < moveValue:
+                        limit = theRange.Max - backupValue
+                elif limit is None and not theUpTo:
+                    return self
+            else:
+                limit = theValue
+            # Move one step at a time, until a collision is found, at that time
+            # back down one position is up to close is defined or return the
+            # original value if not.
+            for inc in range(limit):
+                setattr(self, theAttrName, self._move(getattr(self, theAttrName), 1))
+                for p in theCollisions:
+                    if self == p:
+                        if theUpTo:
+                            setattr(self, theAttrName, self._move(getattr(self, theAttrName), -1))
+                        else:
+                            setattr(self, theAttrName, backupValue)
+                        return self
+            return self
+        else:
+            raise NotImplemented
+
     def xMoveWithCollision(self, theCollisions, theX=1, theRangeX=None, theUpTo=False):
         """
         >>> p = Point(1, 1)
@@ -478,32 +544,7 @@ class Point(object):
         >>> p.xMoveWithCollision([Point(0, 0)], 10, Range(0, 10), True)
         (10, 1)
         """
-        if type(theCollisions) in (list, tuple) and theCollisions:
-            backupX = self.X
-            moveX = self._move(self.X, theX)
-            if theRangeX:
-                limit = theX if theRangeX.Min <= moveX < theRangeX.Max else None
-                if limit is None and theUpTo:
-                    if theRangeX.Min > moveX:
-                        limit = self.X - theRangeX.Min
-                    elif theRangeX.Max < moveX:
-                        limit = theRangeX.Max - self.X
-                elif limit is None and not theUpTo:
-                    return self
-            else:
-                limit = theX
-            for inc in range(limit):
-                self.xMove()
-                for p in theCollisions:
-                    if self == p:
-                        if theUpTo:
-                            self.xMove(-1)
-                        else:
-                            self.X = backupX
-                        return self
-            return self
-        else:
-            raise NotImplemented
+        return self._moveWithCollision('X', theCollisions, theX, theRangeX, theUpTo)
 
     def yMoveWithCollision(self, theCollisions, theY=1, theRangeY=None, theUpTo=False):
         """
@@ -523,29 +564,4 @@ class Point(object):
         >>> p.yMoveWithCollision([Point(0, 0)], 10, Range(0, 10), True)
         (1, 10)
         """
-        if type(theCollisions) in (list, tuple) and theCollisions:
-            backupY = self.Y
-            moveY = self._move(self.Y, theY)
-            if theRangeY:
-                limit = theY if theRangeY.Min <= moveY < theRangeY.Max else None
-                if limit is None and theUpTo:
-                    if theRangeY.Min > moveY:
-                        limit = self.Y - theRangeY.Min
-                    elif theRangeY.Max < moveY:
-                        limit = theRangeY.Max - self.Y
-                elif limit is None and not theUpTo:
-                    return self
-            else:
-                limit = theY
-            for inc in range(limit):
-                self.yMove()
-                for p in theCollisions:
-                    if self == p:
-                        if theUpTo:
-                            self.yMove(-1)
-                        else:
-                            self.Y = backupY
-                        return self
-            return self
-        else:
-            raise NotImplemented
+        return self._moveWithCollision('Y', theCollisions, theY, theRangeY, theUpTo)
