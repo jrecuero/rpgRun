@@ -1,11 +1,11 @@
-from bpoint import Bpoint
+from bpoint import BPoint
 import abc
 
 
 class Shape(abc.ABC):
 
     def __init__(self, theCenter, theWidth, theHeight):
-        if isinstance(theCenter, Bpoint):
+        if isinstance(theCenter, BPoint):
             self._center = theCenter
             self._width = theWidth
             self._height = theHeight
@@ -18,7 +18,7 @@ class Shape(abc.ABC):
 
     @Center.setter
     def Center(self, theValue):
-        if isinstance(theValue, Bpoint):
+        if isinstance(theValue, BPoint):
             self._center = theValue
         else:
             raise NotImplemented
@@ -52,10 +52,10 @@ class Quad(Shape):
 
     def __init__(self, theCenter, theWidth, theHeight):
         """
-        >>> q = Quad(Bpoint(0, 0), 10, 10)
+        >>> q = Quad(BPoint(0, 0), 10, 10)
         >>> q.Center, q.Width, q.Height
         ((0, 0), 10, 10)
-        >>> q.Center = Bpoint(1, 1)
+        >>> q.Center = BPoint(1, 1)
         >>> q.Center
         (1, 1)
         >>> q.Width = 20
@@ -67,7 +67,7 @@ class Quad(Shape):
 
     def getCorners(self):
         """
-        >>> q = Quad(Bpoint(10, 10), 10, 10)
+        >>> q = Quad(BPoint(10, 10), 10, 10)
         >>> q.getCorners()
         ((5, 15), (15, 15), (5, 5), (15, 5))
         """
@@ -79,10 +79,10 @@ class Quad(Shape):
 
     def isInside(self, theOther):
         """
-        >>> q = Quad(Bpoint(10, 10), 4, 4)
-        >>> q.isInside(Bpoint(11, 11)), q.isInside(Bpoint(9, 9))
+        >>> q = Quad(BPoint(10, 10), 4, 4)
+        >>> q.isInside(BPoint(11, 11)), q.isInside(BPoint(9, 9))
         (True, True)
-        >>> q.isInside(Bpoint(13, 11)), q.isInside(Bpoint(10, 5))
+        >>> q.isInside(BPoint(13, 11)), q.isInside(BPoint(10, 5))
         (False, False)
         """
         topLeft, topRight, bottomLeft, bottomRigth = self.getCorners()
@@ -94,10 +94,10 @@ class Rhomboid(Shape):
 
     def __init__(self, theCenter, theWidth, theHeight):
         """
-        >>> r = Rhomboid(Bpoint(0, 0), 10, 10)
+        >>> r = Rhomboid(BPoint(0, 0), 10, 10)
         >>> r.Center, r.Width, r.Height
         ((0, 0), 10, 10)
-        >>> r.Center = Bpoint(1, 1)
+        >>> r.Center = BPoint(1, 1)
         >>> r.Center
         (1, 1)
         >>> r.Width = 20
@@ -124,7 +124,7 @@ class Rhomboid(Shape):
 
     def getCorners(self):
         """
-        >>> r = Rhomboid(Bpoint(10, 10), 4, 4)
+        >>> r = Rhomboid(BPoint(10, 10), 4, 4)
         >>> r.getCorners()
         ((10, 12), (10, 8), (8, 10), (12, 10))
         """
@@ -136,20 +136,20 @@ class Rhomboid(Shape):
 
     def isInside(self, theOther):
         """
-        >>> r = Rhomboid(Bpoint(5, 5), 6, 6)
-        >>> r.isInside(Bpoint(6, 5)), r.isInside(Bpoint(6, 6)), r.isInside(Bpoint(6, 7)), r.isInside(Bpoint(6, 8))
+        >>> r = Rhomboid(BPoint(5, 5), 6, 6)
+        >>> r.isInside(BPoint(6, 5)), r.isInside(BPoint(6, 6)), r.isInside(BPoint(6, 7)), r.isInside(BPoint(6, 8))
         (True, True, True, False)
-        >>> r.isInside(Bpoint(7, 5)), r.isInside(Bpoint(7, 6)), r.isInside(Bpoint(7, 7)), r.isInside(Bpoint(7, 8))
+        >>> r.isInside(BPoint(7, 5)), r.isInside(BPoint(7, 6)), r.isInside(BPoint(7, 7)), r.isInside(BPoint(7, 8))
         (True, True, False, False)
-        >>> r.isInside(Bpoint(8, 5)), r.isInside(Bpoint(8, 6)), r.isInside(Bpoint(8, 7)), r.isInside(Bpoint(8, 8))
+        >>> r.isInside(BPoint(8, 5)), r.isInside(BPoint(8, 6)), r.isInside(BPoint(8, 7)), r.isInside(BPoint(8, 8))
         (True, False, False, False)
-        >>> r.isInside(Bpoint(6, 4)), r.isInside(Bpoint(6, 3)), r.isInside(Bpoint(6, 2))
+        >>> r.isInside(BPoint(6, 4)), r.isInside(BPoint(6, 3)), r.isInside(BPoint(6, 2))
         (True, True, False)
-        >>> r.isInside(Bpoint(7, 4)), r.isInside(Bpoint(7, 3)), r.isInside(Bpoint(7, 2))
+        >>> r.isInside(BPoint(7, 4)), r.isInside(BPoint(7, 3)), r.isInside(BPoint(7, 2))
         (True, False, False)
-        >>> r.isInside(Bpoint(4, 5)), r.isInside(Bpoint(4, 6)), r.isInside(Bpoint(4, 7)), r.isInside(Bpoint(4, 8))
+        >>> r.isInside(BPoint(4, 5)), r.isInside(BPoint(4, 6)), r.isInside(BPoint(4, 7)), r.isInside(BPoint(4, 8))
         (True, True, True, False)
-        >>> r.isInside(Bpoint(3, 5)), r.isInside(Bpoint(3, 6)), r.isInside(Bpoint(3, 7)), r.isInside(Bpoint(3, 8))
+        >>> r.isInside(BPoint(3, 5)), r.isInside(BPoint(3, 6)), r.isInside(BPoint(3, 7)), r.isInside(BPoint(3, 8))
         (True, True, False, False)
         """
         top, bottom, left, right = self.getCorners()

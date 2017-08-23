@@ -76,24 +76,24 @@ class Location(Enum):
     @staticmethod
     def get(theBpointA, theBpointB):
         """
-        >>> Location.get(Bpoint(1, 2), Bpoint(1, 1))
+        >>> Location.get(BPoint(1, 2), BPoint(1, 1))
         <Location.FRONT: (1, 0)>
-        >>> Location.get(Bpoint(1, 0), Bpoint(1, 1))
+        >>> Location.get(BPoint(1, 0), BPoint(1, 1))
         <Location.BACK: (2, 0)>
-        >>> Location.get(Bpoint(0, 1), Bpoint(1, 1))
+        >>> Location.get(BPoint(0, 1), BPoint(1, 1))
         <Location.LEFT: (3, 0)>
-        >>> Location.get(Bpoint(2, 1), Bpoint(1, 1))
+        >>> Location.get(BPoint(2, 1), BPoint(1, 1))
         <Location.RIGHT: (4, 0)>
-        >>> Location.get(Bpoint(0, 2), Bpoint(1, 1))
+        >>> Location.get(BPoint(0, 2), BPoint(1, 1))
         <Location.FRONT_LEFT: (1, 3)>
-        >>> Location.get(Bpoint(2, 2), Bpoint(1, 1))
+        >>> Location.get(BPoint(2, 2), BPoint(1, 1))
         <Location.FRONT_RIGHT: (1, 4)>
-        >>> Location.get(Bpoint(0, 0), Bpoint(1, 1))
+        >>> Location.get(BPoint(0, 0), BPoint(1, 1))
         <Location.BACK_LEFT: (2, 3)>
-        >>> Location.get(Bpoint(2, 0), Bpoint(1, 1))
+        >>> Location.get(BPoint(2, 0), BPoint(1, 1))
         <Location.BACK_RIGHT: (2, 4)>
         """
-        if isinstance(theBpointA, Bpoint) and isinstance(theBpointB, Bpoint):
+        if isinstance(theBpointA, BPoint) and isinstance(theBpointB, BPoint):
             if theBpointA.isJustFront(theBpointB):
                 return Location.FRONT
             elif theBpointA.isJustBack(theBpointB):
@@ -113,142 +113,142 @@ class Location(Enum):
         return NotImplemented
 
 
-class Bpoint(Point):
+class BPoint(Point):
 
     def __init__(self, theX, theY):
-        super(Bpoint, self).__init__(theX, theY)
+        super(BPoint, self).__init__(theX, theY)
 
     def isFront(self, theOther):
         """
-        >>> bp = Bpoint(1, 1)
-        >>> bp.isFront(Bpoint(0, 0))
+        >>> bp = BPoint(1, 1)
+        >>> bp.isFront(BPoint(0, 0))
         True
-        >>> bp.isFront(Bpoint(2, 0))
+        >>> bp.isFront(BPoint(2, 0))
         True
-        >>> bp.isFront(Bpoint(0, 2))
+        >>> bp.isFront(BPoint(0, 2))
         False
         """
         return self.isYgreater(theOther)
 
     def isBack(self, theOther):
         """
-        >>> bp = Bpoint(1, 1)
-        >>> bp.isBack(Bpoint(0, 0))
+        >>> bp = BPoint(1, 1)
+        >>> bp.isBack(BPoint(0, 0))
         False
-        >>> bp.isBack(Bpoint(2, 0))
+        >>> bp.isBack(BPoint(2, 0))
         False
-        >>> bp.isBack(Bpoint(0, 2))
+        >>> bp.isBack(BPoint(0, 2))
         True
         """
         return self.isYlower(theOther)
 
     def isLeft(self, theOther):
         """
-        >>> bp = Bpoint(1, 1)
-        >>> bp.isLeft(Bpoint(0, 0))
+        >>> bp = BPoint(1, 1)
+        >>> bp.isLeft(BPoint(0, 0))
         False
-        >>> bp.isLeft(Bpoint(2, 0))
+        >>> bp.isLeft(BPoint(2, 0))
         True
-        >>> bp.isLeft(Bpoint(0, 2))
+        >>> bp.isLeft(BPoint(0, 2))
         False
         """
         return self.isXlower(theOther)
 
     def isRight(self, theOther):
         """
-        >>> bp = Bpoint(1, 1)
-        >>> bp.isRight(Bpoint(0, 0))
+        >>> bp = BPoint(1, 1)
+        >>> bp.isRight(BPoint(0, 0))
         True
-        >>> bp.isRight(Bpoint(2, 0))
+        >>> bp.isRight(BPoint(2, 0))
         False
-        >>> bp.isRight(Bpoint(0, 2))
+        >>> bp.isRight(BPoint(0, 2))
         True
         """
         return self.isXgreater(theOther)
 
     def isFrontLeft(self, theOther):
         """
-        >>> bp = Bpoint(1, 1)
-        >>> bp.isFrontLeft(Bpoint(0, 0))
+        >>> bp = BPoint(1, 1)
+        >>> bp.isFrontLeft(BPoint(0, 0))
         False
-        >>> bp.isFrontLeft(Bpoint(2, 0))
+        >>> bp.isFrontLeft(BPoint(2, 0))
         True
         """
         return self.isFront(theOther) and self.isLeft(theOther)
 
     def isFrontRight(self, theOther):
         """
-        >>> bp = Bpoint(1, 1)
-        >>> bp.isFrontRight(Bpoint(0, 0))
+        >>> bp = BPoint(1, 1)
+        >>> bp.isFrontRight(BPoint(0, 0))
         True
-        >>> bp.isFrontRight(Bpoint(2, 0))
+        >>> bp.isFrontRight(BPoint(2, 0))
         False
         """
         return self.isFront(theOther) and self.isRight(theOther)
 
     def isBackLeft(self, theOther):
         """
-        >>> bp = Bpoint(1, 1)
-        >>> bp.isBackLeft(Bpoint(0, 0))
+        >>> bp = BPoint(1, 1)
+        >>> bp.isBackLeft(BPoint(0, 0))
         False
-        >>> bp.isBackLeft(Bpoint(2, 2))
+        >>> bp.isBackLeft(BPoint(2, 2))
         True
         """
         return self.isBack(theOther) and self.isLeft(theOther)
 
     def isBackRight(self, theOther):
         """
-        >>> bp = Bpoint(1, 1)
-        >>> bp.isBackRight(Bpoint(0, 0))
+        >>> bp = BPoint(1, 1)
+        >>> bp.isBackRight(BPoint(0, 0))
         False
-        >>> bp.isBackRight(Bpoint(0, 2))
+        >>> bp.isBackRight(BPoint(0, 2))
         True
         """
         return self.isBack(theOther) and self.isRight(theOther)
 
     def isJustFront(self, theOther):
         """
-        >>> bp = Bpoint(1, 1)
-        >>> bp.isJustFront(Bpoint(0, 0))
+        >>> bp = BPoint(1, 1)
+        >>> bp.isJustFront(BPoint(0, 0))
         False
-        >>> bp.isJustFront(Bpoint(1, 0))
+        >>> bp.isJustFront(BPoint(1, 0))
         True
         """
         return self.isFront(theOther) and self.isXeq(theOther)
 
     def isJustBack(self, theOther):
         """
-        >>> bp = Bpoint(1, 1)
-        >>> bp.isJustBack(Bpoint(0, 0))
+        >>> bp = BPoint(1, 1)
+        >>> bp.isJustBack(BPoint(0, 0))
         False
-        >>> bp.isJustBack(Bpoint(1, 2))
+        >>> bp.isJustBack(BPoint(1, 2))
         True
         """
         return self.isBack(theOther) and self.isXeq(theOther)
 
     def isJustLeft(self, theOther):
         """
-        >>> bp = Bpoint(1, 1)
-        >>> bp.isJustLeft(Bpoint(0, 0))
+        >>> bp = BPoint(1, 1)
+        >>> bp.isJustLeft(BPoint(0, 0))
         False
-        >>> bp.isJustLeft(Bpoint(2, 1))
+        >>> bp.isJustLeft(BPoint(2, 1))
         True
         """
         return self.isLeft(theOther) and self.isYeq(theOther)
 
     def isJustRight(self, theOther):
         """
-        >>> bp = Bpoint(1, 1)
-        >>> bp.isJustRight(Bpoint(0, 0))
+        >>> bp = BPoint(1, 1)
+        >>> bp.isJustRight(BPoint(0, 0))
         False
-        >>> bp.isJustRight(Bpoint(0, 1))
+        >>> bp.isJustRight(BPoint(0, 1))
         True
         """
         return self.isRight(theOther) and self.isYeq(theOther)
 
     def moveToFront(self, theMove=1):
         """
-        >>> bp = Bpoint(1, 1)
+        >>> bp = BPoint(1, 1)
         >>> bp.moveToFront()
         (1, 2)
         >>> bp.moveToFront(5)
@@ -258,7 +258,7 @@ class Bpoint(Point):
 
     def moveToBack(self, theMove=1):
         """
-        >>> bp = Bpoint(1, 10)
+        >>> bp = BPoint(1, 10)
         >>> bp.moveToBack()
         (1, 9)
         >>> bp.moveToBack(5)
@@ -268,7 +268,7 @@ class Bpoint(Point):
 
     def moveToRight(self, theMove=1):
         """
-        >>> bp = Bpoint(1, 1)
+        >>> bp = BPoint(1, 1)
         >>> bp.moveToRight()
         (2, 1)
         >>> bp.moveToRight(5)
@@ -278,7 +278,7 @@ class Bpoint(Point):
 
     def moveToLeft(self, theMove=1):
         """
-        >>> bp = Bpoint(10, 1)
+        >>> bp = BPoint(10, 1)
         >>> bp.moveToLeft()
         (9, 1)
         >>> bp.moveToLeft(5)
