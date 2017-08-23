@@ -1,6 +1,29 @@
 import math
 
 
+class Range(object):
+
+    def __init__(self, theMin, theMax):
+        self._min = int(theMin)
+        self._max = int(theMax)
+
+    @property
+    def Min(self):
+        return self._min
+
+    @Min.setter
+    def Min(self, theValue):
+        self._min = int(theValue)
+
+    @property
+    def Max(self):
+        return self._max
+
+    @Max.setter
+    def Max(self, theValue):
+        self._max = int(theValue)
+
+
 class Point(object):
 
     def __init__(self, theX, theY):
@@ -23,6 +46,15 @@ class Point(object):
     def Y(self, theValue):
         self._y = int(theValue)
 
+    def _isPositive(self, theAttr):
+        return theAttr > 0
+
+    def _isNegative(self, theAttr):
+        return theAttr < 0
+
+    def _isZero(self, theAttr):
+        return theAttr == 0
+
     def isXpositive(self):
         """
         >>> p = Point(1, 1)
@@ -32,7 +64,7 @@ class Point(object):
         >>> p.isXpositive()
         False
         """
-        return self.X > 0
+        return self._isPositive(self.X)
 
     def isXnegative(self):
         """
@@ -43,7 +75,7 @@ class Point(object):
         >>> p.isXnegative()
         True
         """
-        return self.X < 0
+        return self._isNegative(self.X)
 
     def isXzero(self):
         """
@@ -54,7 +86,7 @@ class Point(object):
         >>> p.isXzero()
         False
         """
-        return self.X == 0
+        return self._isZero(self.X)
 
     def isYpositive(self):
         """
@@ -65,7 +97,7 @@ class Point(object):
         >>> p.isYpositive()
         False
         """
-        return self.Y > 0
+        return self._isPositive(self.Y)
 
     def isYnegative(self):
         """
@@ -76,7 +108,7 @@ class Point(object):
         >>> p.isYnegative()
         True
         """
-        return self.Y < 0
+        return self._isNegative(self.Y)
 
     def isYzero(self):
         """
@@ -87,7 +119,7 @@ class Point(object):
         >>> p.isYzero()
         False
         """
-        return self.Y == 0
+        return self._isZero(self.Y)
 
     def __repr__(self):
         """
@@ -126,6 +158,15 @@ class Point(object):
             return not self.__eq__(theOther)
         return NotImplemented
 
+    def _isGreater(self, theAttr, theOtherAttr):
+        return theAttr > theOtherAttr
+
+    def _isLower(self, theAttr, theOtherAttr):
+        return theAttr < theOtherAttr
+
+    def _isEq(self, theAttr, theOtherAttr):
+        return theAttr == theOtherAttr
+
     def isYgreater(self, theOther):
         """
         >>> p = Point(1, 1)
@@ -135,7 +176,7 @@ class Point(object):
         False
         """
         if isinstance(theOther, Point):
-            return self.Y > theOther.Y
+            return self._isGreater(self.Y, theOther.Y)
         return NotImplemented
 
     def isYlower(self, theOther):
@@ -147,7 +188,7 @@ class Point(object):
         True
         """
         if isinstance(theOther, Point):
-            return self.Y < theOther.Y
+            return self._isLower(self.Y, theOther.Y)
         return NotImplemented
 
     def isYeq(self, theOther):
@@ -159,7 +200,7 @@ class Point(object):
         False
         """
         if isinstance(theOther, Point):
-            return self.Y == theOther.Y
+            return self._isEq(self.Y, theOther.Y)
         return NotImplemented
 
     def isXgreater(self, theOther):
@@ -171,7 +212,7 @@ class Point(object):
         False
         """
         if isinstance(theOther, Point):
-            return self.X > theOther.X
+            return self._isGreater(self.X, theOther.X)
         return NotImplemented
 
     def isXlower(self, theOther):
@@ -183,7 +224,7 @@ class Point(object):
         True
         """
         if isinstance(theOther, Point):
-            return self.X < theOther.X
+            return self._isLower(self.X, theOther.X)
         return NotImplemented
 
     def isXeq(self, theOther):
@@ -195,7 +236,7 @@ class Point(object):
         True
         """
         if isinstance(theOther, Point):
-            return self.X == theOther.X
+            return self._isEq(self.X, theOther.X)
         return NotImplemented
 
     def __add__(self, theOther):
@@ -254,6 +295,9 @@ class Point(object):
             return theOther - self
         return NotImplemented
 
+    def _distance(self, theAttr, theOtherAttr):
+        return theAttr - theOtherAttr
+
     def xDistance(self, theOther):
         """
         >>> p = Point(1, 1)
@@ -261,7 +305,7 @@ class Point(object):
         1
         """
         if isinstance(theOther, Point):
-            return theOther.X - self.X
+            return self._distance(theOther.X, self.X)
         return NotImplemented
 
     def yDistance(self, theOther):
@@ -271,7 +315,7 @@ class Point(object):
         0
         """
         if isinstance(theOther, Point):
-            return theOther.Y - self.Y
+            return self._distance(theOther.Y, self.Y)
         return NotImplemented
 
     def translate(self, theOther):
@@ -307,3 +351,201 @@ class Point(object):
         (1, 5)
         """
         return self + Point(int(theX), int(theY))
+
+    def _move(self, theAttr, theValue):
+        return theAttr + int(theValue)
+
+    def xMove(self, theX=1):
+        """
+        >>> p = Point(1, 1)
+        >>> p.xMove(1)
+        (2, 1)
+        >>> p.xMove()
+        (3, 1)
+        >>> p.xMove(2).xMove()
+        (6, 1)
+        """
+        self.X = self._move(self.X, theX)
+        return self
+
+    def yMove(self, theY=1):
+        """
+        >>> p = Point(1, 1)
+        >>> p.yMove(1)
+        (1, 2)
+        >>> p.yMove()
+        (1, 3)
+        >>> p.yMove(2).yMove()
+        (1, 6)
+        """
+        self.Y = self._move(self.Y, theY)
+        return self
+
+    def xyMove(self, theX=1, theY=1):
+        """
+        >>> p = Point(1, 1)
+        >>> p.xyMove(1, 1)
+        (2, 2)
+        >>> p.xyMove(1).xyMove(0, 2).xyMove()
+        (4, 6)
+        """
+        self.xMove(theX)
+        self.yMove(theY)
+        return self
+
+    def _moveWithinRange(self, theAttr, theRange, theValue, theUpTo):
+        value = theAttr + int(theValue)
+        if theRange.Min <= value <= theRange.Max:
+            theAttr = value
+        elif theUpTo and theRange.Min > value:
+            theAttr = theRange.Min
+        elif theUpTo and theRange.Max < value:
+            theAttr = theRange.Max
+        return theAttr
+
+    def xMoveWithinRange(self, theRange, theX=1, theUpTo=False):
+        """
+        >>> p = Point(1, 1)
+        >>> p.xMoveWithinRange(Range(0, 10))
+        (2, 1)
+        >>> p.xMoveWithinRange(Range(0, 10), 5)
+        (7, 1)
+        >>> p.xMoveWithinRange(Range(0, 10), 5)
+        (7, 1)
+        >>> p.xMoveWithinRange(Range(0, 10), 5, True)
+        (10, 1)
+        """
+        if isinstance(theRange, Range):
+            self.X = self._moveWithinRange(self.X, theRange, theX, theUpTo)
+            return self
+        else:
+            raise NotImplemented
+
+    def yMoveWithinRange(self, theRange, theY=1, theUpTo=False):
+        """
+        >>> p = Point(1, 1)
+        >>> p.yMoveWithinRange(Range(0, 10))
+        (1, 2)
+        >>> p.yMoveWithinRange(Range(0, 10), 2)
+        (1, 4)
+        >>> p.yMoveWithinRange(Range(0, 10), 10)
+        (1, 4)
+        >>> p.yMoveWithinRange(Range(0, 10), 10, True)
+        (1, 10)
+        """
+        if isinstance(theRange, Range):
+            self.Y = self._moveWithinRange(self.Y, theRange, theY, theUpTo)
+            return self
+        else:
+            raise NotImplemented
+
+    def xyMoveWithinRange(self, theRangeX, theRangeY, theX=1, theY=1, theUpTo=False):
+        """
+        >>> p = Point(1, 1)
+        >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7))
+        (2, 2)
+        >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7), 2, 1)
+        (4, 3)
+        >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7), 1, 5)
+        (5, 3)
+        >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7), 10, 1)
+        (5, 4)
+        >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7), 10, 10, True)
+        (10, 7)
+        """
+        if isinstance(theRangeX, Range) and isinstance(theRangeY, Range):
+            self.xMoveWithinRange(theRangeX, theX, theUpTo)
+            self.yMoveWithinRange(theRangeY, theY, theUpTo)
+            return self
+        else:
+            raise NotImplemented
+
+    def xMoveWithCollision(self, theCollisions, theX=1, theRangeX=None, theUpTo=False):
+        """
+        >>> p = Point(1, 1)
+        >>> p.xMoveWithCollision([Point(0, 0)])
+        (2, 1)
+        >>> p.xMoveWithCollision([Point(0, 0)], 2)
+        (4, 1)
+        >>> p.xMoveWithCollision([Point(0, 0), Point(6, 1)], 2)
+        (4, 1)
+        >>> p.xMoveWithCollision([Point(0, 0), Point(6, 1)], 2, None, True)
+        (5, 1)
+        >>> p.xMoveWithCollision([Point(0, 0), Point(9, 1), Point(10, 1)], 5, None, True)
+        (8, 1)
+        >>> p.xMoveWithCollision([Point(0, 0)], 10, Range(0, 10))
+        (8, 1)
+        >>> p.xMoveWithCollision([Point(0, 0)], 10, Range(0, 10), True)
+        (10, 1)
+        """
+        if type(theCollisions) in (list, tuple) and theCollisions:
+            backupX = self.X
+            moveX = self._move(self.X, theX)
+            if theRangeX:
+                limit = theX if theRangeX.Min <= moveX < theRangeX.Max else None
+                if limit is None and theUpTo:
+                    if theRangeX.Min > moveX:
+                        limit = self.X - theRangeX.Min
+                    elif theRangeX.Max < moveX:
+                        limit = theRangeX.Max - self.X
+                elif limit is None and not theUpTo:
+                    return self
+            else:
+                limit = theX
+            for inc in range(limit):
+                self.xMove()
+                for p in theCollisions:
+                    if self == p:
+                        if theUpTo:
+                            self.xMove(-1)
+                        else:
+                            self.X = backupX
+                        return self
+            return self
+        else:
+            raise NotImplemented
+
+    def yMoveWithCollision(self, theCollisions, theY=1, theRangeY=None, theUpTo=False):
+        """
+        >>> p = Point(1, 1)
+        >>> p.yMoveWithCollision([Point(0, 0)])
+        (1, 2)
+        >>> p.yMoveWithCollision([Point(0, 0)], 2)
+        (1, 4)
+        >>> p.yMoveWithCollision([Point(0, 0), Point(1, 6)], 2)
+        (1, 4)
+        >>> p.yMoveWithCollision([Point(0, 0), Point(1, 6)], 2, None, True)
+        (1, 5)
+        >>> p.yMoveWithCollision([Point(0, 0), Point(1, 9), Point(1, 10)], 5, None, True)
+        (1, 8)
+        >>> p.yMoveWithCollision([Point(0, 0)], 10, Range(0, 10))
+        (1, 8)
+        >>> p.yMoveWithCollision([Point(0, 0)], 10, Range(0, 10), True)
+        (1, 10)
+        """
+        if type(theCollisions) in (list, tuple) and theCollisions:
+            backupY = self.Y
+            moveY = self._move(self.Y, theY)
+            if theRangeY:
+                limit = theY if theRangeY.Min <= moveY < theRangeY.Max else None
+                if limit is None and theUpTo:
+                    if theRangeY.Min > moveY:
+                        limit = self.Y - theRangeY.Min
+                    elif theRangeY.Max < moveY:
+                        limit = theRangeY.Max - self.Y
+                elif limit is None and not theUpTo:
+                    return self
+            else:
+                limit = theY
+            for inc in range(limit):
+                self.yMove()
+                for p in theCollisions:
+                    if self == p:
+                        if theUpTo:
+                            self.yMove(-1)
+                        else:
+                            self.Y = backupY
+                        return self
+            return self
+        else:
+            raise NotImplemented

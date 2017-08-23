@@ -245,3 +245,43 @@ class Bpoint(Point):
         True
         """
         return self.isRight(theOther) and self.isYeq(theOther)
+
+    def moveToFront(self, theMove=1):
+        """
+        >>> bp = Bpoint(1, 1)
+        >>> bp.moveToFront()
+        (1, 2)
+        >>> bp.moveToFront(5)
+        (1, 7)
+        """
+        return self.yMove(theMove)
+
+    def moveToBack(self, theMove=1):
+        """
+        >>> bp = Bpoint(1, 10)
+        >>> bp.moveToBack()
+        (1, 9)
+        >>> bp.moveToBack(5)
+        (1, 4)
+        """
+        return self.yMove(-theMove)
+
+    def moveToRight(self, theMove=1):
+        """
+        >>> bp = Bpoint(1, 1)
+        >>> bp.moveToRight()
+        (2, 1)
+        >>> bp.moveToRight(5)
+        (7, 1)
+        """
+        return self.xMove(theMove)
+
+    def moveToLeft(self, theMove=1):
+        """
+        >>> bp = Bpoint(10, 1)
+        >>> bp.moveToLeft()
+        (9, 1)
+        >>> bp.moveToLeft(5)
+        (4, 1)
+        """
+        return self.xMove(-theMove)
