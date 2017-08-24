@@ -25,3 +25,35 @@ class BLayer(Itero):
     @property
     def CellRow(self):
         return self._cellRow
+
+    def append(self, theValue):
+        """
+        >>> layer = BLayer(BLayer.LType.OBJECT, 5)
+        >>> layer.append(BCell(0, 0, None))
+        >>> layer[0]
+        (0, 0) : None
+        >>> layer.append(BCell(1, 0, None))
+        >>> layer[1]
+        (1, 0) : None
+        >>> try:
+        ...     layer.append(BCell(1, 1, None))
+        ... except AssertionError:
+        ...     print('Assert')
+        Assert
+        """
+        assert isinstance(theValue, BCell)
+        if self.CellRow is None:
+            self._cellRow = theValue.Row
+        else:
+            assert self.CellRow == theValue.Row
+        super(BLayer, self).append(theValue)
+
+    def __repr__(self):
+        """
+        >>> layer = BLayer(BLayer.LType.OBJECT, 5)
+        >>> layer
+        [LType.OBJECT ] <None> cell# 0
+        """
+        return '[{0:<13}] {1:^6} cell# {2}'.format(self.Type,
+                                                   '<{0}>'.format(self.CellRow),
+                                                   len(self))

@@ -35,7 +35,7 @@ class Itero(Iterator):
         'ONE'
         """
         assert theKey < len(self.__stream)
-        assert type(theValue) == self.__streamKlass
+        assert isinstance(theValue, self.__streamKlass)
         self.__stream[theKey] = theValue
 
     def __delitem__(self, theKey):
@@ -108,7 +108,7 @@ class Itero(Iterator):
         """
         if self.MaxLen is not None and len(self.__stream) >= self.MaxLen:
             raise NotImplementedError
-        assert type(theValue) == self.__streamKlass
+        assert isinstance(theValue, self.__streamKlass)
         self.__stream.append(theValue)
 
     def pop(self):
@@ -119,3 +119,18 @@ class Itero(Iterator):
         'one'
         """
         return self.__stream.pop()
+
+    def remove(self, theValue):
+        """
+        >>> it = Itero(str, 2)
+        >>> it.append('one')
+        >>> it.append('two')
+        >>> it.remove('one')
+        >>> try:
+        ...     it.remove('one')
+        ... except ValueError:
+        ...     print('ValueError')
+        ValueError
+        """
+        assert isinstance(theValue, self.__streamKlass)
+        self.__stream.remove(theValue)

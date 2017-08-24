@@ -30,3 +30,10 @@ class BCell(BPoint):
     @property
     def Col(self):
         return self.X
+
+    def __repr__(self):
+        """
+        >>> str(BCell(0, 0, 'cell'))
+        '(0, 0) : cell'
+        """
+        return '{0} : {1}'.format(super(BCell, self).__repr__(), self.Name)

@@ -117,6 +117,14 @@ class BPoint(Point):
 
     def __init__(self, theX, theY):
         super(BPoint, self).__init__(theX, theY)
+        self._moveCb = {Location.FRONT: self.moveToFront,
+                        Location.BACK: self.moveToBack,
+                        Location.LEFT: self.moveToLeft,
+                        Location.RIGHT: self.moveToRight,
+                        Location.FRONT_LEFT: None,
+                        Location.FRONT_RIGHT: None,
+                        Location.BACK_LEFT: None,
+                        Location.BACK_RIGHT: None}
 
     def isFront(self, theOther):
         """
@@ -285,3 +293,30 @@ class BPoint(Point):
         (4, 1)
         """
         return self.xMove(-theMove)
+
+    def moveTo(self, theDirection=Location.FRONT, theMove=1):
+        """
+        >>> bp = BPoint(1, 1)
+        >>> bp.moveTo()
+        (1, 2)
+        >>> bp.moveTo(Location.RIGHT)
+        (2, 2)
+        >>> bp.moveTo(Location.FRONT, 2)
+        (2, 4)
+        >>> bp.moveTo(Location.LEFT, 1)
+        (1, 4)
+        >>> bp.moveTo(Location.FRONT_RIGHT, 10)
+        (1, 4)
+        >>> bp.moveTo(Location.FRONT_LEFT, 10)
+        (1, 4)
+        >>> bp.moveTo(Location.BACK_RIGHT, 10)
+        (1, 4)
+        >>> bp.moveTo(Location.BACK_LEFT, 10)
+        (1, 4)
+        """
+        assert isinstance(theDirection, Location)
+        cb = self._moveCb[theDirection]
+        if cb is None:
+            return self
+        else:
+            return cb(theMove)
