@@ -177,7 +177,7 @@ class Point(object):
         """
         if isinstance(theOther, Point):
             return self._isGreater(self.Y, theOther.Y)
-        return NotImplemented
+        raise NotImplementedError
 
     def isYlower(self, theOther):
         """
@@ -189,7 +189,7 @@ class Point(object):
         """
         if isinstance(theOther, Point):
             return self._isLower(self.Y, theOther.Y)
-        return NotImplemented
+        raise NotImplementedError
 
     def isYeq(self, theOther):
         """
@@ -201,7 +201,7 @@ class Point(object):
         """
         if isinstance(theOther, Point):
             return self._isEq(self.Y, theOther.Y)
-        return NotImplemented
+        raise NotImplementedError
 
     def isXgreater(self, theOther):
         """
@@ -213,7 +213,7 @@ class Point(object):
         """
         if isinstance(theOther, Point):
             return self._isGreater(self.X, theOther.X)
-        return NotImplemented
+        raise NotImplementedError
 
     def isXlower(self, theOther):
         """
@@ -225,7 +225,7 @@ class Point(object):
         """
         if isinstance(theOther, Point):
             return self._isLower(self.X, theOther.X)
-        return NotImplemented
+        raise NotImplementedError
 
     def isXeq(self, theOther):
         """
@@ -237,7 +237,7 @@ class Point(object):
         """
         if isinstance(theOther, Point):
             return self._isEq(self.X, theOther.X)
-        return NotImplemented
+        raise NotImplementedError
 
     def __add__(self, theOther):
         """
@@ -273,7 +273,7 @@ class Point(object):
         """
         if isinstance(theOther, Point):
             return math.hypot(theOther.X - self.X, theOther.Y - self.Y)
-        return NotImplemented
+        raise NotImplementedError
 
     def intDistance(self, theOther):
         """
@@ -283,7 +283,7 @@ class Point(object):
         """
         if isinstance(theOther, Point):
             return int(self.distance(theOther))
-        return NotImplemented
+        raise NotImplementedError
 
     def pointDistance(self, theOther):
         """
@@ -293,7 +293,7 @@ class Point(object):
         """
         if isinstance(theOther, Point):
             return theOther - self
-        return NotImplemented
+        raise NotImplementedError
 
     def _distance(self, theAttr, theOtherAttr):
         return theAttr - theOtherAttr
@@ -306,7 +306,7 @@ class Point(object):
         """
         if isinstance(theOther, Point):
             return self._distance(theOther.X, self.X)
-        return NotImplemented
+        raise NotImplementedError
 
     def yDistance(self, theOther):
         """
@@ -316,7 +316,7 @@ class Point(object):
         """
         if isinstance(theOther, Point):
             return self._distance(theOther.Y, self.Y)
-        return NotImplemented
+        raise NotImplementedError
 
     def translate(self, theOther):
         """
@@ -326,7 +326,7 @@ class Point(object):
         """
         if isinstance(theOther, Point):
             return self + theOther
-        return NotImplemented
+        raise NotImplementedError
 
     def xTranslate(self, theX):
         """
@@ -419,7 +419,7 @@ class Point(object):
             self.X = self._moveWithinRange(self.X, theRange, theX, theUpTo)
             return self
         else:
-            raise NotImplemented
+            raise NotImplementedError
 
     def yMoveWithinRange(self, theRange, theY=1, theUpTo=False):
         """
@@ -437,7 +437,7 @@ class Point(object):
             self.Y = self._moveWithinRange(self.Y, theRange, theY, theUpTo)
             return self
         else:
-            raise NotImplemented
+            raise NotImplementedError
 
     def xyMoveWithinRange(self, theRangeX, theRangeY, theX=1, theY=1, theUpTo=False):
         """
@@ -458,7 +458,7 @@ class Point(object):
             self.yMoveWithinRange(theRangeY, theY, theUpTo)
             return self
         else:
-            raise NotImplemented
+            raise NotImplementedError
 
     def _moveWithCollision(self, theAttrName, theCollisions, theValue, theRange, theUpTo):
         """Generic method that moves positional attribute X or Y to a given
@@ -524,7 +524,7 @@ class Point(object):
                         return self
             return self
         else:
-            raise NotImplemented
+            raise NotImplementedError
 
     def xMoveWithCollision(self, theCollisions, theX=1, theRangeX=None, theUpTo=False):
         """

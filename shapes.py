@@ -10,7 +10,7 @@ class Shape(abc.ABC):
             self._width = theWidth
             self._height = theHeight
         else:
-            raise NotImplemented
+            raise NotImplementedError
 
     @property
     def Center(self):
@@ -21,7 +21,7 @@ class Shape(abc.ABC):
         if isinstance(theValue, BPoint):
             self._center = theValue
         else:
-            raise NotImplemented
+            raise NotImplementedError
 
     @property
     def Width(self):
@@ -110,7 +110,7 @@ class Rhomboid(Shape):
         if theWidth == theHeight:
             super(Rhomboid, self).__init__(theCenter, theWidth, theHeight)
         else:
-            raise NotImplemented
+            raise NotImplementedError
 
     @Shape.Width.setter
     def Width(self, theValue):

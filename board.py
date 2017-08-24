@@ -6,29 +6,17 @@ from brow import BRow
 class Board(Itero):
 
     def __init__(self, theMaxLen):
-        super(Board, self).__init__(BRow)
-        self._maxLen = theMaxLen
-        self._rowIndex = 0
-        self.__stream = deque()
-
-    @property
-    def MaxLen(self):
-        return self._maxLen
-
-    @property
-    def RowIndex(self):
-        return self._rowIndex
-
-    @RowIndex.setter
-    def RowIndex(self, theValue):
-        self._rowIndex = theValue
-
-    def fill(self):
-        while self.RowIndex < self.MaxLen:
-            row = yield
-            self.__stream.appendleft(row)
-            self.RowIndex += 1
+        super(Board, self).__init__(BRow, theMaxLen)
+        self._Itero__stream = deque()
 
     def scroll(self, theNewRow):
-        self.__stream.pop()
-        self.__stream.appendleft(theNewRow)
+        assert isinstance(theNewRow, BRow)
+        self._Itero__stream.pop()
+        self._Itero__stream.appendleft(theNewRow)
+
+    def appendleft(self, theNewRow):
+        assert isinstance(theNewRow, BRow)
+        self._Itero__stream.appendleft(theNewRow)
+
+    def append(self, theValue):
+        raise NotImplementedError
