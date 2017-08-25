@@ -17,7 +17,7 @@ class Shape(abc.ABC):
         return self._center
 
     @Center.setter
-    def Center(self, theValue):
+    def Center(self, theValue: int):
         if isinstance(theValue, BPoint):
             self._center = theValue
         else:
@@ -41,11 +41,19 @@ class Shape(abc.ABC):
 
     @abc.abstractmethod
     def getCorners(theOther):
-        pass
+        raise NotImplementedError
 
     @abc.abstractmethod
-    def isInside(theOther):
-        pass
+    def getRects(self):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def isInside(self, theOther):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def getAllInsidePoints(self):
+        raise NotImplementedError
 
 
 class Quad(Shape):
@@ -74,8 +82,16 @@ class Quad(Shape):
         topLeft = self.Center.xyTranslate(-self.Width / 2, self.Height / 2)
         topRight = self.Center.xyTranslate(self.Width / 2, self.Height / 2)
         bottomLeft = self.Center.xyTranslate(-self.Width / 2, -self.Height / 2)
-        bottomRigth = self.Center.xyTranslate(self.Width / 2, -self.Height / 2)
-        return (topLeft, topRight, bottomLeft, bottomRigth)
+        bottomRight = self.Center.xyTranslate(self.Width / 2, -self.Height / 2)
+        return (topLeft, topRight, bottomLeft, bottomRight)
+
+    def getRects(self):
+        """
+        >>> q = Quad(BPoint(10, 10), 10, 10)
+        >>> q.getRects()
+        [((5, 15), (15, 15), (5, 5), (15, 5))]
+        """
+        return [self.getCorners(), ]
 
     def isInside(self, theOther):
         """
@@ -85,9 +101,22 @@ class Quad(Shape):
         >>> q.isInside(BPoint(13, 11)), q.isInside(BPoint(10, 5))
         (False, False)
         """
-        topLeft, topRight, bottomLeft, bottomRigth = self.getCorners()
+        topLeft, topRight, bottomLeft, bottomRight = self.getCorners()
         return (topLeft.X <= theOther.X <= topRight.X) and\
-               (bottomRigth.Y <= theOther.Y <= topRight.X)
+               (bottomRight.Y <= theOther.Y <= topRight.X)
+
+    def getAllInsidePoints(self):
+        """
+        >>> q = Quad(BPoint(10, 10), 2, 2)
+        >>> q.getAllInsidePoints()
+        [(9, 9), (9, 10), (9, 11), (10, 9), (10, 10), (10, 11), (11, 9), (11, 10), (11, 11)]
+        """
+        allPoints = []
+        topLeft, topRight, bottomLeft, bottomRight = self.getCorners()
+        for x in range(topLeft.X, topRight.X + 1):
+            for y in range(bottomRight.Y, topRight.Y + 1):
+                allPoints.append(BPoint(x, y))
+        return allPoints
 
 
 class Rhomboid(Shape):
@@ -134,6 +163,18 @@ class Rhomboid(Shape):
         right = self.Center.xTranslate(self.Width / 2)
         return (top, bottom, left, right)
 
+    def getRects(self):
+        """
+        >>> r = Rhomboid(BPoint(10, 10), 10, 10)
+        >>> r.getRects()
+        [((5, 15), (15, 15), (5, 5), (15, 5))]
+        """
+        topLeft = self.Center.xyTranslate(-self.Width / 2, self.Height / 2)
+        topRight = self.Center.xyTranslate(self.Width / 2, self.Height / 2)
+        bottomLeft = self.Center.xyTranslate(-self.Width / 2, -self.Height / 2)
+        bottomRight = self.Center.xyTranslate(self.Width / 2, -self.Height / 2)
+        return [(topLeft, topRight, bottomLeft, bottomRight), ]
+
     def isInside(self, theOther):
         """
         >>> r = Rhomboid(BPoint(5, 5), 6, 6)
@@ -162,13 +203,63 @@ class Rhomboid(Shape):
             return (abs(p.X) < halfWidth) and (abs(p.Y) < halfHeight) and\
                    (abs(p.Y) <= (halfWidth - abs(p.X)))
 
+    def getAllInsidePoints(self):
+        """
+        >>> r = Rhomboid(BPoint(10, 10), 4, 4)
+        >>> r.getAllInsidePoints()
+        [(8, 10), (9, 9), (9, 10), (9, 11), (10, 8), (10, 9), (10, 10), (10, 11), (10, 12), (11, 9), (11, 10), (11, 11), (12, 10)]
+        """
+        allPoints = []
+        topLeft, topRight, bottomLeft, bottomRight = self.getRects()[0]
+        for x in range(topLeft.X, topRight.X + 1):
+            for y in range(bottomRight.Y, topRight.Y + 1):
+                bp = BPoint(x, y)
+                if self.isInside(bp):
+                    allPoints.append(bp)
+        return allPoints
+
 
 class Star(Rhomboid):
 
     def __init__(self, theCenter, theWidth, theHeight):
         super(Star, self).__init__(theCenter, theWidth, theHeight)
 
-    def isInside(self, theOther):
+    def getRects(self):
+        """
+        >>> s = Star(BPoint(10, 10), 4, 4)
+        >>> s.getRects()
+        [((10, 12), (10, 12), (10, 8), (10, 8)), ((8, 10), (8, 10), (12, 10), (12, 10))]
+        """
         top, bottom, left, right = self.getCorners()
-        return ((theOther.X == self.Center.X) and (top.Y <= theOther.Y < bottom.Y)) or\
-               ((theOther.Y == self.Center.Y) and (right.X <= theOther.X < left.X))
+        return [(top, top, bottom, bottom), (left, left, right, right)]
+
+    def isInside(self, theOther):
+        """
+        >>> s = Star(BPoint(10, 10), 4, 4)
+        >>> s.isInside(BPoint(10, 11)), s.isInside(BPoint(10, 12)), s.isInside(BPoint(10, 13))
+        (True, True, False)
+        >>> s.isInside(BPoint(10, 9)), s.isInside(BPoint(10, 8)), s.isInside(BPoint(10, 7))
+        (True, True, False)
+        >>> s.isInside(BPoint(9, 10)), s.isInside(BPoint(8, 10)), s.isInside(BPoint(7, 10))
+        (True, True, False)
+        >>> s.isInside(BPoint(11, 10)), s.isInside(BPoint(12, 10)), s.isInside(BPoint(13, 10))
+        (True, True, False)
+        """
+        top, bottom, left, right = self.getCorners()
+        return ((theOther.X == self.Center.X) and (bottom.Y <= theOther.Y <= top.Y)) or\
+               ((theOther.Y == self.Center.Y) and (left.X <= theOther.X <= right.X))
+
+    def getAllInsidePoints(self):
+        """
+        >>> s = Star(BPoint(10, 10), 2, 2)
+        >>> s.getAllInsidePoints()
+        [(9, 10), (11, 10), (10, 9), (10, 11), (10, 10)]
+        """
+        top, bottom, left, right = self.getCorners()
+        allPoints = []
+        for x in [val for val in range(left.X, right.X + 1) if val != self.Center.X]:
+            allPoints.append(BPoint(x, self.Center.Y))
+        for y in [val for val in range(bottom.Y, top.Y + 1) if val != self.Center.Y]:
+            allPoints.append(BPoint(self.Center.X, y))
+        allPoints.append(BPoint(self.Center.X, self.Center.Y))
+        return allPoints
