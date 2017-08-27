@@ -10,6 +10,9 @@ class BCell(BPoint):
         super(BCell, self).__init__(theX, theY)
         self._id = next(BCell.__newId)
         self._name = theName
+        self._static = True
+        self._walkable = True
+        self._solid = True
 
     @property
     def Id(self):
@@ -30,6 +33,30 @@ class BCell(BPoint):
     @property
     def Col(self):
         return self.X
+
+    @property
+    def Static(self):
+        return self._static
+
+    @Static.setter
+    def Static(self, theValue):
+        self._static = theValue
+
+    @property
+    def Walkable(self):
+        return self._walkable
+
+    @Walkable.setter
+    def Walkable(self, theValue):
+        self._walkable = theValue
+
+    @property
+    def Solid(self):
+        return self._solid
+
+    @Solid.setter
+    def Solid(self, theValue):
+        self._solid = theValue
 
     def __repr__(self):
         """
