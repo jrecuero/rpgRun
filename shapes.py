@@ -3,8 +3,13 @@ import abc
 
 
 class Shape(abc.ABC):
+    """Shape class is an abstract class that provides an interface to be
+    implemented for any concrete shape class.
+    """
 
     def __init__(self, theCenter, theWidth, theHeight):
+        """Shape class initialization method.
+        """
         if isinstance(theCenter, BPoint):
             self._center = theCenter
             self._width = theWidth
@@ -14,10 +19,14 @@ class Shape(abc.ABC):
 
     @property
     def Center(self):
+        """
+        """
         return self._center
 
     @Center.setter
-    def Center(self, theValue: int):
+    def Center(self, theValue):
+        """
+        """
         if isinstance(theValue, BPoint):
             self._center = theValue
         else:
@@ -25,41 +34,61 @@ class Shape(abc.ABC):
 
     @property
     def Width(self):
+        """
+        """
         return self._width
 
     @Width.setter
     def Width(self, theValue):
+        """
+        """
         self._width = theValue
 
     @property
     def Height(self):
+        """
+        """
         return self._height
 
     @Height.setter
     def Height(self, theValue):
+        """
+        """
         self._height = theValue
 
     @abc.abstractmethod
     def getCorners(theOther):
+        """
+        """
         raise NotImplementedError
 
     @abc.abstractmethod
     def getRects(self):
+        """
+        """
         raise NotImplementedError
 
     @abc.abstractmethod
     def isInside(self, theOther):
+        """
+        """
         raise NotImplementedError
 
     @abc.abstractmethod
     def getAllInsidePoints(self):
+        """
+        """
         raise NotImplementedError
 
 
 class Quad(Shape):
+    """Quad class derived from Shape class and implements a Square or
+    Rectangle shape.
+    """
 
     def __init__(self, theCenter, theWidth, theHeight):
-        """
+        """Quad class initialization method.
+
         >>> q = Quad(BPoint(0, 0), 10, 10)
         >>> q.Center, q.Width, q.Height
         ((0, 0), 10, 10)
@@ -79,10 +108,10 @@ class Quad(Shape):
         >>> q.getCorners()
         ((5, 15), (15, 15), (5, 5), (15, 5))
         """
-        topLeft = self.Center.xyTranslate(-self.Width / 2, self.Height / 2)
-        topRight = self.Center.xyTranslate(self.Width / 2, self.Height / 2)
-        bottomLeft = self.Center.xyTranslate(-self.Width / 2, -self.Height / 2)
-        bottomRight = self.Center.xyTranslate(self.Width / 2, -self.Height / 2)
+        topLeft = self.Center.xyTranlade(-self.Width / 2, self.Height / 2)
+        topRight = self.Center.xyTranlade(self.Width / 2, self.Height / 2)
+        bottomLeft = self.Center.xyTranlade(-self.Width / 2, -self.Height / 2)
+        bottomRight = self.Center.xyTranlade(self.Width / 2, -self.Height / 2)
         return (topLeft, topRight, bottomLeft, bottomRight)
 
     def getRects(self):
@@ -120,9 +149,13 @@ class Quad(Shape):
 
 
 class Rhomboid(Shape):
+    """Rhomboid class derives from Shape class and it implements a
+    Rhomboid shape.
+    """
 
     def __init__(self, theCenter, theWidth, theHeight):
-        """
+        """Rhomboid class initialization method.
+
         >>> r = Rhomboid(BPoint(0, 0), 10, 10)
         >>> r.Center, r.Width, r.Height
         ((0, 0), 10, 10)
@@ -143,11 +176,15 @@ class Rhomboid(Shape):
 
     @Shape.Width.setter
     def Width(self, theValue):
+        """
+        """
         self._width = theValue
         self._height = theValue
 
     @Shape.Height.setter
     def Height(self, theValue):
+        """
+        """
         self._height = theValue
         self._width = theValue
 
@@ -157,10 +194,10 @@ class Rhomboid(Shape):
         >>> r.getCorners()
         ((10, 12), (10, 8), (8, 10), (12, 10))
         """
-        top = self.Center.yTranslate(self.Height / 2)
-        bottom = self.Center.yTranslate(-self.Height / 2)
-        left = self.Center.xTranslate(-self.Width / 2)
-        right = self.Center.xTranslate(self.Width / 2)
+        top = self.Center.yTranlade(self.Height / 2)
+        bottom = self.Center.yTranlade(-self.Height / 2)
+        left = self.Center.xTranlade(-self.Width / 2)
+        right = self.Center.xTranlade(self.Width / 2)
         return (top, bottom, left, right)
 
     def getRects(self):
@@ -169,10 +206,10 @@ class Rhomboid(Shape):
         >>> r.getRects()
         [((5, 15), (15, 15), (5, 5), (15, 5))]
         """
-        topLeft = self.Center.xyTranslate(-self.Width / 2, self.Height / 2)
-        topRight = self.Center.xyTranslate(self.Width / 2, self.Height / 2)
-        bottomLeft = self.Center.xyTranslate(-self.Width / 2, -self.Height / 2)
-        bottomRight = self.Center.xyTranslate(self.Width / 2, -self.Height / 2)
+        topLeft = self.Center.xyTranlade(-self.Width / 2, self.Height / 2)
+        topRight = self.Center.xyTranlade(self.Width / 2, self.Height / 2)
+        bottomLeft = self.Center.xyTranlade(-self.Width / 2, -self.Height / 2)
+        bottomRight = self.Center.xyTranlade(self.Width / 2, -self.Height / 2)
         return [(topLeft, topRight, bottomLeft, bottomRight), ]
 
     def isInside(self, theOther):
@@ -199,7 +236,7 @@ class Rhomboid(Shape):
         else:
             halfWidth = int(self.Width / 2)
             halfHeight = int(self.Height / 2)
-            p = theOther.xyTranslate(-self.Center.X, -self.Center.Y)
+            p = theOther.xyTranlade(-self.Center.X, -self.Center.Y)
             return (abs(p.X) < halfWidth) and (abs(p.Y) < halfHeight) and\
                    (abs(p.Y) <= (halfWidth - abs(p.X)))
 
@@ -220,8 +257,15 @@ class Rhomboid(Shape):
 
 
 class Star(Rhomboid):
+    """Star class derives from Rhomboid class and it implements a Star shape.
+
+    A start shape only have point in the along the center X-coordinate and the
+    center Y-coordinate.
+    """
 
     def __init__(self, theCenter, theWidth, theHeight):
+        """Star class initialization method.
+        """
         super(Star, self).__init__(theCenter, theWidth, theHeight)
 
     def getRects(self):

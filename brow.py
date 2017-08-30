@@ -4,12 +4,35 @@ from bcell import BCell
 
 
 class BRow(Itero):
+    """BRow class derives from Itero class and it provides some
+    particular functinality for a row in the board.
+
+    BRow contains a fixed number of BLayer instances (one per
+    BLayer.LType).
+
+    Every layer in the row  contains a number of cells, provided
+    as the MaxLen if the Row.
+    """
 
     def __init__(self, theMaxLen):
+        """BRow class initialization method.
+        >>> row = BRow(5)
+        >>> row.MaxLen
+        5
+        """
         super(BRow, self).__init__(BLayer, theMaxLen)
         for layer in BLayer.LType:
             self._Itero__stream.append(BLayer(layer, theMaxLen))
         self._cellRow = None
+
+    @property
+    def Width(self):
+        """
+        >>> row = BRow(10)
+        >>> row.Width
+        10
+        """
+        return self.MaxLen
 
     @property
     def CellRow(self):
@@ -96,8 +119,52 @@ class BRow(Itero):
         except ValueError:
             return False
 
-    def __repr__(self):
+    def populateLayer(self, theCell, theLayer):
+        """Populate a layer with the same cell.
+
+        >>> row = BRow(2)
+        >>> cell = BCell(0, 0, None)
+        >>> row.populateLayer(cell, BLayer.LType.SURFACE)
+        True
+        >>> len(row[BLayer.LType.SURFACE.value])
+        2
+        >>> row[BLayer.LType.SURFACE.value]
+        [LType.SURFACE]  <0>   cell# 2
+        >>> for index in range(2):
+        ...     row[BLayer.LType.SURFACE.value][index]
+        (0, 0) : None
+        (1, 0) : None
         """
+        for index in range(self.Width):
+            newCell = theCell.__class__(theCell.X + index, theCell.Y, theCell.Name)
+            self.addCellToLayer(newCell, theLayer)
+        return True
+
+    def clearLayer(self, theLayer):
+        """Clear all cells from a layer.
+
+        >>> row = BRow(2)
+        >>> cell = BCell(0, 0, None)
+        >>> row.populateLayer(cell, BLayer.LType.SURFACE)
+        True
+        >>> len(row[BLayer.LType.SURFACE.value])
+        2
+        >>> row.clearLayer(BLayer.LType.SURFACE)
+        True
+        >>> len(row[BLayer.LType.SURFACE.value])
+        0
+        """
+        assert isinstance(theLayer, BLayer.LType)
+        for index in range(len(self[theLayer.value])):
+            del self[theLayer.value]
+        return True
+
+    def __repr__(self):
+        """String representation for BRow instance.
+
+        Returns:
+            str : string with the BRow instance representation.
+
         >>> row = BRow(5)
         >>> row
         Row: None

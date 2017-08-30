@@ -6,8 +6,13 @@ from blayer import BLayer
 
 
 class Game(object):
+    """Game class provides all requiered functionality to create a board
+    game.
+    """
 
     def __init__(self, theWidth, theHeight):
+        """Game class initialization method.
+        """
         self._bwidth = theWidth
         self._bheight = theHeight
         self._board = Board(self._bheight, self._bwidth)
@@ -16,21 +21,39 @@ class Game(object):
 
     @property
     def Board(self):
+        """
+        """
         return self._board
 
     @property
     def BHandler(self):
+        """
+        """
         return self._bhandler
 
     @property
     def Player(self):
+        """
+        """
         return self._player
 
     @Player.setter
     def Player(self, theValue):
+        """
+        """
         self._player = theValue
 
     def movePlayer(self, theDirection, theMove):
+        """Moves the player (PActor instace) in the given direction and the
+        given value.
+
+        Args:
+            theDirection (Location) : direction the player will be moved.
+            theMove (int) : number of cells the player will be moved.
+
+        Returns:
+            None
+        """
         assert isinstance(theDirection, Location)
         oldCellRow = self.Player.Row
         assert self.Player.moveTo(theDirection, theMove) is not None

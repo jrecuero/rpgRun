@@ -2,61 +2,152 @@ import math
 
 
 class Range(object):
+    """Range class provides a container for range, where a minimum and a
+    maximum value.
+    """
 
     def __init__(self, theMin, theMax):
+        """Range class initialization method.
+
+        Args:
+            theMin (int) : minimum value for the range.
+            theMax (int) : maximum value for the range.
+        """
         self._min = int(theMin)
         self._max = int(theMax)
 
     @property
     def Min(self):
+        """Property that returns the _min attribute.
+
+        Returns:
+            int : minimum range attribute.
+        """
         return self._min
 
     @Min.setter
     def Min(self, theValue):
+        """Property that sets a new value for the _min attribute.
+
+        Args:
+            theValue (int) : new minimum range attribute.
+        """
         self._min = int(theValue)
 
     @property
     def Max(self):
+        """Property that returns the _max attribute.
+
+        Returns:
+            int : maximum range attribute.
+        """
         return self._max
 
     @Max.setter
     def Max(self, theValue):
+        """Property that sets a new value for the _max attribute.
+
+        Args:
+            theValue (int) : new maximum range attribute.
+        """
         self._max = int(theValue)
 
 
 class Point(object):
+    """Point class represent a basic 2D point representation.
+
+    X-axis is the horizontal axe, it has positive values to the right and
+    negative values to the left.
+
+    Y-axis is the vertical axe, it has positive values up and negative values
+    down.
+    """
 
     def __init__(self, theX, theY):
+        """Point class initialization method.
+
+        Args:
+            theX (int) : X-axis coordinate.
+            theY (int) : Y-axis coordinate.
+        """
         self._x = int(theX)
         self._y = int(theY)
 
     @property
     def X(self):
+        """Property that returns the _x attribute.
+
+        Returns:
+            int : X-axis coordinate attribute.
+        """
         return self._x
 
     @X.setter
     def X(self, theValue):
+        """Property that sets a new value for the _x attribute.
+
+        Args:
+            theValue (int) : new value for the X-axis coordinate attribute.
+        """
         self._x = int(theValue)
 
     @property
     def Y(self):
+        """Property that returns the _y attribute.
+
+        Returns:
+            int : Y-axis coordinate attribute.
+        """
         return self._y
 
     @Y.setter
     def Y(self, theValue):
+        """Property that sets a new value for the _y attribute.
+
+        Args:
+            theValue (int) : new value for the Y-axis coordinate attribute.
+        """
         self._y = int(theValue)
 
     def _isPositive(self, theAttr):
+        """Checks if the value passed is in the positive axe.
+
+        Args:
+            theAttr (int) : value to check.
+
+        Returns:
+            boolean : True is value is in the positive axe, False else.
+        """
         return theAttr > 0
 
     def _isNegative(self, theAttr):
+        """Checks if the value passed is in the negative axe.
+
+        Args:
+            theAttr (int) : value to check.
+
+        Returns:
+            boolean : True is value is in the negative axe, False else.
+        """
         return theAttr < 0
 
     def _isZero(self, theAttr):
+        """Checks if the value passed is in the axe origin.
+
+        Args:
+            theAttr (int) : value to check.
+
+        Returns:
+            boolean : True is value is in the axe origin, False else.
+        """
         return theAttr == 0
 
     def isXpositive(self):
-        """
+        """Check if the point is in the positive X-axe.
+
+        Returns:
+            boolean : True if point is in the positive X-axe, False else.
+
         >>> p = Point(1, 1)
         >>> p.isXpositive()
         True
@@ -67,7 +158,11 @@ class Point(object):
         return self._isPositive(self.X)
 
     def isXnegative(self):
-        """
+        """Check if the point is in the negative X-axe.
+
+        Returns:
+            boolean : True if point is in the negative X-axe, False else.
+
         >>> p = Point(1, 0)
         >>> p.isXnegative()
         False
@@ -78,7 +173,11 @@ class Point(object):
         return self._isNegative(self.X)
 
     def isXzero(self):
-        """
+        """Check if the point is the X-axe origin.
+
+        Returns:
+            boolean : True if point is in the X-axe origin, False else.
+
         >>> p = Point(0, 1)
         >>> p.isXzero()
         True
@@ -89,7 +188,11 @@ class Point(object):
         return self._isZero(self.X)
 
     def isYpositive(self):
-        """
+        """Check if the point is in the positive Y-axe.
+
+        Returns:
+            boolean : True if point is in the positive Y-axe, False else.
+
         >>> p = Point(0, 1)
         >>> p.isYpositive()
         True
@@ -100,7 +203,11 @@ class Point(object):
         return self._isPositive(self.Y)
 
     def isYnegative(self):
-        """
+        """Check if the point is in the negative Y-axe.
+
+        Returns:
+            boolean : True if point is in the negative Y-axe, False else.
+
         >>> p = Point(0, 1)
         >>> p.isYnegative()
         False
@@ -111,7 +218,11 @@ class Point(object):
         return self._isNegative(self.Y)
 
     def isYzero(self):
-        """
+        """Check if the point is the Y-axe origin.
+
+        Returns:
+            boolean : True if point is in the Y-axe origin, False else.
+
         >>> p = Point(1, 0)
         >>> p.isYzero()
         True
@@ -122,14 +233,29 @@ class Point(object):
         return self._isZero(self.Y)
 
     def __repr__(self):
-        """
+        """String representation for the Point instance.
+
+        Returns:
+            str : string with the Point instance representation.
+
         >>> str(Point(0, 0))
         '(0, 0)'
         """
         return '({0}, {1})'.format(self.X, self.Y)
 
     def __eq__(self, theOther):
-        """
+        """Overload method for the 'equal to' operation between Point
+        instances.
+
+        Two Point instances are equal if X and Y coordinates values are
+        equal.
+
+        Args:
+            theOther (Point) : the other Point instance to check if is equal.
+
+        Returns:
+            boolean : True if Point instaces are equal, False else.
+
         >>> Point(1, 1) == Point(1, 1)
         True
         >>> Point(1, 1) == Point(1, 0)
@@ -146,7 +272,19 @@ class Point(object):
         return NotImplemented
 
     def __neq__(self, theOther):
-        """
+        """Overload method for the 'not equal to' operation between Point
+        instances.
+
+        Two Point instances are not equal if X or Y coordinates values are
+        not equal.
+
+        Args:
+            theOther (Point) : the other Point instance to check if is not
+            equal.
+
+        Returns:
+            boolean : True if Point instaces are not equal, False else.
+
         >>> Point(1, 1) != Point(1, 1)
         False
         >>> Point(1, 1) != Point(1, 0)
@@ -159,16 +297,24 @@ class Point(object):
         return NotImplemented
 
     def _isGreater(self, theAttr, theOtherAttr):
+        """Checks if one value is greater than other.
+        """
         return theAttr > theOtherAttr
 
     def _isLower(self, theAttr, theOtherAttr):
+        """Checks if one value is lower than other
+        """
         return theAttr < theOtherAttr
 
     def _isEq(self, theAttr, theOtherAttr):
+        """Checks if two values are equal.
+        """
         return theAttr == theOtherAttr
 
     def isYgreater(self, theOther):
-        """
+        """Checks if point Y-coordinate is greater than the one from the
+        given point.
+
         >>> p = Point(1, 1)
         >>> p.isYgreater(Point(0, 0))
         True
@@ -180,7 +326,8 @@ class Point(object):
         raise NotImplementedError
 
     def isYlower(self, theOther):
-        """
+        """Checks if point Y-coordinate is lower than the one from the
+        given point.
         >>> p = Point(1, 1)
         >>> p.isYlower(Point(0, 0))
         False
@@ -192,7 +339,8 @@ class Point(object):
         raise NotImplementedError
 
     def isYeq(self, theOther):
-        """
+        """Checks if point Y-coordinate is equal than the one from the
+        given point.
         >>> p = Point(1, 1)
         >>> p.isYeq(Point(0, 1))
         True
@@ -204,7 +352,9 @@ class Point(object):
         raise NotImplementedError
 
     def isXgreater(self, theOther):
-        """
+        """Checks if point X-coordinate is greated than the one form the
+        given point.
+
         >>> p = Point(1, 1)
         >>> p.isXgreater(Point(0, 0))
         True
@@ -216,7 +366,9 @@ class Point(object):
         raise NotImplementedError
 
     def isXlower(self, theOther):
-        """
+        """Checks if point X-coordinate is lower than the one form the
+        given point.
+
         >>> p = Point(1, 1)
         >>> p.isXlower(Point(0, 0))
         False
@@ -228,7 +380,9 @@ class Point(object):
         raise NotImplementedError
 
     def isXeq(self, theOther):
-        """
+        """Checks if point X-coordinate is equal than the one form the
+        given point.
+
         >>> p = Point(1, 1)
         >>> p.isXeq(Point(0, 0))
         False
@@ -240,7 +394,8 @@ class Point(object):
         raise NotImplementedError
 
     def __add__(self, theOther):
-        """
+        """Overload addition operation between two Point instances.
+
         >>> p = Point(1, 1)
         >>> p + Point(1, 2)
         (2, 3)
@@ -253,7 +408,8 @@ class Point(object):
         return NotImplemented
 
     def __sub__(self, theOther):
-        """
+        """Overload substract operation between two Point instances.
+
         >>> p = Point(1, 1)
         >>> p - Point(2, 0)
         (-1, 1)
@@ -266,7 +422,14 @@ class Point(object):
         return NotImplemented
 
     def distance(self, theOther):
-        """
+        """Returns the distance between the point and the given point.
+
+        Args:
+            theOther (Point) : second point to check the distance.
+
+        Returns:
+            float : distance between two points.
+
         >>> p = Point(0, 0)
         >>> p.distance(Point(2, 2))
         2.8284271247461903
@@ -276,7 +439,15 @@ class Point(object):
         raise NotImplementedError
 
     def intDistance(self, theOther):
-        """
+        """Returns the distance between the point and the given point as an
+        integer value.
+
+        Args:
+            theOther (Point) : second point to check the distance.
+
+        Returns:
+            int : distance between two points.
+
         >>> p = Point(0, 0)
         >>> p.intDistance(Point(2, 2))
         2
@@ -286,7 +457,15 @@ class Point(object):
         raise NotImplementedError
 
     def pointDistance(self, theOther):
-        """
+        """Returns the distance between the point and the given point as a
+        Point instance.
+
+        Args:
+            theOther (Point) : second point to check the distance.
+
+        Returns:
+            Point : distance between two points as a Point.
+
         >>> p = Point(1, 1)
         >>> p.pointDistance(Point(2, 3))
         (1, 2)
@@ -296,10 +475,13 @@ class Point(object):
         raise NotImplementedError
 
     def _distance(self, theAttr, theOtherAttr):
+        """Retuns the distance (difference) between two values.
+        """
         return theAttr - theOtherAttr
 
     def xDistance(self, theOther):
-        """
+        """Returns the X-coordinate distance between two points.
+
         >>> p = Point(1, 1)
         >>> p.xDistance(Point(2, 1))
         1
@@ -309,7 +491,8 @@ class Point(object):
         raise NotImplementedError
 
     def yDistance(self, theOther):
-        """
+        """Returns the Y-coordinate distance between two points.
+
         >>> p = Point(1, 1)
         >>> p.yDistance(Point(2, 1))
         0
@@ -318,45 +501,56 @@ class Point(object):
             return self._distance(theOther.Y, self.Y)
         raise NotImplementedError
 
-    def translate(self, theOther):
-        """
+    def translade(self, theOther):
+        """Translades point based on the given point.
+
+        It basically moves the point adding X-coordinates and Y-coordinates.
+
         >>> p = Point(1, 1)
-        >>> p.translate(Point(2, 3))
+        >>> p.translade(Point(2, 3))
         (3, 4)
         """
         if isinstance(theOther, Point):
             return self + theOther
         raise NotImplementedError
 
-    def xTranslate(self, theX):
-        """
+    def xTranslade(self, theX):
+        """Translate X-coordinate the given value.
+
         >>> p = Point(0, 0)
-        >>> p.xTranslate(10)
+        >>> p.xTranslade(10)
         (10, 0)
         """
         return self + Point(int(theX), 0)
 
-    def yTranslate(self, theY):
-        """
+    def yTranslade(self, theY):
+        """Translate Y-coordinate the given value.
+
         >>> p = Point(0, 0)
-        >>> p.yTranslate(5)
+        >>> p.yTranslade(5)
         (0, 5)
         """
         return self + Point(0, int(theY))
 
-    def xyTranslate(self, theX, theY):
-        """
+    def xyTranslade(self, theX, theY):
+        """Translate X-coordinate and Y-coordinate with given values.
+
         >>> p = Point(0, 0)
-        >>> p.xyTranslate(1, 5)
+        >>> p.xyTranslade(1, 5)
         (1, 5)
         """
         return self + Point(int(theX), int(theY))
 
     def _move(self, theAttr, theValue):
+        """Add a value to other. Used in move operations.
+
+        This methow allows to make generic operations on X-axis and Y-axis.
+        """
         return theAttr + int(theValue)
 
     def xMove(self, theX=1):
-        """
+        """Moves X-coordinate a given value.
+
         >>> p = Point(1, 1)
         >>> p.xMove(1)
         (2, 1)
@@ -369,7 +563,8 @@ class Point(object):
         return self
 
     def yMove(self, theY=1):
-        """
+        """Moves Y-coordinate a given value.
+
         >>> p = Point(1, 1)
         >>> p.yMove(1)
         (1, 2)
@@ -382,7 +577,8 @@ class Point(object):
         return self
 
     def xyMove(self, theX=1, theY=1):
-        """
+        """Moves X-coordinate and Y-coordinates with given values.
+
         >>> p = Point(1, 1)
         >>> p.xyMove(1, 1)
         (2, 2)
@@ -394,6 +590,10 @@ class Point(object):
         return self
 
     def _moveWithinRange(self, theAttr, theRange, theValue, theUpTo):
+        """Move a coordinate a given value but only in the given range.
+
+        This method is used to make generic X-axis and Y-axis operations.
+        """
         value = theAttr + int(theValue)
         if theRange.Min <= value <= theRange.Max:
             theAttr = value
@@ -404,7 +604,20 @@ class Point(object):
         return theAttr
 
     def xMoveWithinRange(self, theRange, theX=1, theUpTo=False):
-        """
+        """Moves X-coordinate a given value but only in the given ranges.
+
+        Args:
+            theRange (Range) : range values the X-coordinate can move.
+
+            theX (int) : value to increase the X-coordinate (default = 1).
+
+            theUpTo (boolean) : when flag is True the movement is the closest
+            to the final position. False means the movement is not done if it
+            is out of range.
+
+        Returns:
+            Point : Point instace after the X-coordinate movement.
+
         >>> p = Point(1, 1)
         >>> p.xMoveWithinRange(Range(0, 10))
         (2, 1)
@@ -422,7 +635,20 @@ class Point(object):
             raise NotImplementedError
 
     def yMoveWithinRange(self, theRange, theY=1, theUpTo=False):
-        """
+        """Moves Y-coordinate a given value but only in the given ranges.
+
+        Args:
+            theRange (Range) : range values the Y-coordinate can move.
+
+            theY (int) : value to increase the Y-coordinate (default = 1).
+
+            theUpTo (boolean) : when flag is True the movement is the closest
+            to the final position. False means the movement is not done if it
+            is out of range.
+
+        Returns:
+            Point : Point instace after the Y-coordinate movement.
+
         >>> p = Point(1, 1)
         >>> p.yMoveWithinRange(Range(0, 10))
         (1, 2)
@@ -440,7 +666,23 @@ class Point(object):
             raise NotImplementedError
 
     def xyMoveWithinRange(self, theRangeX, theRangeY, theX=1, theY=1, theUpTo=False):
-        """
+        """Moves X-coordiante and Y-coordinate a given value but only in the
+        given ranges.
+
+        Args:
+            theRangeX (Range) : range values the X-coordinate can move.
+            theRangeY (Range) : range values the Y-coordinate can move.
+
+            theX (int) : value to increase the X-coordinate (default = 1).
+            theY (int) : value to increase the Y-coordinate (default = 1).
+
+            theUpTo (boolean) : when flag is True the movement is the closest
+            to the final position. False means the movement is not done if it
+            is out of range.
+
+        Returns:
+            Point : Point instace after the Y-coordinate movement.
+
         >>> p = Point(1, 1)
         >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7))
         (2, 2)
@@ -527,7 +769,26 @@ class Point(object):
             raise NotImplementedError
 
     def xMoveWithCollision(self, theCollisions, theX=1, theRangeX=None, theUpTo=False):
-        """
+        """Noves X-coordinate a given value in the given range and avoiding any
+        collision with given Point instances.
+
+        Args:
+            theCollisions (list/tuple) : list or tuple of Points with
+            possible collisions. These points will block the movement.
+
+            theX (int) : x-coordinate movement value.
+
+            theRangeX (Range) : range instance with the minimum and
+            maximum final position values.
+
+            theUpTo (bool) : boolean that flags if returning initial
+            position if the final one is not possible if False, or
+            move to the closest position to the destination if True.
+
+        Returns:
+
+            Point : point instance with the final movement position.
+
         >>> p = Point(1, 1)
         >>> p.xMoveWithCollision([Point(0, 0)])
         (2, 1)
@@ -547,7 +808,26 @@ class Point(object):
         return self._moveWithCollision('X', theCollisions, theX, theRangeX, theUpTo)
 
     def yMoveWithCollision(self, theCollisions, theY=1, theRangeY=None, theUpTo=False):
-        """
+        """Noves Y-coordinate a given value in the given range and avoiding any
+        collision with given Point instances.
+
+        Args:
+            theCollisions (list/tuple) : list or tuple of Points with
+            possible collisions. These points will block the movement.
+
+            theX (int) : Y-coordinate movement value.
+
+            theRangeX (Range) : range instance with the minimum and
+            maximum final position values.
+
+            theUpTo (bool) : boolean that flags if returning initial
+            position if the final one is not possible if False, or
+            move to the closest position to the destination if True.
+
+        Returns:
+
+            Point : point instance with the final movement position.
+
         >>> p = Point(1, 1)
         >>> p.yMoveWithCollision([Point(0, 0)])
         (1, 2)

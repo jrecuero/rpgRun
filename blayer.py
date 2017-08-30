@@ -4,8 +4,16 @@ from enum import Enum
 
 
 class BLayer(Itero):
+    """BLayer class derives from Itero class and it provides specific
+    functionality for a layer in the board.
+
+    BLayer contains a number of cells, that number is provided as the
+    Width or MaxLen of the layer.
+    """
 
     class LType(Enum):
+        """LType class enumeration provides all possible layer available.
+        """
         HIDDEN = 0
         UNDER = 1
         SURFACE = 2
@@ -13,17 +21,44 @@ class BLayer(Itero):
         OVER = 4
 
     def __init__(self, theType, theMaxLen):
+        """BLayer class initialization method.
+
+        >>> layer = BLayer(BLayer.LType.SURFACE, 10)
+        >>> layer.MaxLen
+        10
+        """
         assert isinstance(theType, BLayer.LType)
         super(BLayer, self).__init__(BCell, theMaxLen)
         self._type = theType
         self._cellRow = None
 
     @property
+    def Width(self):
+        """
+        >>> layer = BLayer(BLayer.LType.SURFACE, 10)
+        >>> layer.Width
+        10
+        """
+        return self.MaxLen
+
+    @property
     def Type(self):
+        """
+        >>> layer = BLayer(BLayer.LType.SURFACE, 10)
+        >>> layer.Type
+        <LType.SURFACE: 2>
+        """
         return self._type
 
     @property
     def CellRow(self):
+        """
+        >>> layer = BLayer(BLayer.LType.SURFACE, 10)
+        >>> layer.CellRow
+        >>> layer.append(BCell(1, 2, None))
+        >>> layer.CellRow
+        2
+        """
         return self._cellRow
 
     def append(self, theValue):
@@ -49,7 +84,11 @@ class BLayer(Itero):
         super(BLayer, self).append(theValue)
 
     def __repr__(self):
-        """
+        """String representation for the BLayer instance.
+
+        Returns:
+            str : string with the BLayer instance representation.
+
         >>> layer = BLayer(BLayer.LType.OBJECT, 5)
         >>> layer
         [LType.OBJECT ] <None> cell# 0

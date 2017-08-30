@@ -11,10 +11,17 @@ BCell.isActor = isActor
 
 
 class Actor(BObject):
+    """Actor Class derives from BObject class and it provides some particular
+    functions for any actor placed on the board.
+    """
 
     def __init__(self, theX, theY, theName):
+        """Actor class initialization method.
+        """
         super(Actor, self).__init__(theX, theY, theName)
         self.Walkable = False
 
     def isActor(self):
+        """Returns if the instance is an Actor.
+        """
         return True

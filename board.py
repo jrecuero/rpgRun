@@ -4,8 +4,23 @@ from brow import BRow
 
 
 class Board(Itero):
+    """Board class derives from Itero class and it provides some particular
+    functionality for the board.
+
+    Board contains a number or BRow instances, that number is provided as
+    the Height of the board.
+
+    Every row contains a number of cells, that number is provided as the
+    Width of the board.
+    """
 
     def __init__(self, theHeight, theWidth):
+        """Board class initialization method.
+
+        >>> board = Board(10, 5)
+        >>> board.MaxLen
+        10
+        """
         super(Board, self).__init__(BRow, theHeight)
         self._Itero__stream = deque()
         self._width = theWidth
@@ -14,10 +29,20 @@ class Board(Itero):
 
     @property
     def Height(self):
+        """
+        >>> board = Board(10, 5)
+        >>> board.Height
+        10
+        """
         return self.MaxLen
 
     @property
     def Width(self):
+        """
+        >>> board = Board(10, 5)
+        >>> board.Width
+        5
+        """
         return self._width
 
     def scroll(self, theNewRow):
@@ -87,6 +112,11 @@ class Board(Itero):
         return None
 
     def __repr__(self):
+        """String representation for Board instance.
+
+        Returns:
+            str : string with the Board instance representation.
+        """
         st = ''
         for row in self:
             st += '{0}\n'.format(str(row))

@@ -1,6 +1,9 @@
-from base import Cli
 import game
 from blayer import BLayer
+from bpoint import Location
+from base import Cli
+from decorators import argo, syntax, setsyntax
+from argtypes import Int
 
 
 class Play(Cli):
@@ -22,6 +25,15 @@ class Play(Cli):
         self._game.Player = BObject(2, 2, 'PLAYER')
         self._game.Board[2].addCellToLayer(self._game.Player, BLayer.LType.OBJECT)
         print('Init rpgRun')
+
+    @Cli.command()
+    @setsyntax
+    @syntax("MOVE pos")
+    @argo('pos', Int, None)
+    def do_move(self, pos):
+        """Move player a numner of positions.
+        """
+        self._game.movePlayer(Location.FRONT, 1)
 
     @Cli.command('PRINT')
     def do_print_board(self, *args):

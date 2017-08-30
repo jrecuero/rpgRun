@@ -3,6 +3,9 @@ from enum import Enum
 
 
 class Location(Enum):
+    """Location Class Enumeration provides all possible location where a cell
+    can be moved on the board.
+    """
 
     FRONT = (1, 0)
     BACK = (2, 0)
@@ -14,6 +17,8 @@ class Location(Enum):
     BACK_RIGHT = (2, 4)
 
     def __init__(self, theX, theY):
+        """Location class initialization method.
+        """
         self._x = theX
         self._y = theY
         self.__front = 1
@@ -114,8 +119,13 @@ class Location(Enum):
 
 
 class BPoint(Point):
+    """BPoint class derived from Point class and it adds some required
+    functinality for a point on a board.
+    """
 
     def __init__(self, theX, theY):
+        """BPoint class initialization method.
+        """
         super(BPoint, self).__init__(theX, theY)
         self._moveCb = {Location.FRONT: self.moveToFront,
                         Location.BACK: self.moveToBack,
@@ -295,7 +305,8 @@ class BPoint(Point):
         return self.xMove(-theMove)
 
     def moveTo(self, theDirection=Location.FRONT, theMove=1):
-        """
+        """Moves the BPoint the given value to the given location.
+
         >>> bp = BPoint(1, 1)
         >>> bp.moveTo()
         (1, 2)

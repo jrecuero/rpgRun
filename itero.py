@@ -2,8 +2,12 @@ from collections.abc import Iterator
 
 
 class Itero(Iterator):
+    """Itero Class implements a generic iterator to be used.
+    """
 
     def __init__(self, theStreamKlass, theMaxLen=None):
+        """Itero class initialization method.
+        """
         assert theStreamKlass
         self.__streamKlass = theStreamKlass
         self.__index = 0
@@ -12,6 +16,11 @@ class Itero(Iterator):
 
     @property
     def MaxLen(self):
+        """
+        >>> it = Itero(str, 10)
+        >>> it.MaxLen
+        10
+        """
         return self.__maxLen
 
     def __getitem__(self, theKey):
@@ -54,20 +63,20 @@ class Itero(Iterator):
 
     def __iter__(self):
         """
-            >>> it = Itero(str)
-            >>> for x in ['one', 'two', 'three', 'four', 'five']:
-            ...     it.append(x)
-            >>> it[0], it[1], it[2], it[3], it[4]
-            ('one', 'two', 'three', 'four', 'five')
-            >>> for i, v in enumerate(it):
-            ...     it[i] = v.upper()
-            >>> for x in it:
-            ...     print(x)
-            ONE
-            TWO
-            THREE
-            FOUR
-            FIVE
+         >>> it = Itero(str)
+         >>> for x in ['one', 'two', 'three', 'four', 'five']:
+         ...     it.append(x)
+         >>> it[0], it[1], it[2], it[3], it[4]
+         ('one', 'two', 'three', 'four', 'five')
+         >>> for i, v in enumerate(it):
+         ...     it[i] = v.upper()
+         >>> for x in it:
+         ...     print(x)
+         ONE
+         TWO
+         THREE
+         FOUR
+         FIVE
         """
         self.__index = 0
         return self
@@ -82,12 +91,12 @@ class Itero(Iterator):
 
     def __len__(self):
         """
-            >>> it = Itero(str)
-            >>> len(it)
-            0
-            >>> it.append('one')
-            >>> len(it)
-            1
+        >>> it = Itero(str)
+        >>> len(it)
+        0
+        >>> it.append('one')
+        >>> len(it)
+        1
         """
         return len(self.__stream)
 
