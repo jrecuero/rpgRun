@@ -1,7 +1,7 @@
 from board import Board
 from bhandler import BoardHandler
 from bpoint import Location
-# from brow import BRow
+from brow import BRow
 from blayer import BLayer
 
 
@@ -56,6 +56,8 @@ class Game(object):
         """
         assert isinstance(theDirection, Location)
         oldCellRow = self.Player.Row
+        # This moveTo should be replaced with a move with collision and range
+        # check in order to validate the movement.
         assert self.Player.moveTo(theDirection, theMove) is not None
         if oldCellRow != self.Player.Row:
             oldRow = self.Board.getRowFromCellRow(oldCellRow)
@@ -64,6 +66,21 @@ class Game(object):
             newRow = self.Board.getRowFromCellRow(self.Player.Row)
             assert newRow is not None
             newRow.addCellToLayer(self.Player, BLayer.LType.OBJECT)
+
+    def scrollBoard(self, theNewRow):
+        """Scroll the board, removing one row and adding a new one.
+
+        Scroll always moves row to the front, it means to higher
+        cell-row values.
+
+        Args:
+            theNewRow (BRow) : new row to be added to the board.
+
+        Returns:
+            None
+        """
+        assert isinstance(theNewRow, BRow)
+        self.Board.scroll(theNewRow)
 
 
 def printBoard(theBoard):

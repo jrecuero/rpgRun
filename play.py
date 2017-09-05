@@ -3,7 +3,10 @@ from blayer import BLayer
 from bpoint import Location
 from base import Cli
 from decorators import argo, syntax, setsyntax
-from argtypes import Int
+from argtypes import Int, Str
+from brow import BRow
+from bobject import BObject
+from bsurface import BSurface
 
 
 class Play(Cli):
@@ -16,34 +19,58 @@ class Play(Cli):
     def do_init(self, *args):
         """Initialize rpgRUN game.
         """
-        from bobject import BObject
-        from bsurface import BSurface
         width, height = (5, 5)
         self._game = game.Game(width, height)
-        for index, row in enumerate(self._game.Board):
-            row.addCellToLayer(BSurface(0, index, None), BLayer.LType.SURFACE)
+        iheight = height
+        for row in self._game.Board:
+            iheight -= 1
+            for iwidth in range(width):
+                row.addCellToLayer(BSurface(iwidth, iheight, '****'), BLayer.LType.SURFACE)
+
         self._game.Player = BObject(2, 2, 'PLAYER')
         self._game.Board[2].addCellToLayer(self._game.Player, BLayer.LType.OBJECT)
+        self._game.Board[0].addCellToLayer(BObject(0, 4, 'Pillar'), BLayer.LType.OBJECT)
         print('Init rpgRun')
 
     @Cli.command()
     @setsyntax
-    @syntax("MOVE pos")
+    @syntax("MOVE pos locst")
     @argo('pos', Int, None)
-    def do_move(self, pos):
+    @argo('locst', Str, None)
+    def do_move(self, pos, locst):
         """Move player a numner of positions.
         """
-        self._game.movePlayer(Location.FRONT, 1)
+        locst = locst.upper()
+        if locst == 'FRONT':
+            loc = Location.FRONT
+        # elif locst == 'BACK':
+        #     loc = Location.BACK
+        elif locst == 'LEFT':
+            loc = Location.LEFT
+        elif locst == 'RIGHT':
+            loc = Location.RIGHT
+        else:
+            loc = None
+        if loc is not None:
+            self._game.movePlayer(loc, pos)
 
     @Cli.command('PRINT')
     def do_print_board(self, *args):
         """Print rpgRUN game board.
         """
         for row in self._game.Board:
-            if row.CellRow == self._game.Player.Row:
-                print('{0} {1}'.format(row.CellRow, self._game.Player))
-            else:
-                print(row.CellRow)
+            print('{0} {1}'.format(row.CellRow, row.rowToString()))
+
+    @Cli.command('SCROLL')
+    def do_scroll_board(self, *args):
+        """Scroll Board.
+        """
+        width = self._game.Board.Width
+        row = BRow(width)
+        newHeight = self._game.Board.TopCellRow + 1
+        for iwidth in range(width):
+            row.addCellToLayer(BSurface(iwidth, newHeight, '****'), BLayer.LType.SURFACE)
+        self._game.scrollBoard(row)
 
 
 if __name__ == '__main__':

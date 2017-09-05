@@ -45,23 +45,26 @@ class Board(Itero):
         """
         return self._width
 
-    def scroll(self, theNewRow):
+    @property
+    def TopCellRow(self):
         """
+        >>> from bcell import BCell
+        >>> from blayer import BLayer
         >>> board = Board(5, 5)
-        >>> row1 = BRow(5)
-        >>> board.appendleft(row1)
-        >>> row2 = BRow(5)
-        >>> board.appendleft(row2)
-        >>> board[0] == row2
+        >>> row = BRow(5)
+        >>> row.addCellToLayer(BCell(0, 0, None), BLayer.LType.SURFACE)
         True
-        >>> board[1] == row1
+        >>> board.appendleft(row)
+        >>> row = BRow(5)
+        >>> row.addCellToLayer(BCell(0, 1, None), BLayer.LType.SURFACE)
         True
+        >>> board.appendleft(row)
+        >>> board.TopCellRow
+        1
         """
-        assert isinstance(theNewRow, BRow)
-        self._Itero__stream.pop()
-        self._Itero__stream.appendleft(theNewRow)
+        return self[0].CellRow
 
-    def appendleft(self, theNewRow):
+    def scroll(self, theNewRow):
         """
         >>> board = Board(3, 5)
         >>> row1 = BRow(5)
@@ -83,6 +86,22 @@ class Board(Itero):
         >>> board[1] == row3
         True
         >>> board[2] == row2
+        True
+        """
+        assert isinstance(theNewRow, BRow)
+        self._Itero__stream.pop()
+        self._Itero__stream.appendleft(theNewRow)
+
+    def appendleft(self, theNewRow):
+        """
+        >>> board = Board(5, 5)
+        >>> row1 = BRow(5)
+        >>> board.appendleft(row1)
+        >>> row2 = BRow(5)
+        >>> board.appendleft(row2)
+        >>> board[0] == row2
+        True
+        >>> board[1] == row1
         True
         """
         self._Itero__stream.appendleft(theNewRow)

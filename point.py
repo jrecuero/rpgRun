@@ -501,42 +501,42 @@ class Point(object):
             return self._distance(theOther.Y, self.Y)
         raise NotImplementedError
 
-    def translade(self, theOther):
-        """Translades point based on the given point.
+    def translate(self, theOther):
+        """Translates point based on the given point.
 
         It basically moves the point adding X-coordinates and Y-coordinates.
 
         >>> p = Point(1, 1)
-        >>> p.translade(Point(2, 3))
+        >>> p.translate(Point(2, 3))
         (3, 4)
         """
         if isinstance(theOther, Point):
             return self + theOther
         raise NotImplementedError
 
-    def xTranslade(self, theX):
+    def xTranslate(self, theX):
         """Translate X-coordinate the given value.
 
         >>> p = Point(0, 0)
-        >>> p.xTranslade(10)
+        >>> p.xTranslate(10)
         (10, 0)
         """
         return self + Point(int(theX), 0)
 
-    def yTranslade(self, theY):
+    def yTranslate(self, theY):
         """Translate Y-coordinate the given value.
 
         >>> p = Point(0, 0)
-        >>> p.yTranslade(5)
+        >>> p.yTranslate(5)
         (0, 5)
         """
         return self + Point(0, int(theY))
 
-    def xyTranslade(self, theX, theY):
+    def xyTranslate(self, theX, theY):
         """Translate X-coordinate and Y-coordinate with given values.
 
         >>> p = Point(0, 0)
-        >>> p.xyTranslade(1, 5)
+        >>> p.xyTranslate(1, 5)
         (1, 5)
         """
         return self + Point(int(theX), int(theY))
@@ -769,7 +769,7 @@ class Point(object):
             raise NotImplementedError
 
     def xMoveWithCollision(self, theCollisions, theX=1, theRangeX=None, theUpTo=False):
-        """Noves X-coordinate a given value in the given range and avoiding any
+        """Moves X-coordinate a given value in the given range and avoiding any
         collision with given Point instances.
 
         Args:
@@ -808,7 +808,7 @@ class Point(object):
         return self._moveWithCollision('X', theCollisions, theX, theRangeX, theUpTo)
 
     def yMoveWithCollision(self, theCollisions, theY=1, theRangeY=None, theUpTo=False):
-        """Noves Y-coordinate a given value in the given range and avoiding any
+        """Moves Y-coordinate a given value in the given range and avoiding any
         collision with given Point instances.
 
         Args:
@@ -845,3 +845,140 @@ class Point(object):
         (1, 10)
         """
         return self._moveWithCollision('Y', theCollisions, theY, theRangeY, theUpTo)
+
+    def _isValidMove(self, theAttrName, theCollisions, theValue, theRange):
+        """Generic method that checks in the positional movement is a valid one
+        without collisions.
+
+        Method checks against a list of possible positions and a range with
+        the minimum and maximum values.
+
+        Args:
+            theAttrName (str) : String with the name of the positional
+            attribute to update. It could be 'X' or 'Y'.
+
+            theCollisions (list/tuple) : list or tuple of Points with
+            possible collisions. These points will block the movement.
+
+            theValue (int) : movement value.
+
+            theRange (Range) : range instance with the minimum and
+            maximum final position values.
+
+        Returns:
+
+            boolean : True if movement is possible, False else
+        """
+        trav = Point(self.X, self.Y)
+        if type(theCollisions) in (list, tuple) and theCollisions:
+            moveValue = trav._move(getattr(trav, theAttrName), theValue)
+            if theRange:
+                limit = theValue if theRange.Min <= moveValue < theRange.Max else None
+                if limit is None:
+                    return False
+            else:
+                limit = theValue
+            # Move one step at a time, until a collision is found.
+            for inc in range(limit):
+                setattr(trav, theAttrName, trav._move(getattr(trav, theAttrName), 1))
+                for p in theCollisions:
+                    if trav == p:
+                        return False
+            return True
+        else:
+            raise NotImplementedError
+
+    def xIsValidMove(self, theCollisions, theX=1, theRangeX=None):
+        """Check if X-coordinate movement is valid.
+
+        Args:
+            theCollisions (list/tuple) : list or tuple of Points with
+            possible collisions. These points will block the movement.
+
+            theX (int) : x-coordinate movement value.
+
+            theRangeX (Range) : range instance with the minimum and
+            maximum final position values.
+
+        Returns:
+
+            boolean : True if movement is possible, False else
+
+        >>> p = Point(1, 1)
+        >>> p.xIsValidMove([Point(0, 0)])
+        True
+        >>> p.xIsValidMove([Point(0, 0)], 2)
+        True
+        >>> p.xIsValidMove([Point(0, 0), Point(6, 1)], 2)
+        True
+        >>> p.xIsValidMove([Point(0, 0), Point(6, 1)], 6)
+        False
+        >>> p.xIsValidMove([Point(0, 0), Point(6, 1)], 2, None)
+        True
+        >>> p.xIsValidMove([Point(0, 0), Point(6, 1)], 7, None)
+        False
+        >>> p.xIsValidMove([Point(0, 0)], 10, Range(0, 10))
+        False
+        """
+        return self._isValidMove('X', theCollisions, theX, theRangeX)
+
+    def yIsValidMove(self, theCollisions, theY=1, theRangeY=None):
+        """Check if Y-coordinate movement is valid.
+
+        Args:
+            theCollisions (list/tuple) : list or tuple of Points with
+            possible collisions. These points will block the movement.
+
+            theY (int) : Y-coordinate movement value.
+
+            theRangeY (Range) : range instance with the minimum and
+            maximum final position values.
+
+        Returns:
+
+            boolean : True if movement is possible, False else
+
+        >>> p = Point(1, 1)
+        >>> p.yIsValidMove([Point(0, 0)])
+        True
+        >>> p.yIsValidMove([Point(0, 0)], 2)
+        True
+        >>> p.yIsValidMove([Point(0, 0), Point(1, 6)], 2)
+        True
+        >>> p.yIsValidMove([Point(0, 0), Point(1, 6)], 6)
+        False
+        >>> p.yIsValidMove([Point(0, 0), Point(1, 6)], 2, None)
+        True
+        >>> p.yIsValidMove([Point(0, 0), Point(1, 6)], 7, None)
+        False
+        >>> p.yIsValidMove([Point(0, 0)], 10, Range(0, 10))
+        False
+        """
+        return self._isValidMove('Y', theCollisions, theY, theRangeY)
+
+    def isCollision(self, theTranslate, theCollisions):
+        """Checks if the point translated with the given Point has any
+        collision.
+
+        Args:
+            theTranslate (Point) : translation point
+
+            theCollisions (list/tuple) : list or tuple of Points with
+            possible collisions. These points will block the movement.
+
+        Returns:
+            boolean : True if there is any collision, False else.
+
+        >>> p = Point(1, 1)
+        >>> p.isCollision(Point(1, 1), [Point(0, 0)])
+        False
+        >>> p.isCollision(Point(1, 1), [Point(2, 2)])
+        True
+        >>> p.isCollision(Point(1, 1), [Point(1, 0), Point(2, 2)])
+        True
+        """
+        newPoint = self.translate(theTranslate)
+        for p in theCollisions:
+            if newPoint == p:
+                return True
+        return False

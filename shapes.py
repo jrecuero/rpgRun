@@ -108,10 +108,10 @@ class Quad(Shape):
         >>> q.getCorners()
         ((5, 15), (15, 15), (5, 5), (15, 5))
         """
-        topLeft = self.Center.xyTranlade(-self.Width / 2, self.Height / 2)
-        topRight = self.Center.xyTranlade(self.Width / 2, self.Height / 2)
-        bottomLeft = self.Center.xyTranlade(-self.Width / 2, -self.Height / 2)
-        bottomRight = self.Center.xyTranlade(self.Width / 2, -self.Height / 2)
+        topLeft = self.Center.xyTranslate(-self.Width / 2, self.Height / 2)
+        topRight = self.Center.xyTranslate(self.Width / 2, self.Height / 2)
+        bottomLeft = self.Center.xyTranslate(-self.Width / 2, -self.Height / 2)
+        bottomRight = self.Center.xyTranslate(self.Width / 2, -self.Height / 2)
         return (topLeft, topRight, bottomLeft, bottomRight)
 
     def getRects(self):
@@ -194,10 +194,10 @@ class Rhomboid(Shape):
         >>> r.getCorners()
         ((10, 12), (10, 8), (8, 10), (12, 10))
         """
-        top = self.Center.yTranlade(self.Height / 2)
-        bottom = self.Center.yTranlade(-self.Height / 2)
-        left = self.Center.xTranlade(-self.Width / 2)
-        right = self.Center.xTranlade(self.Width / 2)
+        top = self.Center.yTranslate(self.Height / 2)
+        bottom = self.Center.yTranslate(-self.Height / 2)
+        left = self.Center.xTranslate(-self.Width / 2)
+        right = self.Center.xTranslate(self.Width / 2)
         return (top, bottom, left, right)
 
     def getRects(self):
@@ -206,10 +206,10 @@ class Rhomboid(Shape):
         >>> r.getRects()
         [((5, 15), (15, 15), (5, 5), (15, 5))]
         """
-        topLeft = self.Center.xyTranlade(-self.Width / 2, self.Height / 2)
-        topRight = self.Center.xyTranlade(self.Width / 2, self.Height / 2)
-        bottomLeft = self.Center.xyTranlade(-self.Width / 2, -self.Height / 2)
-        bottomRight = self.Center.xyTranlade(self.Width / 2, -self.Height / 2)
+        topLeft = self.Center.xyTranslate(-self.Width / 2, self.Height / 2)
+        topRight = self.Center.xyTranslate(self.Width / 2, self.Height / 2)
+        bottomLeft = self.Center.xyTranslate(-self.Width / 2, -self.Height / 2)
+        bottomRight = self.Center.xyTranslate(self.Width / 2, -self.Height / 2)
         return [(topLeft, topRight, bottomLeft, bottomRight), ]
 
     def isInside(self, theOther):
@@ -236,7 +236,7 @@ class Rhomboid(Shape):
         else:
             halfWidth = int(self.Width / 2)
             halfHeight = int(self.Height / 2)
-            p = theOther.xyTranlade(-self.Center.X, -self.Center.Y)
+            p = theOther.xyTranslate(-self.Center.X, -self.Center.Y)
             return (abs(p.X) < halfWidth) and (abs(p.Y) < halfHeight) and\
                    (abs(p.Y) <= (halfWidth - abs(p.X)))
 

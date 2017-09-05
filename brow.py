@@ -1,6 +1,7 @@
 from itero import Itero
 from blayer import BLayer
 from bcell import BCell
+from collections import OrderedDict
 
 
 class BRow(Itero):
@@ -158,6 +159,20 @@ class BRow(Itero):
         for index in range(len(self[theLayer.value])):
             del self[theLayer.value]
         return True
+
+    def rowToString(self):
+        """Return strinf with row representation
+
+        Returns:
+            str : String with all cells in the row.
+        """
+        cells = OrderedDict()
+        for layer in [x for x in self if len(x)]:
+            for cell in layer:
+                key = '{0},{1}'.format(cell.Col, cell.Row)
+                cells.update({key: cell})
+        cellSt = ['{0:^8}'.format(str(x.Name)) for x in cells.values()]
+        return " ".join(cellSt)
 
     def __repr__(self):
         """String representation for BRow instance.
