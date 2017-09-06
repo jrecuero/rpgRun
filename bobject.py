@@ -1,4 +1,5 @@
 from bcell import BCell
+from attr import Attributes
 
 
 @staticmethod
@@ -16,7 +17,12 @@ class BObject(BCell):
 
     def __init__(self, theX, theY, theName):
         super(BObject, self).__init__(theX, theY, theName)
+        self._attrs = Attributes()
         self.Walkable = False
+
+    @property
+    def Attrs(self):
+        return self._attrs
 
     def isObject(self):
         """Returns if the instance is a BObject.

@@ -1,3 +1,6 @@
+from itero import StrItero
+
+
 class Attr(object):
     """Attr Class contains all data related with a board object attribute.
     """
@@ -146,14 +149,32 @@ class Attr(object):
         return '{0}: {1}/{2}'.format(self.Name, self.Now, self.Base)
 
 
-class Attributes(object):
+class Attributes(StrItero):
     """Attributes Class contains all attributes related with a board object.
     """
 
     def __init__(self):
         """Attribute class initialization method.
+
+        >>> ats = Attributes()
+        >>> ats['hp'] = Attr('hp')
+        >>> ats['hp'].Name
+        'hp'
+        >>> ats['HP'].Name
+        'hp'
+        >>> ats['MP'] = Attr('mp')
+        >>> ats['mp'].Name
+        'mp'
+        >>> ats['MP'].Name
+        'mp'
+        >>> del ats['hp']
+        >>> try:
+        ...     ats['hp']
+        ... except KeyError:
+        ...     'KeyError'
+        'KeyError'
         """
-        self._attrs = {}
+        super(Attributes, self).__init__(Attr, self._buildAttrName)
 
     def _buildAttrName(self, theName):
         """
@@ -168,61 +189,13 @@ class Attributes(object):
         >>> ats = Attributes()
         >>> ats.addAttr(Attr('hp'))
         True
-        >>> ats._attrs.keys()
-        dict_keys(['HP'])
+        >>> ats['hp'].Name
+        'hp'
+        >>> ats['HP'].Name
+        'hp'
         """
-        attrName = self._buildAttrName(theAttr.Name)
-        self._attrs.update({attrName: theAttr})
-        setattr(self, attrName, theAttr)
+        self[theAttr.Name] = theAttr
         return True
-
-    def getAttr(self, theName):
-        """
-        >>> ats = Attributes()
-        >>> ats.addAttr(Attr('hp'))
-        True
-        >>> ats.getAttr('hp').Name
-        'hp'
-        >>> ats.getAttr('HP').Name
-        'hp'
-        """
-        attrName = self._buildAttrName(theName)
-        return self._attrs[attrName]
-
-    def delAttr(self, theName):
-        """
-        >>> ats = Attributes()
-        >>> ats.addAttr(Attr('hp'))
-        True
-        >>> ats.getAttr('hp').Name
-        'hp'
-        >>> ats.delAttr('hp')
-        True
-        >>> try:
-        ...     ats.getAttr('hp')
-        ... except KeyError:
-        ...     'KeyError'
-        'KeyError'
-        """
-        attrName = self._buildAttrName(theName)
-        del self._attrs[attrName]
-        delattr(self, attrName)
-        return True
-
-    def traverse(self):
-        """
-        >>> ats = Attributes()
-        >>> ats.addAttr(Attr('hp'))
-        True
-        >>> ats.addAttr(Attr('mp'))
-        True
-        >>> for a in ats.traverse():
-        ...     a.Name
-        'hp'
-        'mp'
-        """
-        for attr in self._attrs.values():
-            yield attr
 
     def levelUp(self, theLevel=1):
         """
@@ -250,7 +223,7 @@ class Attributes(object):
         >>> mp.Base
         11
         """
-        for attr in self.traverse():
+        for attr in self:
             attr.levelUp(theLevel)
         return True
 
@@ -265,4 +238,4 @@ class Attributes(object):
         hp: 0/0
         mp: 0/0
         """
-        return '\n'.join([str(attr) for attr in self.traverse()])
+        return '\n'.join([str(attr) for attr in self])

@@ -1,4 +1,5 @@
 from collections.abc import Iterator
+from collections import OrderedDict
 
 
 class Itero(Iterator):
@@ -143,3 +144,100 @@ class Itero(Iterator):
         """
         assert isinstance(theValue, self.__streamKlass)
         self.__stream.remove(theValue)
+
+
+class StrItero(Iterator):
+    """DictItero Class implements a generic iterator where indexes are strings
+    instead of integers
+    """
+
+    def __init__(self, theStreamKlass, theProcessKey=None):
+        """StrItero class initialization method.
+        """
+        assert theStreamKlass
+        self.__streamKlass = theStreamKlass
+        self.__index = 0
+        self.__stream = OrderedDict()
+        self.__processKey = theProcessKey
+
+    def __getitem__(self, theKey):
+        """
+        >>> it = StrItero(int)
+        >>> it.update('one', 1)
+        >>> it['one']
+        1
+        """
+        assert isinstance(theKey, str)
+        key = self.__processKey(theKey) if self.__processKey else theKey
+        return OrderedDict.__getitem__(self.__stream, key)
+
+    def __setitem__(self, theKey, theValue):
+        """
+        >>> it = StrItero(int)
+        >>> it['two'] = 2
+        >>> it['two']
+        2
+        """
+        assert isinstance(theKey, str)
+        assert isinstance(theValue, self.__streamKlass)
+        key = self.__processKey(theKey) if self.__processKey else theKey
+        OrderedDict.__setitem__(self.__stream, key, theValue)
+
+    def __len__(self):
+        """
+        >>> it = StrItero(int)
+        >>> it['one'] = 1
+        >>> it['two'] = 2
+        >>> len(it)
+        2
+        """
+        return len(self.__stream)
+
+    def __delitem__(self, theKey):
+        """
+        >>> it = StrItero(int)
+        >>> it['one'] = 1
+        >>> it['two'] = 2
+        >>> len(it)
+        2
+        >>> del it['one']
+        >>> len(it)
+        1
+        """
+        assert isinstance(theKey, str)
+        key = self.__processKey(theKey) if self.__processKey else theKey
+        OrderedDict.__delitem__(self.__stream, key)
+
+    def __iter__(self):
+        """
+        >>> it = StrItero(int)
+        >>> for i, v in enumerate(['zero', 'one', 'two']):
+        ...     it[v] = i
+        >>> it['zero'], it['one'], it['two']
+        (0, 1, 2)
+        >>> for x in it:
+        ...     x
+        0
+        1
+        2
+        """
+        self.__index = 0
+        self.__streamAsList = [_ for _ in self.__stream.values()]
+        return self
+
+    def __next__(self):
+        if self.__index >= len(self.__streamAsList):
+            self.__index = 0
+            raise StopIteration
+        _ = self.__streamAsList[self.__index]
+        self.__index += 1
+        return _
+
+    def items(self):
+        return self.__stream.items()
+
+    def update(self, theKey, theValue):
+        assert isinstance(theKey, str)
+        assert isinstance(theValue, self.__streamKlass)
+        key = self.__processKey(theKey) if self.__processKey else theKey
+        OrderedDict.update(self.__stream, {key: theValue})
