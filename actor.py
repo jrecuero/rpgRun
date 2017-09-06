@@ -1,5 +1,6 @@
 from bcell import BCell
 from bobject import BObject
+# from attr import Attr
 
 
 @staticmethod
@@ -20,6 +21,7 @@ class Actor(BObject):
         """
         super(Actor, self).__init__(theX, theY, theName)
         self.Walkable = False
+        self.Attrs.setupAttrByName(['hp', 'str', 'con'])
 
     def isActor(self):
         """Returns if the instance is an Actor.

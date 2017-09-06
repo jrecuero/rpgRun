@@ -1,3 +1,6 @@
+import sys
+sys.path.append('../jc2li')
+
 import game
 from blayer import BLayer
 from bpoint import Location

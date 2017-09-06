@@ -15,6 +15,7 @@ class BCell(BPoint):
         super(BCell, self).__init__(theX, theY)
         self._id = next(BCell.__newId)
         self._name = theName
+        self._desc = None
         self._static = True
         self._walkable = True
         self._solid = True
@@ -33,6 +34,24 @@ class BCell(BPoint):
         'cell'
         """
         return self._name
+
+    @property
+    def Desc(self):
+        """
+        >>> cell = BCell(0, 0, 'cell')
+        >>> cell.Desc
+        ''
+        >>> cell.Desc = 'new cell'
+        >>> cell.Desc
+        'new cell'
+        """
+        return self._desc if self._desc is not None else ''
+
+    @Desc.setter
+    def Desc(self, theValue):
+        """
+        """
+        self._desc = theValue
 
     @Name.setter
     def Name(self, theValue):

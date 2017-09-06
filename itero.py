@@ -226,6 +226,8 @@ class StrItero(Iterator):
         return self
 
     def __next__(self):
+        """
+        """
         if self.__index >= len(self.__streamAsList):
             self.__index = 0
             raise StopIteration
@@ -233,10 +235,39 @@ class StrItero(Iterator):
         self.__index += 1
         return _
 
+    def __contains__(self, theOther):
+        """
+        >>> it = StrItero(int)
+        >>> for i, v in enumerate(['zero', 'one', 'two']):
+        ...     it[v] = i
+        >>> 'one' in it
+        True
+        >>> 'three' in it
+        False
+        """
+        other = self.__processKey(theOther) if self.__processKey else theOther
+        return other in self.__stream
+
     def items(self):
+        """
+        >>> it = StrItero(int)
+        >>> for i, v in enumerate(['zero', 'one', 'two']):
+        ...     it[v] = i
+        >>> for k, v in it.items():
+        ...     k, v
+        ('zero', 0)
+        ('one', 1)
+        ('two', 2)
+        """
         return self.__stream.items()
 
     def update(self, theKey, theValue):
+        """
+        >>> it = StrItero(int)
+        >>> it.update('one', 1)
+        >>> it['one']
+        1
+        """
         assert isinstance(theKey, str)
         assert isinstance(theValue, self.__streamKlass)
         key = self.__processKey(theKey) if self.__processKey else theKey

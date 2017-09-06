@@ -9,6 +9,7 @@ class Attr(object):
         """Attr class initialization method.
         """
         self._name = theName
+        self._desc = None
         self._base = 0
         self._delta = 0
         self._buffs = {}
@@ -33,6 +34,24 @@ class Attr(object):
         'new'
         """
         self._name = theValue
+
+    @property
+    def Desc(self):
+        """
+        >>> at = Attr('new')
+        >>> at.Desc
+        ''
+        >>> at.Desc = 'new attribute'
+        >>> at.Desc
+        'new attribute'
+        """
+        return self._desc if self._desc is not None else ''
+
+    @Desc.setter
+    def Desc(self, theValue):
+        """
+        """
+        self._desc = theValue
 
     @property
     def Base(self):
@@ -64,13 +83,13 @@ class Attr(object):
 
     @Delta.setter
     def Delta(self, theValue):
-        self._delta = theValue
         """
         >>> at = Attr('old')
         >>> at.Delta = 1
         >>> at.Delta
         1
         """
+        self._delta = theValue
 
     @property
     def Buffs(self):
@@ -140,6 +159,33 @@ class Attr(object):
         for _ in range(abs(theLevel)):
             self.Base += self.Delta * int(theLevel / abs(theLevel))
 
+    def setupAttr(self, theBase=None, theDelta=None, theBuffs=None):
+        """
+        >>> at = Attr('new')
+        >>> at
+        new: 0/0
+        >>> at.setupAttr(), at.Delta, at.Buffs
+        (new: 0/0, 0, {})
+        >>> at.setupAttr(10), at.Delta, at.Buffs
+        (new: 10/10, 0, {})
+        >>> at.setupAttr(5, 1), at.Delta, at.Buffs
+        (new: 5/5, 1, {})
+        >>> at.setupAttr(10, None, {'st': 1}), at.Delta, at.Buffs
+        (new: 11/10, 1, {'st': 1})
+        >>> at.setupAttr(None, 5, {'ag': 2}), at.Delta, at.Buffs
+        (new: 13/10, 5, {'st': 1, 'ag': 2})
+        """
+        self.Base = theBase if theBase is not None else self.Base
+        self.Delta = theDelta if theDelta is not None else self.Delta
+        if theBuffs is not None and isinstance(theBuffs, dict):
+            self.Buffs.update(theBuffs)
+        return self
+
+    def setupAttrFromJSON(self, theJsonFile):
+        """
+        """
+        return self
+
     def __repr__(self):
         """
         >>> at = Attr('old')
@@ -188,14 +234,41 @@ class Attributes(StrItero):
         """
         >>> ats = Attributes()
         >>> ats.addAttr(Attr('hp'))
-        True
+        hp: 0/0
         >>> ats['hp'].Name
         'hp'
         >>> ats['HP'].Name
         'hp'
         """
         self[theAttr.Name] = theAttr
-        return True
+        return theAttr
+
+    def setupAttrs(self, theAttrs):
+        """
+        >>> ats = Attributes()
+        >>> ats.setupAttrs([Attr('hp'), Attr('mp')])
+        >>> ats
+        hp: 0/0
+        mp: 0/0
+        """
+        for attrib in theAttrs:
+            self.addAttr(attrib)
+
+    def setupAttrsByName(self, theNames):
+        """
+        >>> ats = Attributes()
+        >>> ats.setupAttrsByName(['hp', 'mp'])
+        >>> ats
+        hp: 0/0
+        mp: 0/0
+        """
+        for name in theNames:
+            self.addAttr(Attr(name))
+
+    def setupAttrsFromJSON(self, theJsonFile):
+        """
+        """
+        pass
 
     def levelUp(self, theLevel=1):
         """
@@ -204,12 +277,12 @@ class Attributes(StrItero):
         >>> hp.Base = 10
         >>> hp.Delta = 3
         >>> ats.addAttr(hp)
-        True
+        hp: 10/10
         >>> mp = Attr('mp')
         >>> mp.Base = 5
         >>> mp.Delta = 2
         >>> ats.addAttr(mp)
-        True
+        mp: 5/5
         >>> ats.levelUp()
         True
         >>> hp.Base
@@ -231,9 +304,9 @@ class Attributes(StrItero):
         """
         >>> ats = Attributes()
         >>> ats.addAttr(Attr('hp'))
-        True
+        hp: 0/0
         >>> ats.addAttr(Attr('mp'))
-        True
+        mp: 0/0
         >>> ats
         hp: 0/0
         mp: 0/0
