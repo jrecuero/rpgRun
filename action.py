@@ -1,3 +1,17 @@
+from enum import Enum
+
+
+class AType(Enum):
+    """AType class enumeration provides all action types.
+    """
+    NONE = 0
+    MOVEMENT = 1
+    WEAPONIZE = 2
+    SKILL = 3
+    MAGIC = 4
+    ITEM = 5
+
+
 class Action(object):
     """Action class contains all required information to execute an action.
 
@@ -19,6 +33,7 @@ class Action(object):
         self._preExecCb = None
         self._postExecCb = None
         self._resultCb = None
+        self._type = None
 
     @property
     def Name(self):

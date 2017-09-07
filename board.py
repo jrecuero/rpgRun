@@ -49,14 +49,14 @@ class Board(Itero):
     def TopCellRow(self):
         """
         >>> from bcell import BCell
-        >>> from blayer import BLayer
+        >>> from blayer import LType
         >>> board = Board(5, 5)
         >>> row = BRow(5)
-        >>> row.addCellToLayer(BCell(0, 0, None), BLayer.LType.SURFACE)
+        >>> row.addCellToLayer(BCell(0, 0, None), LType.SURFACE)
         True
         >>> board.appendleft(row)
         >>> row = BRow(5)
-        >>> row.addCellToLayer(BCell(0, 1, None), BLayer.LType.SURFACE)
+        >>> row.addCellToLayer(BCell(0, 1, None), LType.SURFACE)
         True
         >>> board.appendleft(row)
         >>> board.TopCellRow
@@ -129,6 +129,16 @@ class Board(Itero):
             if row.CellRow == theCellRow:
                 return row
         return None
+
+    def render(self, **kwargs):
+        """Render the board.
+
+        TODO: JUST RENDER ON TEXT FROM NOW.
+        """
+        st = ''
+        for row in self:
+            st += '{0} {1}\n'.format(row.CellRow, row.render(**kwargs))
+        return st
 
     def __repr__(self):
         """String representation for Board instance.

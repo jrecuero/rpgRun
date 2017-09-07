@@ -15,10 +15,10 @@ class BObject(BCell):
     functionality for cells in the OBJECT layer.
     """
 
-    def __init__(self, theX, theY, theName):
+    def __init__(self, theX, theY, theName, **kwargs):
         """BObject class initialization method.
         """
-        super(BObject, self).__init__(theX, theY, theName)
+        super(BObject, self).__init__(theX, theY, theName, **kwargs)
         self._attrs = Attributes()
         self.Walkable = False
 

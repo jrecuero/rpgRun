@@ -15,10 +15,10 @@ class PActor(Actor):
     functionality for the player actor placed on the baord.
     """
 
-    def __init__(self, theX, theY, theName):
+    def __init__(self, theX, theY, theName, **kwargs):
         """PActor class initialization method.
         """
-        super(PActor, self).__init__(theX, theY, theName)
+        super(PActor, self).__init__(theX, theY, theName, **kwargs)
         self.Static = False
 
     def isPlayer(self):

@@ -14,10 +14,10 @@ class BSurface(BCell):
     functionality for cells in the SURFACE layer.
     """
 
-    def __init__(self, theX, theY, theName):
+    def __init__(self, theX, theY, theName, **kwargs):
         """BSurface class initialization method.
         """
-        super(BSurface, self).__init__(theX, theY, theName)
+        super(BSurface, self).__init__(theX, theY, theName, **kwargs)
         self.Solid = False
 
     def isSurface(self):

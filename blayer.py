@@ -3,6 +3,17 @@ from bcell import BCell
 from enum import Enum
 
 
+class LType(Enum):
+    """LType class enumeration provides all possible layer available.
+    """
+    HIDDEN = 0
+    UNDER = 1
+    SURFACE = 2
+    OBJECT = 3
+    OVER = 4
+    MASK = 5
+
+
 class BLayer(Itero):
     """BLayer class derives from Itero class and it provides specific
     functionality for a layer in the board.
@@ -11,23 +22,14 @@ class BLayer(Itero):
     Width or MaxLen of the layer.
     """
 
-    class LType(Enum):
-        """LType class enumeration provides all possible layer available.
-        """
-        HIDDEN = 0
-        UNDER = 1
-        SURFACE = 2
-        OBJECT = 3
-        OVER = 4
-
     def __init__(self, theType, theMaxLen):
         """BLayer class initialization method.
 
-        >>> layer = BLayer(BLayer.LType.SURFACE, 10)
+        >>> layer = BLayer(LType.SURFACE, 10)
         >>> layer.MaxLen
         10
         """
-        assert isinstance(theType, BLayer.LType)
+        assert isinstance(theType, LType)
         super(BLayer, self).__init__(BCell, theMaxLen)
         self._type = theType
         self._cellRow = None
@@ -35,7 +37,7 @@ class BLayer(Itero):
     @property
     def Width(self):
         """
-        >>> layer = BLayer(BLayer.LType.SURFACE, 10)
+        >>> layer = BLayer(LType.SURFACE, 10)
         >>> layer.Width
         10
         """
@@ -44,7 +46,7 @@ class BLayer(Itero):
     @property
     def Type(self):
         """
-        >>> layer = BLayer(BLayer.LType.SURFACE, 10)
+        >>> layer = BLayer(LType.SURFACE, 10)
         >>> layer.Type
         <LType.SURFACE: 2>
         """
@@ -53,7 +55,7 @@ class BLayer(Itero):
     @property
     def CellRow(self):
         """
-        >>> layer = BLayer(BLayer.LType.SURFACE, 10)
+        >>> layer = BLayer(LType.SURFACE, 10)
         >>> layer.CellRow
         >>> layer.append(BCell(1, 2, None))
         >>> layer.CellRow
@@ -63,7 +65,7 @@ class BLayer(Itero):
 
     def append(self, theValue):
         """
-        >>> layer = BLayer(BLayer.LType.OBJECT, 5)
+        >>> layer = BLayer(LType.OBJECT, 5)
         >>> layer.append(BCell(0, 0, None))
         >>> layer[0]
         (0, 0) : None
@@ -89,7 +91,7 @@ class BLayer(Itero):
         Returns:
             str : string with the BLayer instance representation.
 
-        >>> layer = BLayer(BLayer.LType.OBJECT, 5)
+        >>> layer = BLayer(LType.OBJECT, 5)
         >>> layer
         [LType.OBJECT ] <None> cell# 0
         """

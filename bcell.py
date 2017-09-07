@@ -1,5 +1,52 @@
 import itertools
+from enum import Enum
 from bpoint import BPoint
+
+
+class BRender(Enum):
+
+    NONE = 0
+    TEXT = 1
+    GRAPH = 2
+    DEFAULT = 1
+
+
+class BSprite(object):
+
+    def __init__(self, **kwargs):
+        self._graph = kwargs.get('theSprGraph', None)
+        self._text = kwargs.get('theSprText', None)
+
+    @property
+    def Graph(self):
+        return self._graph
+
+    @Graph.setter
+    def Graph(self, theValue):
+        self._graph = theValue
+
+    @property
+    def Text(self):
+        return self._text
+
+    @Text.setter
+    def Text(self, theValue):
+        self._text = theValue
+
+    def get(self, theRender=BRender.DEFAULT):
+        if theRender == BRender.GRAPH:
+            return self._graph
+        elif theRender == BRender.TEXT:
+            return self._text
+        elif theRender == BRender.NONE:
+            return None
+        else:
+            raise NotImplementedError
+
+    def __repr__(self):
+        st = 'Text[{0}] '.format(self._text if self._text else 'None')
+        st += 'Graph[{0}]'.format('<GRAPH>' if self._graph else 'None')
+        return st
 
 
 class BCell(BPoint):
@@ -9,8 +56,23 @@ class BCell(BPoint):
 
     __newId = itertools.count(1)
 
-    def __init__(self, theX, theY, theName):
+    def __init__(self, theX, theY, theName, **kwargs):
         """BCell class initialization method.
+
+        >>> cell = BCell(0, 0, 'cell')
+        >>> cell.Sprite
+        >>> cell = BCell(0, 0, 'cell', theSprite='*')
+        >>> cell.Sprite
+        Text[*] Graph[None]
+        >>> cell = BCell(0, 0, 'cell', theSprite=BSprite(theSprText='*'))
+        >>> cell.Sprite
+        Text[*] Graph[None]
+        >>> cell = BCell(0, 0, 'cell', theSprite=BSprite(theSprGraph=True))
+        >>> cell.Sprite
+        Text[None] Graph[<GRAPH>]
+        >>> cell = BCell(0, 0, 'cell', theSprite=BSprite(theSprGraph=True, theSprText='*'))
+        >>> cell.Sprite
+        Text[*] Graph[<GRAPH>]
         """
         super(BCell, self).__init__(theX, theY)
         self._id = next(BCell.__newId)
@@ -19,6 +81,7 @@ class BCell(BPoint):
         self._static = True
         self._walkable = True
         self._solid = True
+        self.Sprite = kwargs.get('theSprite', None)
 
     @property
     def Id(self):
@@ -145,6 +208,42 @@ class BCell(BPoint):
         False
         """
         self._solid = theValue
+
+    @property
+    def Sprite(self):
+        """
+        >>> cell = BCell(0, 0, 'cell', theSprite='*')
+        >>> cell.Sprite
+        Text[*] Graph[None]
+        """
+        return self._sprite
+
+    @Sprite.setter
+    def Sprite(self, theValue):
+        """
+        >>> cell = BCell(0, 0, 'cell')
+        >>> cell.Sprite
+        >>> cell.Sprite = '*'
+        Text[*] Graph[None]
+        >>> cell.Sprite = BSprite(theSprGraph=True)
+        Text[None] Graph[<GRAPH>]
+        >>> cell.Sprite = BSprite(theSprGraph=True, theSprText='*')
+        Text[*] Graph[<GRAPH>]
+        """
+        self._sprite = BSprite(theSprText=theValue) if isinstance(theValue, str) else theValue
+
+    def render(self, theRender=BRender.DEFAULT):
+        """Render the cell.
+
+        >>> cell = BCell(0, 0, 'cell', theSprite=BSprite(theSprGraph=True, theSprText='*'))
+        >>> cell.render()
+        '*'
+        >>> cell.render(BRender.TEXT)
+        '*'
+        >>> cell.render(BRender.GRAPH)
+        True
+        """
+        return self.Sprite.get(theRender)
 
     def __repr__(self):
         """String representation for the BCell instance.

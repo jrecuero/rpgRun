@@ -2,7 +2,7 @@ import sys
 sys.path.append('../jc2li')
 
 import game
-from blayer import BLayer
+from blayer import LType
 from bpoint import Point, Location
 from base import Cli
 from decorators import argo, syntax, setsyntax
@@ -22,6 +22,17 @@ class Play(Cli):
         super(Play, self).__init__()
         self._game = None
 
+    def _scroll(self):
+        """Scroll Board.
+        """
+        width = self._game.Board.Width
+        row = BRow(width)
+        newHeight = self._game.Board.TopCellRow + 1
+        for iwidth in range(width):
+            cell = BSurface(iwidth, newHeight, '****', theSprite='***')
+            row.addCellToLayer(cell, LType.SURFACE)
+        self._game.scrollBoard(row)
+
     @Cli.command('INIT')
     def do_init(self, *args):
         """Initialize rpgRUN game.
@@ -32,12 +43,13 @@ class Play(Cli):
         for row in self._game.Board:
             iheight -= 1
             for iwidth in range(width):
-                row.addCellToLayer(BSurface(iwidth, iheight, '****'), BLayer.LType.SURFACE)
+                cell = BSurface(iwidth, iheight, '****', theSprite='***')
+                row.addCellToLayer(cell, LType.SURFACE)
 
-        self._game.Player = BObject(2, 2, 'PLAYER')
+        self._game.Player = BObject(2, 2, 'PLAYER', theSprite="-^-")
         self._game.Player.Attrs.setupAttrsFromJSON(PLAYER_ATTRS)
-        self._game.Board[2].addCellToLayer(self._game.Player, BLayer.LType.OBJECT)
-        self._game.Board[0].addCellToLayer(BObject(0, 4, 'Pillar'), BLayer.LType.OBJECT)
+        self._game.Board[2].addCellToLayer(self._game.Player, LType.OBJECT)
+        self._game.Board[0].addCellToLayer(BObject(0, 4, 'Pillar', theSprite='|||'), LType.OBJECT)
         print('Init rpgRun')
 
     @Cli.command()
@@ -49,8 +61,10 @@ class Play(Cli):
         """Move player a numner of positions.
         """
         locst = locst.upper()
+        scrollFlag = False
         if locst == 'FRONT':
             loc = Location.FRONT
+            scrollFlag = True
         # elif locst == 'BACK':
         #     loc = Location.BACK
         elif locst == 'LEFT':
@@ -61,6 +75,8 @@ class Play(Cli):
             loc = None
         if loc is not None:
             self._game.movePlayer(loc, pos)
+            if scrollFlag:
+                self._scroll()
 
     @Cli.command()
     @setsyntax
@@ -78,19 +94,13 @@ class Play(Cli):
     def do_print_board(self, *args):
         """Print rpgRUN game board.
         """
-        for row in self._game.Board:
-            print('{0} {1}'.format(row.CellRow, row.rowToString()))
+        print(self._game.Board.render(theWidth=7))
 
     @Cli.command('SCROLL')
     def do_scroll_board(self, *args):
         """Scroll Board.
         """
-        width = self._game.Board.Width
-        row = BRow(width)
-        newHeight = self._game.Board.TopCellRow + 1
-        for iwidth in range(width):
-            row.addCellToLayer(BSurface(iwidth, newHeight, '****'), BLayer.LType.SURFACE)
-        self._game.scrollBoard(row)
+        self._scroll()
 
 
 if __name__ == '__main__':

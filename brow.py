@@ -1,6 +1,6 @@
 from itero import Itero
-from blayer import BLayer
-from bcell import BCell
+from blayer import BLayer, LType
+from bcell import BCell, BRender
 from collections import OrderedDict
 
 
@@ -9,7 +9,7 @@ class BRow(Itero):
     particular functinality for a row in the board.
 
     BRow contains a fixed number of BLayer instances (one per
-    BLayer.LType).
+    LType).
 
     Every layer in the row  contains a number of cells, provided
     as the MaxLen if the Row.
@@ -22,7 +22,7 @@ class BRow(Itero):
         5
         """
         super(BRow, self).__init__(BLayer, theMaxLen)
-        for layer in BLayer.LType:
+        for layer in LType:
             self._Itero__stream.append(BLayer(layer, theMaxLen))
         self._cellRow = None
 
@@ -86,13 +86,13 @@ class BRow(Itero):
     def addCellToLayer(self, theCell, theLayer):
         """
         >>> row = BRow(2)
-        >>> row.addCellToLayer(BCell(0, 0, None), BLayer.LType.SURFACE)
+        >>> row.addCellToLayer(BCell(0, 0, None), LType.SURFACE)
         True
-        >>> row[BLayer.LType.SURFACE.value]
+        >>> row[LType.SURFACE.value]
         [LType.SURFACE]  <0>   cell# 1
         """
         assert isinstance(theCell, BCell)
-        assert isinstance(theLayer, BLayer.LType)
+        assert isinstance(theLayer, LType)
         self.CellRow = theCell.Row
         self[theLayer.value].append(theCell)
         return True
@@ -101,19 +101,19 @@ class BRow(Itero):
         """
         >>> row = BRow(2)
         >>> cell = BCell(0, 0, None)
-        >>> row.addCellToLayer(cell, BLayer.LType.SURFACE)
+        >>> row.addCellToLayer(cell, LType.SURFACE)
         True
-        >>> len(row[BLayer.LType.SURFACE.value])
+        >>> len(row[LType.SURFACE.value])
         1
-        >>> row.removeCellFromLayer(cell, BLayer.LType.SURFACE)
+        >>> row.removeCellFromLayer(cell, LType.SURFACE)
         True
-        >>> len(row[BLayer.LType.SURFACE.value])
+        >>> len(row[LType.SURFACE.value])
         0
-        >>> row.removeCellFromLayer(cell, BLayer.LType.SURFACE)
+        >>> row.removeCellFromLayer(cell, LType.SURFACE)
         False
         """
         assert isinstance(theCell, BCell)
-        assert isinstance(theLayer, BLayer.LType)
+        assert isinstance(theLayer, LType)
         try:
             self[theLayer.value].remove(theCell)
             return True
@@ -125,14 +125,14 @@ class BRow(Itero):
 
         >>> row = BRow(2)
         >>> cell = BCell(0, 0, None)
-        >>> row.populateLayer(cell, BLayer.LType.SURFACE)
+        >>> row.populateLayer(cell, LType.SURFACE)
         True
-        >>> len(row[BLayer.LType.SURFACE.value])
+        >>> len(row[LType.SURFACE.value])
         2
-        >>> row[BLayer.LType.SURFACE.value]
+        >>> row[LType.SURFACE.value]
         [LType.SURFACE]  <0>   cell# 2
         >>> for index in range(2):
-        ...     row[BLayer.LType.SURFACE.value][index]
+        ...     row[LType.SURFACE.value][index]
         (0, 0) : None
         (1, 0) : None
         """
@@ -146,16 +146,16 @@ class BRow(Itero):
 
         >>> row = BRow(2)
         >>> cell = BCell(0, 0, None)
-        >>> row.populateLayer(cell, BLayer.LType.SURFACE)
+        >>> row.populateLayer(cell, LType.SURFACE)
         True
-        >>> len(row[BLayer.LType.SURFACE.value])
+        >>> len(row[LType.SURFACE.value])
         2
-        >>> row.clearLayer(BLayer.LType.SURFACE)
+        >>> row.clearLayer(LType.SURFACE)
         True
-        >>> len(row[BLayer.LType.SURFACE.value])
+        >>> len(row[LType.SURFACE.value])
         0
         """
-        assert isinstance(theLayer, BLayer.LType)
+        assert isinstance(theLayer, LType)
         for index in range(len(self[theLayer.value])):
             del self[theLayer.value]
         return True
@@ -174,6 +174,21 @@ class BRow(Itero):
         cellSt = ['{0:^8}'.format(str(x.Name)) for x in cells.values()]
         return " ".join(cellSt)
 
+    def render(self, **kwargs):
+        """Render the row.
+
+        TODO: JUST RENDER ON TEXT FROM NOW.
+        """
+        render = kwargs.get('theRender', BRender.DEFAULT)
+        width = kwargs.get('theWidth', 5)
+        cells = OrderedDict()
+        for layer in [x for x in self if len(x)]:
+            for cell in layer:
+                key = '{0},{1}'.format(cell.Col, cell.Row)
+                cells.update({key: cell})
+        cellSt = ['{0}'.format(x.render(render).center(width)) for x in cells.values()]
+        return " ".join(cellSt)
+
     def __repr__(self):
         """String representation for BRow instance.
 
@@ -188,6 +203,7 @@ class BRow(Itero):
           [LType.SURFACE] <None> cell# 0
           [LType.OBJECT ] <None> cell# 0
           [LType.OVER   ] <None> cell# 0
+          [LType.MASK   ] <None> cell# 0
         <BLANKLINE>
         """
         st = 'Row: {0}\n'.format(self.CellRow)
