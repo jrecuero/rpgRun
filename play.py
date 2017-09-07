@@ -3,13 +3,17 @@ sys.path.append('../jc2li')
 
 import game
 from blayer import BLayer
-from bpoint import Location
+from bpoint import Point, Location
 from base import Cli
 from decorators import argo, syntax, setsyntax
 from argtypes import Int, Str
 from brow import BRow
 from bobject import BObject
 from bsurface import BSurface
+
+PLAYER_ATTRS = '''[{"hp": {"base": 10, "delta": 2, "buffs": "None"}},
+                   {"str": {"base": 5, "delta": 1, "buffs": "None"}},
+                   {"con": {"base": 3, "delta": 1, "buffs": "None"}}]'''
 
 
 class Play(Cli):
@@ -31,6 +35,7 @@ class Play(Cli):
                 row.addCellToLayer(BSurface(iwidth, iheight, '****'), BLayer.LType.SURFACE)
 
         self._game.Player = BObject(2, 2, 'PLAYER')
+        self._game.Player.Attrs.setupAttrsFromJSON(PLAYER_ATTRS)
         self._game.Board[2].addCellToLayer(self._game.Player, BLayer.LType.OBJECT)
         self._game.Board[0].addCellToLayer(BObject(0, 4, 'Pillar'), BLayer.LType.OBJECT)
         print('Init rpgRun')
@@ -56,6 +61,18 @@ class Play(Cli):
             loc = None
         if loc is not None:
             self._game.movePlayer(loc, pos)
+
+    @Cli.command()
+    @setsyntax
+    @syntax("PLAYER [name]?")
+    @argo('name', Str, 'PLAYER')
+    def do_print_player(self, name):
+        """Print player information.
+        """
+        print("Data for  : {0}".format(name))
+        print("Name      : {0}".format(self._game.Player.Name))
+        print("Position  : {0}".format(Point.__repr__(self._game.Player)))
+        print("Attributes:\n{0}".format(self._game.Player.Attrs))
 
     @Cli.command('PRINT')
     def do_print_board(self, *args):

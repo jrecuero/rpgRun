@@ -1,4 +1,5 @@
 from itero import StrItero
+import json
 
 
 class Attr(object):
@@ -162,8 +163,8 @@ class Attr(object):
     def setupAttr(self, theBase=None, theDelta=None, theBuffs=None):
         """
         >>> at = Attr('new')
-        >>> at
-        new: 0/0
+        >>> at, at.Delta, at.Buffs
+        (new: 0/0, 0, {})
         >>> at.setupAttr(), at.Delta, at.Buffs
         (new: 0/0, 0, {})
         >>> at.setupAttr(10), at.Delta, at.Buffs
@@ -181,10 +182,22 @@ class Attr(object):
             self.Buffs.update(theBuffs)
         return self
 
-    def setupAttrFromJSON(self, theJsonFile):
+    def setupAttrFromJSON(self, theJSON):
         """
+        >>> at = Attr('new')
+        >>> at, at.Delta, at.Buffs
+        (new: 0/0, 0, {})
+        >>> data = '{"base": 10, "delta": 1, "buffs": "None"}'
+        >>> at.setupAttrFromJSON(data), at.Delta, at.Buffs
+        (new: 10/10, 1, {})
+        >>> data = '{"base": "None", "delta": 5, "buffs": {"one": 4}}'
+        >>> at.setupAttrFromJSON(data), at.Delta, at.Buffs
+        (new: 14/10, 5, {'one': 4})
         """
-        return self
+        dicta = json.loads(theJSON)
+        return self.setupAttr(int(dicta['base']) if dicta['base'] != "None" else None,
+                              int(dicta['delta']) if dicta['delta'] != "None" else None,
+                              dicta['buffs'] if dicta['buffs'] != 'None' else None)
 
     def __repr__(self):
         """
@@ -265,10 +278,32 @@ class Attributes(StrItero):
         for name in theNames:
             self.addAttr(Attr(name))
 
-    def setupAttrsFromJSON(self, theJsonFile):
+    def setupAttrsFromJSON(self, theJSON):
+        """
+        >>> ats = Attributes()
+        >>> data = '[{"hp": {"base": 10, "delta": 2, "buffs": "None"}},\
+                {"mp": {"base": 5, "delta": 1, "buffs": {"one": 2}}}]'
+        >>> ats.setupAttrsFromJSON(data)
+        >>> ats
+        hp: 10/10
+        mp: 7/5
+        >>> ats['HP'].Delta
+        2
+        >>> ats['mp'].Delta
+        1
+        """
+        lista = json.loads(theJSON)
+        for entry in lista:
+            k = list(entry.keys())[0]
+            v = json.dumps(list(entry.values())[0])
+            self.addAttr(Attr(k)).setupAttrFromJSON(v)
+
+    def setupAttrsFromFile(self, theFile):
         """
         """
-        pass
+        with open(theFile, 'r') as file:
+            data = json.load(file)
+        self.setupAttrsFromJSON(json.dumps(data))
 
     def levelUp(self, theLevel=1):
         """
