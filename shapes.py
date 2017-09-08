@@ -9,6 +9,11 @@ class Shape(abc.ABC):
 
     def __init__(self, theCenter, theWidth, theHeight):
         """Shape class initialization method.
+
+        Args:
+            theCenter (BPoint) : Point to the center of shape.
+            theWidth (int) : Shape width dimension (x-axis).
+            theHeight (int) : Shape height dimension (y-axis).
         """
         if isinstance(theCenter, BPoint):
             self._center = theCenter
@@ -89,6 +94,11 @@ class Quad(Shape):
     def __init__(self, theCenter, theWidth, theHeight):
         """Quad class initialization method.
 
+        Args:
+            theCenter (BPoint) : Point to the center of quad.
+            theWidth (int) : Quad width dimension (x-axis).
+            theHeight (int) : Quad height dimension (y-axis).
+
         >>> q = Quad(BPoint(0, 0), 10, 10)
         >>> q.Center, q.Width, q.Height
         ((0, 0), 10, 10)
@@ -148,6 +158,69 @@ class Quad(Shape):
         return allPoints
 
 
+class Rectangle(Quad):
+    """Rectanle class derived from Quad class, it is basically a Quad
+    but the hook point is not the Center, but the bottom-left corner.
+    """
+
+    def __init__(self, theCorner, theWidth, theHeight):
+        """Rectangle class initialization method.
+
+        Args:
+            theCorner (BPoint) : Point to the bottom-left of the rectangle..
+            theWidth (int) : Rectangle width dimension (x-axis).
+            theHeight (int) : Rectangle height dimension (y-axis).
+
+        >>> q = Rectangle(BPoint(0, 0), 2, 2)
+        >>> q.Center, q.Width, q.Height
+        ((1, 1), 2, 2)
+        >>> q.getCorners()
+        ((0, 2), (2, 2), (0, 0), (2, 0))
+        >>> q.getRects()
+        [((0, 2), (2, 2), (0, 0), (2, 0))]
+        >>> q.isInside(BPoint(3, 3)), q.isInside(BPoint(1, 1))
+        (False, True)
+        >>> q.getAllInsidePoints()
+        [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
+        """
+        center = BPoint(theCorner.X + int(theWidth / 2), theCorner.Y + int(theHeight / 2))
+        super(Rectangle, self).__init__(center, theWidth, theHeight)
+
+    @Quad.Center.setter
+    def Center(self, theValue):
+        """
+        >>> q = Rectangle(BPoint(0, 0), 2, 2)
+        >>> try:
+        ...     q.Center = BPoint(1, 1)
+        ... except NotImplementedError:
+        ...     'NotImplemented'
+        'NotImplemented'
+        """
+        raise NotImplementedError
+
+    @Quad.Width.setter
+    def Width(self, theValue):
+        """
+        >>> try:
+        ...     q.Width = 20
+        ... except NotImplementedError:
+        ...     'NotImplemented'
+        'NotImplemented'
+        """
+        raise NotImplementedError
+
+    @Quad.Height.setter
+    def Height(self, theValue):
+        """
+        >>> try:
+        ...     q.Height = 15
+        ... except NotImplementedError:
+        ...     'NotImplemented'
+        'NotImplemented'
+        """
+        raise NotImplementedError
+
+
 class Rhomboid(Shape):
     """Rhomboid class derives from Shape class and it implements a
     Rhomboid shape.
@@ -156,18 +229,17 @@ class Rhomboid(Shape):
     def __init__(self, theCenter, theWidth, theHeight):
         """Rhomboid class initialization method.
 
+        Args:
+            theCenter (BPoint) : Point to the center of rombhoid.
+            theWidth (int) : Rombhoid width dimension (x-axis).
+            theHeight (int) : Rombhoid height dimension (y-axis).
+
         >>> r = Rhomboid(BPoint(0, 0), 10, 10)
         >>> r.Center, r.Width, r.Height
         ((0, 0), 10, 10)
         >>> r.Center = BPoint(1, 1)
         >>> r.Center
         (1, 1)
-        >>> r.Width = 20
-        >>> r.Width, r.Height
-        (20, 20)
-        >>> r.Height = 15
-        >>> r.Width, r.Height
-        (15, 15)
         """
         if theWidth == theHeight:
             super(Rhomboid, self).__init__(theCenter, theWidth, theHeight)
@@ -177,6 +249,12 @@ class Rhomboid(Shape):
     @Shape.Width.setter
     def Width(self, theValue):
         """
+        >>> r = Rhomboid(BPoint(0, 0), 10, 10)
+        >>> r.Width, r.Height
+        (10, 10)
+        >>> r.Width = 20
+        >>> r.Width, r.Height
+        (20, 20)
         """
         self._width = theValue
         self._height = theValue
@@ -184,6 +262,12 @@ class Rhomboid(Shape):
     @Shape.Height.setter
     def Height(self, theValue):
         """
+        >>> r = Rhomboid(BPoint(0, 0), 10, 10)
+        >>> r.Width, r.Height
+        (10, 10)
+        >>> r.Height = 15
+        >>> r.Width, r.Height
+        (15, 15)
         """
         self._height = theValue
         self._width = theValue
@@ -265,6 +349,15 @@ class Star(Rhomboid):
 
     def __init__(self, theCenter, theWidth, theHeight):
         """Star class initialization method.
+
+        Args:
+            theCenter (BPoint) : Point to the center of star.
+            theWidth (int) : Star width dimension (x-axis).
+            theHeight (int) : Star height dimension (y-axis).
+
+        >>> r = Star(BPoint(0, 0), 10, 10)
+        >>> r.Center, r.Width, r.Height
+        ((0, 0), 10, 10)
         """
         super(Star, self).__init__(theCenter, theWidth, theHeight)
 

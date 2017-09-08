@@ -11,10 +11,16 @@ from brow import BRow
 from bcell import BSprite
 from bobject import BObject
 from bsurface import BSurface
+from actor import Actor
+from pactor import PActor
 
 PLAYER_ATTRS = '''[{"hp": {"base": 10, "delta": 2, "buffs": "None"}},
-                   {"str": {"base": 5, "delta": 1, "buffs": "None"}},
+                   {"str": {"base": 9, "delta": 1, "buffs": "None"}},
                    {"con": {"base": 3, "delta": 1, "buffs": "None"}}]'''
+
+ACTOR_ATTRS = '''[{"hp": {"base": 10, "delta": 2, "buffs": "None"}},
+                  {"str": {"base": 5, "delta": 1, "buffs": "None"}},
+                  {"con": {"base": 3, "delta": 1, "buffs": "None"}}]'''
 
 
 class Play(Cli):
@@ -50,11 +56,15 @@ class Play(Cli):
                 row.addCellToLayer(cell, LType.SURFACE)
 
         playerSprite = BSprite(theSprText='-^-', theWidth=7, theColor="\x1b[32m" + "\x1b[41m")
+        actorSprite = BSprite(theSprText='oOo', theWidth=7, theColor="\x1b[32m" + "\x1b[41m")
         pillarSprite = BSprite(theSprText='|||||||', theWidth=7, theColor="\x1b[44m")
-        self._game.Player = BObject(2, 2, 'PLAYER', theSprite=playerSprite)
+        self._game.Player = PActor(2, 2, 'PLAYER', theSprite=playerSprite)
         self._game.Player.Attrs.setupAttrsFromJSON(PLAYER_ATTRS)
+        enemy = Actor(4, 4, 'ENEMY', theSprite=actorSprite)
+        enemy.Attrs.setupAttrsFromJSON(ACTOR_ATTRS)
         self._game.Board[2].addCellToLayer(self._game.Player, LType.OBJECT)
         self._game.Board[0].addCellToLayer(BObject(0, 4, 'Pillar', theSprite=pillarSprite), LType.OBJECT)
+        self._game.Board[0].addCellToLayer(enemy, LType.OBJECT)
         print('Init rpgRun')
 
     @Cli.command()

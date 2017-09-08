@@ -12,8 +12,12 @@ class BRender(Enum):
 
 
 class BSprite(object):
+    """
+    """
 
     def __init__(self, **kwargs):
+        """
+        """
         self._graph = kwargs.get('theSprGraph', None)
         self._text = kwargs.get('theSprText', None)
         self._color = kwargs.get('theColor', None)
@@ -21,37 +25,55 @@ class BSprite(object):
 
     @property
     def Graph(self):
+        """
+        """
         return self._graph
 
     @Graph.setter
     def Graph(self, theValue):
+        """
+        """
         self._graph = theValue
 
     @property
     def Text(self):
+        """
+        """
         return self._text
 
     @Text.setter
     def Text(self, theValue):
+        """
+        """
         self._text = theValue
 
     @property
     def Color(self):
+        """
+        """
         return self._color
 
     @Color.setter
     def Color(self, theValue):
+        """
+        """
         self._color = theValue
 
     @property
     def Width(self):
+        """
+        """
         return self._width
 
     @Width.setter
     def Width(self, theValue):
+        """
+        """
         self._width = theValue
 
     def get(self, theRender=BRender.DEFAULT):
+        """
+        """
         if theRender == BRender.GRAPH:
             return self._graph
         elif theRender == BRender.TEXT:
@@ -62,6 +84,8 @@ class BSprite(object):
             raise NotImplementedError
 
     def render(self, theRender=BRender.DEFAULT):
+        """
+        """
         if theRender == BRender.GRAPH:
             raise NotImplementedError
         elif theRender == BRender.TEXT:
@@ -75,6 +99,8 @@ class BSprite(object):
             raise NotImplementedError
 
     def __repr__(self):
+        """
+        """
         st = 'Text[{0}] '.format(self._text if self._text else 'None')
         st += 'Graph[{0}]'.format('<GRAPH>' if self._graph else 'None')
         return st
