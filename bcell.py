@@ -16,6 +16,8 @@ class BSprite(object):
     def __init__(self, **kwargs):
         self._graph = kwargs.get('theSprGraph', None)
         self._text = kwargs.get('theSprText', None)
+        self._color = kwargs.get('theColor', None)
+        self._width = kwargs.get('theWidth', None)
 
     @property
     def Graph(self):
@@ -33,6 +35,22 @@ class BSprite(object):
     def Text(self, theValue):
         self._text = theValue
 
+    @property
+    def Color(self):
+        return self._color
+
+    @Color.setter
+    def Color(self, theValue):
+        self._color = theValue
+
+    @property
+    def Width(self):
+        return self._width
+
+    @Width.setter
+    def Width(self, theValue):
+        self._width = theValue
+
     def get(self, theRender=BRender.DEFAULT):
         if theRender == BRender.GRAPH:
             return self._graph
@@ -40,6 +58,19 @@ class BSprite(object):
             return self._text
         elif theRender == BRender.NONE:
             return None
+        else:
+            raise NotImplementedError
+
+    def render(self, theRender=BRender.DEFAULT):
+        if theRender == BRender.GRAPH:
+            raise NotImplementedError
+        elif theRender == BRender.TEXT:
+            return '{0}{1}{2}'.format(self.Color if self.Color else '',
+                                      self._text.center(self.Width) if self.Width else self._text,
+                                      '\x1b[0m' if self.Color else '')
+            return self._text
+        elif theRender == BRender.NONE:
+            raise NotImplementedError
         else:
             raise NotImplementedError
 
@@ -240,10 +271,8 @@ class BCell(BPoint):
         '*'
         >>> cell.render(BRender.TEXT)
         '*'
-        >>> cell.render(BRender.GRAPH)
-        True
         """
-        return self.Sprite.get(theRender)
+        return self.Sprite.render(theRender)
 
     def __repr__(self):
         """String representation for the BCell instance.

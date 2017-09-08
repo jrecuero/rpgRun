@@ -8,6 +8,7 @@ from base import Cli
 from decorators import argo, syntax, setsyntax
 from argtypes import Int, Str
 from brow import BRow
+from bcell import BSprite
 from bobject import BObject
 from bsurface import BSurface
 
@@ -28,8 +29,9 @@ class Play(Cli):
         width = self._game.Board.Width
         row = BRow(width)
         newHeight = self._game.Board.TopCellRow + 1
+        sprite = BSprite(theSprText=' ', theColor='\x1b[42m', theWidth=7)
         for iwidth in range(width):
-            cell = BSurface(iwidth, newHeight, '****', theSprite='***')
+            cell = BSurface(iwidth, newHeight, '*', theSprite=sprite)
             row.addCellToLayer(cell, LType.SURFACE)
         self._game.scrollBoard(row)
 
@@ -40,16 +42,19 @@ class Play(Cli):
         width, height = (5, 5)
         self._game = game.Game(width, height)
         iheight = height
+        sprite = BSprite(theSprText=' ', theColor='\x1b[42m', theWidth=7)
         for row in self._game.Board:
             iheight -= 1
             for iwidth in range(width):
-                cell = BSurface(iwidth, iheight, '****', theSprite='***')
+                cell = BSurface(iwidth, iheight, '*', theSprite=sprite)
                 row.addCellToLayer(cell, LType.SURFACE)
 
-        self._game.Player = BObject(2, 2, 'PLAYER', theSprite="-^-")
+        playerSprite = BSprite(theSprText='-^-', theWidth=7, theColor="\x1b[32m" + "\x1b[41m")
+        pillarSprite = BSprite(theSprText='|||||||', theWidth=7, theColor="\x1b[44m")
+        self._game.Player = BObject(2, 2, 'PLAYER', theSprite=playerSprite)
         self._game.Player.Attrs.setupAttrsFromJSON(PLAYER_ATTRS)
         self._game.Board[2].addCellToLayer(self._game.Player, LType.OBJECT)
-        self._game.Board[0].addCellToLayer(BObject(0, 4, 'Pillar', theSprite='|||'), LType.OBJECT)
+        self._game.Board[0].addCellToLayer(BObject(0, 4, 'Pillar', theSprite=pillarSprite), LType.OBJECT)
         print('Init rpgRun')
 
     @Cli.command()
