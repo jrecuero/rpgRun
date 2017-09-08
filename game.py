@@ -100,21 +100,3 @@ class Game(object):
             the cycle.
         """
         pass
-
-
-def printBoard(theBoard):
-    for row in theBoard.Board:
-        if row.CellRow == theBoard.Player.Row:
-            print('{0} {1}'.format(row.CellRow, theBoard.Player))
-        else:
-            print(row.CellRow)
-
-
-from bobject import BObject
-from bsurface import BSurface
-width, height = (5, 5)
-g = Game(width, height)
-for index, row in enumerate(g.Board):
-    row.addCellToLayer(BSurface(0, index, None), LType.SURFACE)
-g.Player = BObject(2, 2, 'PLAYER')
-g.Board[2].addCellToLayer(g.Player, LType.OBJECT)

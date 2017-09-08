@@ -1,5 +1,12 @@
 #!/bin/bash
 
-export PYTHONPATH=.:../jc2li
+CURRENT_DIRECTORY=`pwd`
+REPO_PATH=${CURRENT_DIRECTORY}/..
+JC2LI_PATH=${REPO_PATH}/jcli
+RPG_RUN_PATH=${REPO_PATH}/rpgRun
+TEXT_PLAY_PATH=${RPG_RUN_PATH}/textplay
+TEXT_PLAY_APP=play.py
 
-python play.py
+export PYTHONPATH=${RPG_RUN_PATH}:${TEXT_PLAY_PATH}:${JC2LI_PATH}
+
+python ${TEXT_PLAY_PATH}/${TEXT_PLAY_APP}
