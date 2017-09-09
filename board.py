@@ -130,6 +130,14 @@ class Board(Itero):
                 return row
         return None
 
+    def getCellsFromLayer(self, theLayers):
+        cells  = []
+        for row in self:
+            cellsFromRow = row.getCellsFromLayer(theLayers)
+            if cellsFromRow:
+                cells.extend(cellsFromRow)
+        return cells
+
     def render(self, **kwargs):
         """Render the board.
 

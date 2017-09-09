@@ -1,5 +1,5 @@
-import sys
-sys.path.append('../jc2li')
+# import sys
+# sys.path.append('../jc2li')
 
 import game
 from blayer import LType
@@ -8,7 +8,9 @@ from base import Cli
 from decorators import argo, syntax, setsyntax
 from argtypes import Int, Str
 from brow import BRow
+from action import AType
 from assets import GreenSurface, PlayerActor, EnemyActor, Pillar
+from assets import DebugAction
 import loggerator
 
 
@@ -99,6 +101,26 @@ class Play(Cli):
         """Scroll Board.
         """
         self._scroll()
+
+    @Cli.command('RUN')
+    def do_run(self, *args):
+        """Run a cycle
+        """
+        weapon = DebugAction('wepon', AType.WEAPONIZE)
+        weapon.Originator = self._game.Player
+        self._game.run()
+        self._game.runner(weapon)
+        print('select target')
+        for i, x in enumerate(self._game.TargetChoice):
+            print('{0} : {1}'.format(i, x))
+
+    @Cli.command()
+    @setsyntax
+    @syntax("SELECT targetid")
+    @argo('targetid', Int, None)
+    def do_select(self, targetid):
+        target = self._game.TargetChoice[targetid]
+        self._game.runner(target)
 
 
 if __name__ == '__main__':

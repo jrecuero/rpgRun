@@ -22,10 +22,11 @@ class Action(object):
     inside that AoE
     """
 
-    def __init__(self, theName, **kwargs):
+    def __init__(self, theName, theType=AType.NONE, **kwargs):
         """Action class initializaton method.
         """
         self._name = theName
+        self.Type = theType
         self._originator = None
         self._target = []
         self._aoe = None
@@ -33,13 +34,33 @@ class Action(object):
         self._preExecCb = None
         self._postExecCb = None
         self._resultCb = None
-        self._type = None
 
     @property
     def Name(self):
         """
         """
         return self._name
+
+    @property
+    def Type(self):
+        """
+        """
+        return self._type
+
+    @Type.setter
+    def Type(self, theValue):
+        """
+        """
+        assert isinstance(theValue, AType)
+        self._type = theValue
+
+    @property
+    def Originator(self):
+        return self._originator
+
+    @Originator.setter
+    def Originator(self, theValue):
+        self._originator = theValue
 
     def requires(self):
         """Method that returns requirements for the action.
@@ -51,6 +72,17 @@ class Action(object):
         """
         return None
 
+    def layerToTarget(self):
+        """Return layers that can be targeted by the action.
+        """
+        return None
+
+    def filterTarget(self, theTarget):
+        """Filter the given list with cell and return possible
+        cells to be targeted by the action.
+        """
+        return None
+
     def drySelect(self):
         """Method that show possible targets to be selected.
         """
@@ -59,7 +91,10 @@ class Action(object):
     def select(self):
         """Method that returns action targets.
         """
-        pass
+        return None
+
+    def selected(self, theTarget):
+        return None
 
     def dryExecute(self):
         """Method that returns possible actions execution.

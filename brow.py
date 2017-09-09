@@ -160,6 +160,14 @@ class BRow(Itero):
             del self[theLayer.value]
         return True
 
+    def getCellsFromLayer(self, theLayers):
+        """
+        """
+        cells  = []
+        for layer in [x for x in self if x.Type in theLayers]:
+            cells.extend([cell for cell in layer])
+        return cells
+
     def rowToString(self):
         """Return strinf with row representation
 

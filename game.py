@@ -3,6 +3,7 @@ from bhandler import BoardHandler
 from bpoint import Location
 from brow import BRow
 from blayer import LType
+from action import Action
 
 
 class Game(object):
@@ -18,6 +19,7 @@ class Game(object):
         self._board = Board(self._bheight, self._bwidth)
         self._bhandler = BoardHandler(self._board)
         self._player = None
+        self._targetChoice = None
 
     @property
     def Board(self):
@@ -42,6 +44,14 @@ class Game(object):
         """
         """
         self._player = theValue
+
+    @property
+    def TargetChoice(self):
+        return self._targetChoice
+
+    @TargetChoice.setter
+    def TargetChoice(self, theValue):
+        self._targetChoice = theValue
 
     def movePlayer(self, theDirection, theMove):
         """Moves the player (PActor instace) in the given direction and the
@@ -82,8 +92,8 @@ class Game(object):
         assert isinstance(theNewRow, BRow)
         self.Board.scroll(theNewRow)
 
-    def oneRun(self):
-        """Executes one run cycle.
+    def _run(self):
+        """Executes run cycle.
 
         Run cycle stages:
             - Prompt user for operation. Action could be movement and any other
@@ -99,4 +109,26 @@ class Game(object):
             - After all actors have taken their turn, scroll the board and end
             the cycle.
         """
-        pass
+        while True:
+            # Wait for user to select an action.
+            _action = yield
+            assert isinstance(_action, Action)
+            print('action: {}'.format(_action.Type))
+
+            # When action has been selected, ask for cells for target
+            # selection.
+            _layer = _action.layerToTarget()
+            _cells = self.Board.getCellsFromLayer(_layer)
+            self.TargetChoice = _action.filterTarget(_cells)
+
+            _target = yield
+            print('target: {}'.format(_target))
+
+    def run(self):
+        """
+        """
+        self.__runner = self._run()
+        next(self.__runner)
+
+    def runner(self, theValue):
+        self.__runner.send(theValue)
