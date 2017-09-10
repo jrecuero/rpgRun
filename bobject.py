@@ -25,6 +25,13 @@ class BObject(BCell):
     def __getattr__(self, theAttr):
         """Overwrite __getattr__ method allowing to access values inside _attrs
         as regular instance attributes.
+
+        >>> from attr import Attr
+        >>> obj = BObject(0, 0, 'new')
+        >>> obj.addAttr(Attr('HP'))
+        HP: 0/0
+        >>> obj.HP
+        0
         """
         if '_attrs' in self.__dict__ and theAttr in self.__dict__['_attrs']:
             return self._attrs[theAttr].Now
@@ -47,10 +54,30 @@ class BObject(BCell):
 
     def addAttr(self, theAttr):
         """
+
+        >>> from attr import Attr
+        >>> obj = BObject(0, 0, 'new')
+        >>> obj.addAttr(Attr('HP'))
+        HP: 0/0
+        >>> obj.Attrs
+        HP: 0/0
         """
         return self.Attrs.addAttr(theAttr)
 
     def isObject(self):
         """Returns if the instance is a BObject.
+
+        >>> obj = BObject(0, 0, 'new')
+        >>> obj.isObject()
+        True
+        """
+        return True
+
+    def isInBoard(self):
+        """Returns if the object is still in the board.
+
+        >>> obj = BObject(0, 0, 'new')
+        >>> obj.isInBoard()
+        True
         """
         return True

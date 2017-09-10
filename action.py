@@ -38,12 +38,18 @@ class Action(object):
     @property
     def Name(self):
         """
+        >>> acto = Action('new', AType.SKILL)
+        >>> acto.Name
+        'new'
         """
         return self._name
 
     @property
     def Type(self):
         """
+        >>> acto = Action('new', AType.SKILL)
+        >>> acto.Type
+        <AType.SKILL: 3>
         """
         return self._type
 
@@ -56,11 +62,36 @@ class Action(object):
 
     @property
     def Originator(self):
+        """
+        >>> acto = Action('new', AType.SKILL)
+        >>> acto.Originator
+        >>> acto.Originator = 'me'
+        >>> acto.Originator
+        'me'
+        """
         return self._originator
 
     @Originator.setter
     def Originator(self, theValue):
         self._originator = theValue
+
+    @property
+    def Target(self):
+        """
+        >>> acto = Action('new', AType.SKILL)
+        >>> acto.Target
+        []
+        >>> acto.Target = 'me'
+        >>> acto.Target
+        ['me']
+        """
+        return self._target
+
+    @Target.setter
+    def Target(self, theValue):
+        """
+        """
+        self._target.append(theValue)
 
     def requires(self):
         """Method that returns requirements for the action.

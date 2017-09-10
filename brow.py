@@ -95,6 +95,7 @@ class BRow(Itero):
         assert isinstance(theLayer, LType)
         self.CellRow = theCell.Row
         self[theLayer.value].append(theCell)
+        theCell.Layer = theLayer
         return True
 
     def removeCellFromLayer(self, theCell, theLayer):

@@ -138,6 +138,7 @@ class BCell(BPoint):
         self._static = True
         self._walkable = True
         self._solid = True
+        self._layer = None
         self.Sprite = kwargs.get('theSprite', None)
 
     @property
@@ -288,6 +289,23 @@ class BCell(BPoint):
         Text[*] Graph[<GRAPH>]
         """
         self._sprite = BSprite(theSprText=theValue) if isinstance(theValue, str) else theValue
+
+    @property
+    def Layer(self):
+        """
+        >>> cell = BCell(0, 0, 'cell')
+        >>> cell.Layer
+        >>> cell.Layer = True
+        >>> cell.Layer
+        True
+        """
+        return self._layer
+
+    @Layer.setter
+    def Layer(self, theValue):
+        """
+        """
+        self._layer = theValue
 
     def render(self, theRender=BRender.DEFAULT):
         """Render the cell.

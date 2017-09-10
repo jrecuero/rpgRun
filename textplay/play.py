@@ -45,10 +45,15 @@ class Play(Cli):
             for iwidth in range(self._width):
                 row.addCellToLayer(GreenSurface(iwidth, iheight, self._sprWidth), LType.SURFACE)
 
-        self._game.Player = PlayerActor(2, 2, self._sprWidth)
+        player = PlayerActor(2, 2, self._sprWidth)
+        enemy = EnemyActor(4, 4, self._sprWidth)
+
+        self._game.addActor(player, True)
+        self._game.addActor(enemy)
+
         self._game.Board[2].addCellToLayer(self._game.Player, LType.OBJECT)
         self._game.Board[0].addCellToLayer(Pillar(0, 4, self._sprWidth), LType.OBJECT)
-        self._game.Board[0].addCellToLayer(EnemyActor(4, 4, self._sprWidth), LType.OBJECT)
+        self._game.Board[0].addCellToLayer(enemy, LType.OBJECT)
         self._logger.display('Init rpgRun')
 
     @Cli.command()
@@ -89,6 +94,15 @@ class Play(Cli):
         self._logger.display("Name      : {0}".format(self._game.Player.Name))
         self._logger.display("Position  : {0}".format(Point.__repr__(self._game.Player)))
         self._logger.display("Attributes:\n{0}".format(self._game.Player.Attrs))
+
+    @Cli.command('ACTORS')
+    def do_print_actors(self, *args):
+        """Print actors attributes.
+        """
+        for _actor in self._game.Actors:
+            self._logger.display("Data for  : {0}".format(_actor.Name))
+            self._logger.display("Position  : {0}".format(Point.__repr__(_actor)))
+            self._logger.display("Attributes:\n{0}".format(_actor.Attrs))
 
     @Cli.command('PRINT')
     def do_print_board(self, *args):

@@ -19,6 +19,7 @@ class Game(object):
         self._board = Board(self._bheight, self._bwidth)
         self._bhandler = BoardHandler(self._board)
         self._player = None
+        self._actors = []
         self._targetChoice = None
 
     @property
@@ -46,12 +47,42 @@ class Game(object):
         self._player = theValue
 
     @property
+    def Actors(self):
+        """
+        """
+        return self._actors
+
+    @property
     def TargetChoice(self):
+        """
+        """
         return self._targetChoice
 
     @TargetChoice.setter
     def TargetChoice(self, theValue):
+        """
+        """
         self._targetChoice = theValue
+
+    def addActor(self, theActor, thePlayer=False):
+        """
+        """
+        self._actors.append(theActor)
+        if thePlayer:
+            self.Player = theActor
+
+    def _removeActor(self, theActor):
+        """
+        """
+        self.Board.removeCell(theActor)
+        self._actors.remove(theActor)
+
+    def _updateActors(self):
+        """
+        """
+        for _actor in self.Actors:
+            if not _actor.isInBoard():
+                self._removeActor(_actor)
 
     def movePlayer(self, theDirection, theMove):
         """Moves the player (PActor instace) in the given direction and the
@@ -121,8 +152,13 @@ class Game(object):
             _cells = self.Board.getCellsFromLayer(_layer)
             self.TargetChoice = _action.filterTarget(_cells)
 
+            # Wait for user to select the target
             _target = yield
             print('target: {}'.format(_target))
+            _action.selected(_target)
+            _action.execute()
+            print('target hp: {0}'.format(_target.HP))
+            self._updateActors()
 
     def run(self):
         """

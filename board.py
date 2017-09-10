@@ -131,12 +131,46 @@ class Board(Itero):
         return None
 
     def getCellsFromLayer(self, theLayers):
+        """
+        """
         cells  = []
         for row in self:
             cellsFromRow = row.getCellsFromLayer(theLayers)
             if cellsFromRow:
                 cells.extend(cellsFromRow)
         return cells
+
+    def addCellToLayer(self, theCell, theLayer):
+        """
+        >>> from bcell import BCell
+        >>> from blayer import LType
+        >>> board = Board(2, 5)
+        >>> board[0].CellRow = 0
+        >>> board.addCellToLayer(BCell(0, 0, None), LType.SURFACE)
+        True
+        >>> board[0][LType.SURFACE.value]
+        [LType.SURFACE]  <0>   cell# 1
+        """
+        row = self.getRowFromCellRow(theCell.Row)
+        return row.addCellToLayer(theCell, theLayer)
+
+    def removeCell(self, theCell):
+        """
+        >>> from bcell import BCell
+        >>> from blayer import LType
+        >>> board = Board(2, 5)
+        >>> board[0].CellRow = 0
+        >>> cell = BCell(0, 0, None)
+        >>> board.addCellToLayer(cell, LType.SURFACE)
+        True
+        >>> board.removeCell(cell)
+        True
+        >>> board[0][LType.SURFACE.value]
+        [LType.SURFACE]  <0>   cell# 0
+        """
+        cellLayer = theCell.Layer
+        row = self.getRowFromCellRow(theCell.Row)
+        return row.removeCellFromLayer(theCell, cellLayer)
 
     def render(self, **kwargs):
         """Render the board.

@@ -73,13 +73,14 @@ class DebugAction(Action):
         pass
 
     def selected(self, theTarget):
-        pass
+        self.Target = theTarget
 
     def dryExecute(self):
         pass
 
     def execute(self):
-        pass
+        damage = self.Originator.STR - self.Target[0].CON
+        self.Target[0].Attrs['HP'].dec(damage)
 
     def dryResult(self):
         pass

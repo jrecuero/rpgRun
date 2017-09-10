@@ -12,6 +12,7 @@ class Attr(object):
         self._name = theName
         self._desc = None
         self._base = 0
+        self._now = 0
         self._delta = 0
         self._buffs = {}
 
@@ -109,7 +110,27 @@ class Attr(object):
         >>> at.Now
         5
         """
-        return self.Base + sum(self.Buffs.values())
+        return self.Base + sum(self.Buffs.values()) + self._now
+
+    def dec(self, theValue):
+        """
+        >>> at = Attr('new')
+        >>> at.Base = 10
+        >>> at.dec(1)
+        >>> at.Now
+        9
+        """
+        self._now -= theValue
+
+    def inc(self, theValue):
+        """
+        >>> at = Attr('new')
+        >>> at.Base = 10
+        >>> at.inc(2)
+        >>> at.Now
+        12
+        """
+        self._now += theValue
 
     def addBuff(self, theName, theValue):
         """

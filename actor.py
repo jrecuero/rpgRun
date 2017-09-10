@@ -27,3 +27,16 @@ class Actor(BObject):
         """Returns if the instance is an Actor.
         """
         return True
+
+    def isInBoard(self):
+        """
+        """
+        return self.isAlive()
+
+    def isAlive(self):
+        """
+        """
+        try:
+            return self.HP > 0
+        except KeyError:
+            return True
