@@ -132,7 +132,7 @@ class Action(object):
         """
         pass
 
-    def execute(self):
+    def execute(self, theGame):
         """Method that executes the action.
         """
         pass

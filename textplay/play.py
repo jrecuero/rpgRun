@@ -10,7 +10,7 @@ from argtypes import Int, Str
 from brow import BRow
 from action import AType
 from assets import GreenSurface, PlayerActor, EnemyActor, Pillar
-from assets import DebugAction
+from assets import WeaponAction, MoveAction
 import loggerator
 
 
@@ -46,6 +46,8 @@ class Play(Cli):
                 row.addCellToLayer(GreenSurface(iwidth, iheight, self._sprWidth), LType.SURFACE)
 
         player = PlayerActor(2, 2, self._sprWidth)
+        player.Actions = WeaponAction('weapon', AType.WEAPONIZE)
+        player.Actions = MoveAction('move', AType.MOVEMENT)
         enemy = EnemyActor(4, 4, self._sprWidth)
 
         self._game.addActor(player, True)
@@ -120,11 +122,22 @@ class Play(Cli):
     def do_run(self, *args):
         """Run a cycle
         """
-        weapon = DebugAction('wepon', AType.WEAPONIZE)
-        weapon.Originator = self._game.Player
+        print('select action:')
+        for i, x in enumerate(self._game.Player.Actions):
+            print('{0} : {1}'.format(i, x))
+
+    @Cli.command()
+    @setsyntax
+    @syntax("ACTION actionid")
+    @argo('actionid', Int, None)
+    def do_action(self, actionid):
+        """Select action
+        """
+        _action = self._game.Player.Actions[actionid]
+        _action.Originator = self._game.Player
         self._game.run()
-        self._game.runner(weapon)
-        print('select target')
+        self._game.runner(_action)
+        print('select target:')
         for i, x in enumerate(self._game.TargetChoice):
             print('{0} : {1}'.format(i, x))
 

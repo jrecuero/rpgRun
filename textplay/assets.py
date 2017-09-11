@@ -1,3 +1,4 @@
+from bpoint import Location
 from bcell import BSprite
 from blayer import LType
 from bobject import BObject
@@ -45,10 +46,10 @@ class Pillar(BObject):
         self.Sprite = BSprite(theSprText='|||||||', theWidth=theWidth, theColor="\x1b[44m")
 
 
-class DebugAction(Action):
+class WeaponAction(Action):
 
     def __init__(self, theName, theType=AType.NONE, **kwargs):
-        super(DebugAction, self).__init__(theName, theType, **kwargs)
+        super(WeaponAction, self).__init__(theName, theType, **kwargs)
 
     def requires(self):
         return None
@@ -78,9 +79,48 @@ class DebugAction(Action):
     def dryExecute(self):
         pass
 
-    def execute(self):
+    def execute(self, theGame):
         damage = self.Originator.STR - self.Target[0].CON
         self.Target[0].Attrs['HP'].dec(damage)
+
+    def dryResult(self):
+        pass
+
+    def result(self):
+        pass
+
+
+class MoveAction(Action):
+
+    def __init__(self, theName, theType=AType.NONE, **kwargs):
+        super(MoveAction, self).__init__(theName, theType, **kwargs)
+
+    def requires(self):
+        return None
+
+    def consume(self):
+        return None
+
+    def layerToTarget(self):
+        return None
+
+    def filterTarget(self, theCells):
+        return [self.Originator, ]
+
+    def drySelect(self):
+        pass
+
+    def select(self):
+        pass
+
+    def selected(self, theTarget):
+        self.Target = theTarget
+
+    def dryExecute(self):
+        pass
+
+    def execute(self, theGame):
+        theGame.movePlayer(Location.FRONT, 1)
 
     def dryResult(self):
         pass

@@ -40,3 +40,11 @@ class Actor(BObject):
             return self.HP > 0
         except KeyError:
             return True
+
+    @property
+    def Actions(self):
+        return self._actions
+
+    @Actions.setter
+    def Actions(self, theValue):
+        self._actions.append(theValue)

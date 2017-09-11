@@ -149,14 +149,17 @@ class Game(object):
             # When action has been selected, ask for cells for target
             # selection.
             _layer = _action.layerToTarget()
-            _cells = self.Board.getCellsFromLayer(_layer)
+            _cells = self.Board.getCellsFromLayer(_layer) if _layer else None
             self.TargetChoice = _action.filterTarget(_cells)
+
+            # TODO: is action selected is a move, we have to changes the target
+            # selection for a movement selection behavior.
 
             # Wait for user to select the target
             _target = yield
             print('target: {}'.format(_target))
             _action.selected(_target)
-            _action.execute()
+            _action.execute(self)
             print('target hp: {0}'.format(_target.HP))
             self._updateActors()
 
