@@ -60,11 +60,11 @@ class Play(Cli):
 
     @Cli.command()
     @setsyntax
-    @syntax("MOVE pos locst")
-    @argo('pos', Int, None)
+    @syntax("MOVE locst pos")
     @argo('locst', Str, None)
-    def do_move(self, pos, locst):
-        """Move player a numner of positions.
+    @argo('pos', Int, None)
+    def do_move_player(self, locst, pos):
+        """Move player a number of positions to given location.
         """
         locst = locst.upper()
         scrollFlag = False
@@ -122,7 +122,7 @@ class Play(Cli):
     def do_run(self, *args):
         """Run a cycle
         """
-        print('select action:')
+        print('select action (use command: ACTION <id>) ')
         for i, x in enumerate(self._game.Player.Actions):
             print('{0} : {1}'.format(i, x))
 
@@ -135,19 +135,54 @@ class Play(Cli):
         """
         _action = self._game.Player.Actions[actionid]
         _action.Originator = self._game.Player
-        self._game.run()
-        self._game.runner(_action)
-        print('select target:')
-        for i, x in enumerate(self._game.TargetChoice):
-            print('{0} : {1}'.format(i, x))
+        self._game.runInit()
+        _actionType = self._game.runSelectAction(_action)
+        if _actionType == AType.WEAPONIZE:
+            print('select target (use command: TARGET <id>)')
+            for i, x in enumerate(self._game.TargetChoice):
+                print('{0} : {1}'.format(i, x))
+        elif _actionType == AType.MOVEMENT:
+            # Run a select target, because movement has a fixed target for the
+            # movement always.
+            _target = _action.filterTarget(None)[0]
+            self._game.runSelectTarget(_target)
+            print('select player movement (use command: MOVEMENT <pos> <locst>)')
 
     @Cli.command()
     @setsyntax
-    @syntax("SELECT targetid")
+    @syntax("TARGET targetid")
     @argo('targetid', Int, None)
-    def do_select(self, targetid):
-        target = self._game.TargetChoice[targetid]
-        self._game.runner(target)
+    def do_target(self, targetid):
+        """Select target for the action.
+        """
+        _target = self._game.TargetChoice[targetid]
+        self._game.runSelectTarget(_target)
+        # Run a none movement after target has been selected.
+        # self._game.runSelectMovement()
+        self._game.runSelectRequires()
+
+    @Cli.command()
+    @setsyntax
+    @syntax("MOVEMENT locst pos")
+    @argo('locst', Str, None)
+    @argo('pos', Int, None)
+    def do_select_movement(self, locst, pos):
+        """Select player movement, location and steps.
+        """
+        locst = locst.upper()
+        if locst == 'FRONT':
+            loc = Location.FRONT
+        # We can NOT move backwards
+        # elif locst == 'BACK':
+        #     loc = Location.BACK
+        elif locst == 'LEFT':
+            loc = Location.LEFT
+        elif locst == 'RIGHT':
+            loc = Location.RIGHT
+        else:
+            loc = None
+        if loc is not None:
+            self._game.runSelectMovement(loc, pos)
 
 
 if __name__ == '__main__':

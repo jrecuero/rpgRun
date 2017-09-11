@@ -11,6 +11,23 @@ class AType(Enum):
     MAGIC = 4
     ITEM = 5
 
+    @staticmethod
+    def phase(theType):
+        if theType == AType.NONE:
+            raise NotImplementedError
+        elif theType == AType.MOVEMENT:
+            pass
+        elif theType == AType.WEAPONIZE:
+            pass
+        elif theType == AType.SKILL:
+            pass
+        elif theType == AType.MAGIC:
+            pass
+        elif theType == AType.ITEM:
+            pass
+        else:
+            raise NotImplementedError
+
 
 class Action(object):
     """Action class contains all required information to execute an action.
@@ -93,15 +110,26 @@ class Action(object):
         """
         self._target.append(theValue)
 
-    def requires(self):
+    def requires(self, theGame):
         """Method that returns requirements for the action.
         """
-        return None
+        target = yield
+        yield target
 
     def consume(self):
         """Method that consumes action requirements.
         """
         return None
+
+    def requiresTarget(self):
+        """
+        """
+        return True
+
+    def requiresMovement(self):
+        """
+        """
+        return False
 
     def layerToTarget(self):
         """Return layers that can be targeted by the action.
@@ -119,10 +147,11 @@ class Action(object):
         """
         pass
 
-    def select(self):
+    def select(self, theGame):
         """Method that returns action targets.
         """
-        return None
+        target = yield
+        yield target
 
     def selected(self, theTarget):
         return None
@@ -132,7 +161,7 @@ class Action(object):
         """
         pass
 
-    def execute(self, theGame):
+    def execute(self, theGame, **kwargs):
         """Method that executes the action.
         """
         pass

@@ -4,6 +4,7 @@ from bpoint import Location
 from brow import BRow
 from blayer import LType
 from action import Action
+import loggerator
 
 
 class Game(object):
@@ -20,7 +21,9 @@ class Game(object):
         self._bhandler = BoardHandler(self._board)
         self._player = None
         self._actors = []
+        self._action = None
         self._targetChoice = None
+        self._logger = loggerator.getLoggerator('GAME')
 
     @property
     def Board(self):
@@ -141,33 +144,63 @@ class Game(object):
             the cycle.
         """
         while True:
-            # Wait for user to select an action.
-            _action = yield
-            assert isinstance(_action, Action)
-            print('action: {}'.format(_action.Type))
+            # Yield for user to select an action.
+            self._action = yield
+            assert isinstance(self._action, Action)
+            self._logger.debug('action: {}'.format(self._action.Type))
 
             # When action has been selected, ask for cells for target
             # selection.
-            _layer = _action.layerToTarget()
+            _layer = self._action.layerToTarget()
             _cells = self.Board.getCellsFromLayer(_layer) if _layer else None
-            self.TargetChoice = _action.filterTarget(_cells)
+            self.TargetChoice = self._action.filterTarget(_cells)
 
-            # TODO: is action selected is a move, we have to changes the target
-            # selection for a movement selection behavior.
+            # Yield for user to select the target.
+            _target = yield self._action.select(self)
+            self._action.selected(_target)
+            self._logger.debug('target: {}'.format(_target))
 
-            # Wait for user to select the target
-            _target = yield
-            print('target: {}'.format(_target))
-            _action.selected(_target)
-            _action.execute(self)
-            print('target hp: {0}'.format(_target.HP))
+            # Yield for the user to enter any additional data required by the
+            # action.
+            _actionKwargs = yield self._action.requires(self)
+            self._logger.debug('action kwargs: {}'.format(_actionKwargs))
+            self._action.execute(self, **_actionKwargs)
             self._updateActors()
 
-    def run(self):
+    def runInit(self):
         """
         """
         self.__runner = self._run()
         next(self.__runner)
 
+    def runSelectAction(self, theAction):
+        """
+        """
+        self.__runner.send(theAction)
+        return theAction.Type
+
+    def runSelectTarget(self, theTarget):
+        """
+        """
+        _select = self._action.select(self)
+        next(_select)
+        self.__runner.send(_select.send(theTarget))
+
+    def runSelectRequires(self, **kwargs):
+        """
+        """
+        _requires = self._action.requires(self)
+        next(_requires)
+        self.__runner.send(_requires.send({}))
+
+    def runSelectMovement(self, theLocation=None, thePosition=None):
+        """
+        """
+        _requires = self._action.requires(self)
+        next(_requires)
+        self.__runner.send(_requires.send({'theLocation': theLocation, 'thePosition': thePosition}))
+
     def runner(self, theValue):
+        """
+        """
         self.__runner.send(theValue)

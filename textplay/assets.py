@@ -51,12 +51,6 @@ class WeaponAction(Action):
     def __init__(self, theName, theType=AType.NONE, **kwargs):
         super(WeaponAction, self).__init__(theName, theType, **kwargs)
 
-    def requires(self):
-        return None
-
-    def consume(self):
-        return None
-
     def layerToTarget(self):
         return [LType.OBJECT, ]
 
@@ -67,27 +61,12 @@ class WeaponAction(Action):
                 cells.append(cell)
         return cells
 
-    def drySelect(self):
-        pass
-
-    def select(self):
-        pass
-
     def selected(self, theTarget):
         self.Target = theTarget
 
-    def dryExecute(self):
-        pass
-
-    def execute(self, theGame):
+    def execute(self, theGame, **kwargs):
         damage = self.Originator.STR - self.Target[0].CON
         self.Target[0].Attrs['HP'].dec(damage)
-
-    def dryResult(self):
-        pass
-
-    def result(self):
-        pass
 
 
 class MoveAction(Action):
@@ -95,11 +74,15 @@ class MoveAction(Action):
     def __init__(self, theName, theType=AType.NONE, **kwargs):
         super(MoveAction, self).__init__(theName, theType, **kwargs)
 
-    def requires(self):
-        return None
+    def requiresTarget(self):
+        """
+        """
+        return False
 
-    def consume(self):
-        return None
+    def requiresMovement(self):
+        """
+        """
+        return True
 
     def layerToTarget(self):
         return None
@@ -107,23 +90,10 @@ class MoveAction(Action):
     def filterTarget(self, theCells):
         return [self.Originator, ]
 
-    def drySelect(self):
-        pass
-
-    def select(self):
-        pass
-
     def selected(self, theTarget):
         self.Target = theTarget
 
-    def dryExecute(self):
-        pass
-
-    def execute(self, theGame):
-        theGame.movePlayer(Location.FRONT, 1)
-
-    def dryResult(self):
-        pass
-
-    def result(self):
-        pass
+    def execute(self, theGame, **kwargs):
+        location = kwargs.get('theLocation', Location.FRONT)
+        position = kwargs.get('thePostion', 1)
+        theGame.movePlayer(location, position)
