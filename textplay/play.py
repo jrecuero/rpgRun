@@ -14,6 +14,56 @@ from assets import WeaponAction, MoveAction
 import loggerator
 
 
+class T_Target(Str):
+
+    def _helpStr(self):
+        return "Enter target for action"
+
+    def complete(self, text):
+        _game = self.Journal.getFromCache('game')
+        if _game is not None:
+            return [x.Name for x in _game.TargetChoice]
+        return []
+
+
+class T_Action(Str):
+
+    def _helpStr(self):
+        return "Enter action"
+
+    def complete(self, text):
+        _game = self.Journal.getFromCache('game')
+        if _game is not None:
+            return [x.Name for x in _game.Player.Actions]
+        return []
+
+
+class T_Location(Str):
+
+    @staticmethod
+    def _(val):
+        return Location[val]
+
+    @staticmethod
+    def type():
+        return Location
+
+    def _helpStr(self):
+        return "Enter location for movement"
+
+    def complete(self, text):
+        return [x.name for x in Location.userMoves()]
+
+
+class T_Step(Int):
+
+    @staticmethod
+    def _(val):
+        if int(val) > 1:
+            print('you are moving to far')
+        return int(val)
+
+
 class Play(Cli):
 
     def __init__(self):
@@ -39,6 +89,7 @@ class Play(Cli):
         self._height = 5
         self._sprWidth = 7
         self._game = game.Game(self._width, self._height)
+        self.Journal.setToCache('game', self._game)
         iheight = self._height
         for row in self._game.Board:
             iheight -= 1
@@ -60,30 +111,15 @@ class Play(Cli):
 
     @Cli.command()
     @setsyntax
-    @syntax("MOVE locst pos")
-    @argo('locst', Str, None)
+    @syntax("MOVE loc pos")
+    @argo('loc', T_Location, None)
     @argo('pos', Int, None)
-    def do_move_player(self, locst, pos):
+    def do_move_player(self, loc, pos):
         """Move player a number of positions to given location.
         """
-        locst = locst.upper()
-        scrollFlag = False
-        if locst == 'FRONT':
-            loc = Location.FRONT
-            scrollFlag = True
-        # We can NOT move backwards
-        # elif locst == 'BACK':
-        #     loc = Location.BACK
-        elif locst == 'LEFT':
-            loc = Location.LEFT
-        elif locst == 'RIGHT':
-            loc = Location.RIGHT
-        else:
-            loc = None
-        if loc is not None:
-            self._game.movePlayer(loc, pos)
-            if scrollFlag:
-                self._scroll()
+        self._game.movePlayer(loc, pos)
+        if loc == Location.FRONT:
+            self._scroll()
 
     @Cli.command()
     @setsyntax
@@ -122,60 +158,56 @@ class Play(Cli):
     def do_run(self, *args):
         """Run a cycle
         """
-        print('select action (use command: ACTION <id>) ')
+        print('select action (use command: ACTION <name>) ')
         for i, x in enumerate(self._game.Player.Actions):
-            print('{0} : {1}'.format(i, x))
+            print('{0} : {1}'.format(i, x.Name))
 
     @Cli.command()
     @setsyntax
-    @syntax("ACTION actionid")
-    @argo('actionid', Int, None)
-    def do_action(self, actionid):
-        """Select action
+    @syntax("ACTION name")
+    @argo('name', T_Action, None)
+    def do_action(self, name):
+        """Select action to run.
         """
-        _action = self._game.Player.Actions[actionid]
+        for _action in self._game.Player.Actions:
+            if _action.Name == name:
+                break
+        else:
+            return
         _action.Originator = self._game.Player
         self._game.runInit()
         _actionType = self._game.runSelectAction(_action)
         if _actionType == AType.WEAPONIZE:
-            print('select target (use command: TARGET <id>)')
+            print('select target (use command: TARGET <name>)')
             for i, x in enumerate(self._game.TargetChoice):
                 print('{0} : {1}'.format(i, x))
         elif _actionType == AType.MOVEMENT:
-            print('select player movement (use command: MOVEMENT <pos> <locst>)')
+            print('select player movement (use command: MOVEMENT <loc> <pos>)')
 
     @Cli.command()
     @setsyntax
-    @syntax("TARGET targetid")
-    @argo('targetid', Int, None)
-    def do_target(self, targetid):
-        """Select target for the action.
+    @syntax("TARGET name")
+    @argo('name', T_Target, None)
+    def do_target(self, name):
+        """Select target for the action to run.
         """
-        _target = self._game.TargetChoice[targetid]
+        for _target in self._game.TargetChoice:
+            if _target.Name == name:
+                break
+        else:
+            return
         self._game.runSelectTarget(_target)
 
     @Cli.command()
     @setsyntax
-    @syntax("MOVEMENT locst pos")
-    @argo('locst', Str, None)
-    @argo('pos', Int, None)
-    def do_select_movement(self, locst, pos):
-        """Select player movement, location and steps.
+    @syntax("MOVEMENT loc pos")
+    @argo('loc', T_Location, None)
+    @argo('pos', T_Step, None)
+    def do_select_movement(self, loc, pos):
+        """Select location and steps for the player to move.
         """
-        locst = locst.upper()
-        if locst == 'FRONT':
-            loc = Location.FRONT
-        # We can NOT move backwards
-        # elif locst == 'BACK':
-        #     loc = Location.BACK
-        elif locst == 'LEFT':
-            loc = Location.LEFT
-        elif locst == 'RIGHT':
-            loc = Location.RIGHT
-        else:
-            loc = None
-        if loc is not None:
-            self._game.runSelectMovement(loc, pos)
+        print('player moves {0} to {1}'.format(pos, loc))
+        self._game.runSelectMovement(loc, pos)
 
 
 if __name__ == '__main__':

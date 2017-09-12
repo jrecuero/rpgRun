@@ -79,6 +79,12 @@ class Location(Enum):
         return self.__right in self.value
 
     @staticmethod
+    def userMoves():
+        """
+        """
+        return [Location.FRONT, Location.RIGHT, Location.LEFT]
+
+    @staticmethod
     def get(theBpointA, theBpointB):
         """
         >>> Location.get(BPoint(1, 2), BPoint(1, 1))
