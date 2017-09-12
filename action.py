@@ -110,6 +110,10 @@ class Action(object):
         """
         self._target.append(theValue)
 
+    def wait(self, theGame):
+        target = yield
+        yield target
+
     def requires(self, theGame):
         """Method that returns requirements for the action.
         """

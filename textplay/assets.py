@@ -74,6 +74,16 @@ class MoveAction(Action):
     def __init__(self, theName, theType=AType.NONE, **kwargs):
         super(MoveAction, self).__init__(theName, theType, **kwargs)
 
+    @Action.Originator.setter
+    def Originator(self, theValue):
+        self._originator = theValue
+        self.Target = theValue
+
+    def requires(self, theGame):
+        print('requires to enter Location and Position for movement')
+        target = yield
+        yield target
+
     def requiresTarget(self):
         """
         """

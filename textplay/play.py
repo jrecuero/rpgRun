@@ -142,10 +142,6 @@ class Play(Cli):
             for i, x in enumerate(self._game.TargetChoice):
                 print('{0} : {1}'.format(i, x))
         elif _actionType == AType.MOVEMENT:
-            # Run a select target, because movement has a fixed target for the
-            # movement always.
-            _target = _action.filterTarget(None)[0]
-            self._game.runSelectTarget(_target)
             print('select player movement (use command: MOVEMENT <pos> <locst>)')
 
     @Cli.command()
@@ -157,9 +153,6 @@ class Play(Cli):
         """
         _target = self._game.TargetChoice[targetid]
         self._game.runSelectTarget(_target)
-        # Run a none movement after target has been selected.
-        # self._game.runSelectMovement()
-        self._game.runSelectRequires()
 
     @Cli.command()
     @setsyntax

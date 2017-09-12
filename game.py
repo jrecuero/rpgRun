@@ -23,6 +23,8 @@ class Game(object):
         self._actors = []
         self._action = None
         self._targetChoice = None
+        self.__action_select = None
+        self.__action_requires = None
         self._logger = loggerator.getLoggerator('GAME')
 
     @property
@@ -149,20 +151,31 @@ class Game(object):
             assert isinstance(self._action, Action)
             self._logger.debug('action: {}'.format(self._action.Type))
 
-            # When action has been selected, ask for cells for target
-            # selection.
-            _layer = self._action.layerToTarget()
-            _cells = self.Board.getCellsFromLayer(_layer) if _layer else None
-            self.TargetChoice = self._action.filterTarget(_cells)
+            if self._action.requiresTarget():
+                # When action has been selected, ask for cells for target
+                # selection.
+                _layer = self._action.layerToTarget()
+                _cells = self.Board.getCellsFromLayer(_layer) if _layer else None
+                self.TargetChoice = self._action.filterTarget(_cells)
 
-            # Yield for user to select the target.
-            _target = yield self._action.select(self)
+                # Yield for user to select the target.
+                self.__action_select = self._action.select(self)
+                next(self.__action_select)
+                _target = yield self.__action_select
+            else:
+                _target = self._action.Target
+
             self._action.selected(_target)
             self._logger.debug('target: {}'.format(_target))
 
-            # Yield for the user to enter any additional data required by the
-            # action.
-            _actionKwargs = yield self._action.requires(self)
+            if self._action.requiresMovement():
+                # Yield for the user to enter any additional data required by the
+                # action.
+                self.__action_requires = self._action.requires(self)
+                next(self.__action_requires)
+                _actionKwargs = yield self.__action_requires
+            else:
+                _actionKwargs = {}
             self._logger.debug('action kwargs: {}'.format(_actionKwargs))
             self._action.execute(self, **_actionKwargs)
             self._updateActors()
@@ -182,23 +195,18 @@ class Game(object):
     def runSelectTarget(self, theTarget):
         """
         """
-        _select = self._action.select(self)
-        next(_select)
-        self.__runner.send(_select.send(theTarget))
+        self.__runner.send(self.__action_select.send(theTarget))
 
     def runSelectRequires(self, **kwargs):
         """
         """
-        _requires = self._action.requires(self)
-        next(_requires)
-        self.__runner.send(_requires.send({}))
+        self.__runner.send(self.__action_requires.send({}))
 
     def runSelectMovement(self, theLocation=None, thePosition=None):
         """
         """
-        _requires = self._action.requires(self)
-        next(_requires)
-        self.__runner.send(_requires.send({'theLocation': theLocation, 'thePosition': thePosition}))
+        self.__runner.send(self.__action_requires.send({'theLocation': theLocation,
+                                                        'thePosition': thePosition}))
 
     def runner(self, theValue):
         """
