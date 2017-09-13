@@ -29,7 +29,8 @@ class Board(Itero):
 
     @property
     def Height(self):
-        """
+        """Gets _maxlen attribute value.
+
         >>> board = Board(10, 5)
         >>> board.Height
         10
@@ -38,7 +39,8 @@ class Board(Itero):
 
     @property
     def Width(self):
-        """
+        """Gets _width attribute value.
+
         >>> board = Board(10, 5)
         >>> board.Width
         5
@@ -47,7 +49,8 @@ class Board(Itero):
 
     @property
     def TopCellRow(self):
-        """
+        """Gets the CellRow value for the top row in the board.
+
         >>> from bcell import BCell
         >>> from blayer import LType
         >>> board = Board(5, 5)
@@ -65,7 +68,9 @@ class Board(Itero):
         return self[0].CellRow
 
     def scroll(self, theNewRow):
-        """
+        """Scrolls the board, removing the row at the bottom (right) and
+        adding a new row at the top (left).
+
         >>> board = Board(3, 5)
         >>> row1 = BRow(5)
         >>> row2 = BRow(5)
@@ -93,7 +98,8 @@ class Board(Itero):
         self._Itero__stream.appendleft(theNewRow)
 
     def appendleft(self, theNewRow):
-        """
+        """Appends a new row to the left (top).
+
         >>> board = Board(5, 5)
         >>> row1 = BRow(5)
         >>> board.appendleft(row1)
@@ -107,7 +113,8 @@ class Board(Itero):
         self._Itero__stream.appendleft(theNewRow)
 
     def append(self, theNewRow):
-        """
+        """Appends a new row to the right. Not Allowed.
+
         >>> board = Board(5, 5)
         >>> try:
         ...     board.append(None)
@@ -118,7 +125,8 @@ class Board(Itero):
         raise NotImplementedError
 
     def getRowFromCellRow(self, theCellRow):
-        """
+        """Gets the row for the given CellRow.
+
         >>> board = Board(2, 5)
         >>> board[0].CellRow = 1
         >>> board.getRowFromCellRow(1).CellRow
@@ -130,8 +138,47 @@ class Board(Itero):
                 return row
         return None
 
-    def getCellsFromLayer(self, theLayers):
+    def getIndexFromCellRow(self, theCellRow):
+        """Gets the row index for the given CellRow.
+
+        >>> board = Board(2, 5)
+        >>> board[0].CellRow = 1
+        >>> board.getIndexFromCellRow(1)
+        0
+        >>> board.getRowFromCellRow(3)
         """
+        for index, row in enumerate(self):
+            if row.CellRow == theCellRow:
+                return index
+        return None
+
+    def getRowFromCell(self, theCell):
+        """Gets the row for the given Cell..
+
+        >>> from bcell import BCell
+        >>> board = Board(2, 5)
+        >>> board[0].CellRow = 1
+        >>> board.getRowFromCell(BCell(0, 1, None)).CellRow
+        1
+        >>> board.getRowFromCellRow(BCell(0, 3, None))
+        """
+        return self.getRowFromCellRow(theCell.Y)
+
+    def getIndexFromCell(self, theCell):
+        """Gets the row index for the given Cell.
+
+        >>> from bcell import BCell
+        >>> board = Board(2, 5)
+        >>> board[0].CellRow = 1
+        >>> board.getIndexFromCell(BCell(0, 1, None))
+        0
+        >>> board.getRowFromCellRow(BCell(0, 3, None))
+        """
+        return self.getIndexFromCellRow(theCell.Y)
+
+    def getCellsFromLayer(self, theLayers):
+        """Gets all cell for the given layer.
+
         """
         cells  = []
         for row in self:
@@ -141,7 +188,8 @@ class Board(Itero):
         return cells
 
     def addCellToLayer(self, theCell, theLayer):
-        """
+        """Adds a new cell to the given layer.
+
         >>> from bcell import BCell
         >>> from blayer import LType
         >>> board = Board(2, 5)
@@ -155,7 +203,8 @@ class Board(Itero):
         return row.addCellToLayer(theCell, theLayer)
 
     def removeCell(self, theCell):
-        """
+        """Removes a cell from the board.
+
         >>> from bcell import BCell
         >>> from blayer import LType
         >>> board = Board(2, 5)

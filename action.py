@@ -13,6 +13,8 @@ class AType(Enum):
 
     @staticmethod
     def phase(theType):
+        """Checks phase.
+        """
         if theType == AType.NONE:
             raise NotImplementedError
         elif theType == AType.MOVEMENT:
@@ -54,7 +56,8 @@ class Action(object):
 
     @property
     def Name(self):
-        """
+        """Gets _name attribute value.
+
         >>> acto = Action('new', AType.SKILL)
         >>> acto.Name
         'new'
@@ -63,7 +66,8 @@ class Action(object):
 
     @property
     def Type(self):
-        """
+        """Gets _type attribute value.
+
         >>> acto = Action('new', AType.SKILL)
         >>> acto.Type
         <AType.SKILL: 3>
@@ -72,14 +76,15 @@ class Action(object):
 
     @Type.setter
     def Type(self, theValue):
-        """
+        """Sets _type attribute value.
         """
         assert isinstance(theValue, AType)
         self._type = theValue
 
     @property
     def Originator(self):
-        """
+        """Gets _originator attribute value.
+
         >>> acto = Action('new', AType.SKILL)
         >>> acto.Originator
         >>> acto.Originator = 'me'
@@ -90,11 +95,14 @@ class Action(object):
 
     @Originator.setter
     def Originator(self, theValue):
+        """Sets _originator attribute value.
+        """
         self._originator = theValue
 
     @property
     def Target(self):
-        """
+        """Gets _target attribute value.
+
         >>> acto = Action('new', AType.SKILL)
         >>> acto.Target
         []
@@ -106,11 +114,14 @@ class Action(object):
 
     @Target.setter
     def Target(self, theValue):
-        """
+        """Sets _target attribute value. It appends the given value to
+        the _target attribute list.
         """
         self._target.append(theValue)
 
     def wait(self, theGame):
+        """Yields until user provides input..
+        """
         target = yield
         yield target
 
@@ -126,12 +137,12 @@ class Action(object):
         return None
 
     def requiresTarget(self):
-        """
+        """Returns if action requires a target.
         """
         return True
 
     def requiresMovement(self):
-        """
+        """Returns if action requires a movements.
         """
         return False
 
@@ -158,6 +169,8 @@ class Action(object):
         yield target
 
     def selected(self, theTarget):
+        """Sets the given actor as the target.
+        """
         return None
 
     def dryExecute(self):

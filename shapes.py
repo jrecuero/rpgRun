@@ -24,13 +24,13 @@ class Shape(abc.ABC):
 
     @property
     def Center(self):
-        """
+        """Gets _center attribute value.
         """
         return self._center
 
     @Center.setter
     def Center(self, theValue):
-        """
+        """Sets _center attribute value.
         """
         if isinstance(theValue, BPoint):
             self._center = theValue
@@ -39,49 +39,49 @@ class Shape(abc.ABC):
 
     @property
     def Width(self):
-        """
+        """Gets _width attribute value.
         """
         return self._width
 
     @Width.setter
     def Width(self, theValue):
-        """
+        """Set _width attribute value.
         """
         self._width = theValue
 
     @property
     def Height(self):
-        """
+        """Gets _height attribute value.
         """
         return self._height
 
     @Height.setter
     def Height(self, theValue):
-        """
+        """Set _height attribute value.
         """
         self._height = theValue
 
     @abc.abstractmethod
     def getCorners(theOther):
-        """
+        """Gets all shape corners.
         """
         raise NotImplementedError
 
     @abc.abstractmethod
     def getRects(self):
-        """
+        """Get a rectangle corners that contains the shape.
         """
         raise NotImplementedError
 
     @abc.abstractmethod
     def isInside(self, theOther):
-        """
+        """Checks if the given point is inside the shape.
         """
         raise NotImplementedError
 
     @abc.abstractmethod
     def getAllInsidePoints(self):
-        """
+        """Returns all points contained in the shape.
         """
         raise NotImplementedError
 
@@ -113,7 +113,8 @@ class Quad(Shape):
         super(Quad, self).__init__(theCenter, theWidth, theHeight)
 
     def getCorners(self):
-        """
+        """Gets all shape corners.
+
         >>> q = Quad(BPoint(10, 10), 10, 10)
         >>> q.getCorners()
         ((5, 15), (15, 15), (5, 5), (15, 5))
@@ -125,7 +126,8 @@ class Quad(Shape):
         return (topLeft, topRight, bottomLeft, bottomRight)
 
     def getRects(self):
-        """
+        """Get a rectangle corners that contains the shape.
+
         >>> q = Quad(BPoint(10, 10), 10, 10)
         >>> q.getRects()
         [((5, 15), (15, 15), (5, 5), (15, 5))]
@@ -133,7 +135,8 @@ class Quad(Shape):
         return [self.getCorners(), ]
 
     def isInside(self, theOther):
-        """
+        """Checks if the given point is inside the shape.
+
         >>> q = Quad(BPoint(10, 10), 4, 4)
         >>> q.isInside(BPoint(11, 11)), q.isInside(BPoint(9, 9))
         (True, True)
@@ -145,7 +148,8 @@ class Quad(Shape):
                (bottomRight.Y <= theOther.Y <= topRight.X)
 
     def getAllInsidePoints(self):
-        """
+        """Returns all points contained in the shape.
+
         >>> q = Quad(BPoint(10, 10), 2, 2)
         >>> q.getAllInsidePoints()
         [(9, 9), (9, 10), (9, 11), (10, 9), (10, 10), (10, 11), (11, 9), (11, 10), (11, 11)]
@@ -188,7 +192,8 @@ class Rectangle(Quad):
 
     @Quad.Center.setter
     def Center(self, theValue):
-        """
+        """Sets _center attribute value. Rectangle can not update Center.
+
         >>> q = Rectangle(BPoint(0, 0), 2, 2)
         >>> try:
         ...     q.Center = BPoint(1, 1)
@@ -200,7 +205,7 @@ class Rectangle(Quad):
 
     @Quad.Width.setter
     def Width(self, theValue):
-        """
+        """Sets _width attribute value. Rectangle can not update Width.
         >>> try:
         ...     q.Width = 20
         ... except NotImplementedError:
@@ -211,7 +216,7 @@ class Rectangle(Quad):
 
     @Quad.Height.setter
     def Height(self, theValue):
-        """
+        """Sets _height attribute value. Rectangle can not update Height.
         >>> try:
         ...     q.Height = 15
         ... except NotImplementedError:
@@ -248,7 +253,8 @@ class Rhomboid(Shape):
 
     @Shape.Width.setter
     def Width(self, theValue):
-        """
+        """Set _width attribute value. Rhomboid have same Width and Height
+
         >>> r = Rhomboid(BPoint(0, 0), 10, 10)
         >>> r.Width, r.Height
         (10, 10)
@@ -261,7 +267,8 @@ class Rhomboid(Shape):
 
     @Shape.Height.setter
     def Height(self, theValue):
-        """
+        """Set _height attribute value. Rhomboid have same Width and Height
+
         >>> r = Rhomboid(BPoint(0, 0), 10, 10)
         >>> r.Width, r.Height
         (10, 10)
@@ -273,7 +280,8 @@ class Rhomboid(Shape):
         self._width = theValue
 
     def getCorners(self):
-        """
+        """Gets all shape corners.
+
         >>> r = Rhomboid(BPoint(10, 10), 4, 4)
         >>> r.getCorners()
         ((10, 12), (10, 8), (8, 10), (12, 10))
@@ -285,7 +293,8 @@ class Rhomboid(Shape):
         return (top, bottom, left, right)
 
     def getRects(self):
-        """
+        """Get a rectangle corners that contains the shape.
+
         >>> r = Rhomboid(BPoint(10, 10), 10, 10)
         >>> r.getRects()
         [((5, 15), (15, 15), (5, 5), (15, 5))]
@@ -297,7 +306,8 @@ class Rhomboid(Shape):
         return [(topLeft, topRight, bottomLeft, bottomRight), ]
 
     def isInside(self, theOther):
-        """
+        """Checks if the given point is inside the shape.
+
         >>> r = Rhomboid(BPoint(5, 5), 6, 6)
         >>> r.isInside(BPoint(6, 5)), r.isInside(BPoint(6, 6)), r.isInside(BPoint(6, 7)), r.isInside(BPoint(6, 8))
         (True, True, True, False)
@@ -325,7 +335,8 @@ class Rhomboid(Shape):
                    (abs(p.Y) <= (halfWidth - abs(p.X)))
 
     def getAllInsidePoints(self):
-        """
+        """Returns all points contained in the shape.
+
         >>> r = Rhomboid(BPoint(10, 10), 4, 4)
         >>> r.getAllInsidePoints()
         [(8, 10), (9, 9), (9, 10), (9, 11), (10, 8), (10, 9), (10, 10), (10, 11), (10, 12), (11, 9), (11, 10), (11, 11), (12, 10)]
@@ -362,7 +373,8 @@ class Star(Rhomboid):
         super(Star, self).__init__(theCenter, theWidth, theHeight)
 
     def getRects(self):
-        """
+        """get a rectangle corners that contains the shape.
+
         >>> s = Star(BPoint(10, 10), 4, 4)
         >>> s.getRects()
         [((10, 12), (10, 12), (10, 8), (10, 8)), ((8, 10), (8, 10), (12, 10), (12, 10))]
@@ -371,7 +383,8 @@ class Star(Rhomboid):
         return [(top, top, bottom, bottom), (left, left, right, right)]
 
     def isInside(self, theOther):
-        """
+        """Checks if the given point is inside the shape.
+
         >>> s = Star(BPoint(10, 10), 4, 4)
         >>> s.isInside(BPoint(10, 11)), s.isInside(BPoint(10, 12)), s.isInside(BPoint(10, 13))
         (True, True, False)
@@ -387,7 +400,8 @@ class Star(Rhomboid):
                ((theOther.Y == self.Center.Y) and (left.X <= theOther.X <= right.X))
 
     def getAllInsidePoints(self):
-        """
+        """Returns all points contained in the shape.
+
         >>> s = Star(BPoint(10, 10), 2, 2)
         >>> s.getAllInsidePoints()
         [(9, 10), (11, 10), (10, 9), (10, 11), (10, 10)]

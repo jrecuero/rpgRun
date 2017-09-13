@@ -85,8 +85,8 @@ class Play(Cli):
     def do_init(self, *args):
         """Initialize rpgRUN game.
         """
-        self._width = 5
-        self._height = 5
+        self._width = 7
+        self._height = 7
         self._sprWidth = 7
         self._game = game.Game(self._width, self._height)
         self.Journal.setToCache('game', self._game)
@@ -96,17 +96,19 @@ class Play(Cli):
             for iwidth in range(self._width):
                 row.addCellToLayer(GreenSurface(iwidth, iheight, self._sprWidth), LType.SURFACE)
 
-        player = PlayerActor(2, 2, self._sprWidth)
+        player = PlayerActor(2, 4, self._sprWidth)
         player.Actions = WeaponAction('weapon', AType.WEAPONIZE)
         player.Actions = MoveAction('move', AType.MOVEMENT)
-        enemy = EnemyActor(4, 4, self._sprWidth)
+        enemy = EnemyActor(4, 6, self._sprWidth)
+        pillar = Pillar(0, 6, self._sprWidth)
 
         self._game.addActor(player, True)
         self._game.addActor(enemy)
 
-        self._game.Board[2].addCellToLayer(self._game.Player, LType.OBJECT)
-        self._game.Board[0].addCellToLayer(Pillar(0, 4, self._sprWidth), LType.OBJECT)
-        self._game.Board[0].addCellToLayer(enemy, LType.OBJECT)
+        self._game.Board.getRowFromCell(player).addCellToLayer(player, LType.OBJECT)
+        self._game.Board.getRowFromCell(pillar).addCellToLayer(pillar, LType.OBJECT)
+        self._game.Board.getRowFromCell(enemy).addCellToLayer(enemy, LType.OBJECT)
+
         self._logger.display('Init rpgRun')
 
     @Cli.command()

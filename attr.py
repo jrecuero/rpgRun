@@ -18,7 +18,8 @@ class Attr(object):
 
     @property
     def Name(self):
-        """
+        """Gets _name attribute value.
+
         >>> at = Attr('new')
         >>> at.Name
         'new'
@@ -27,7 +28,8 @@ class Attr(object):
 
     @Name.setter
     def Name(self, theValue):
-        """
+        """Sets _name attribute value.
+
         >>> at = Attr('old')
         >>> at.Name
         old
@@ -39,7 +41,11 @@ class Attr(object):
 
     @property
     def Desc(self):
-        """
+        """Gets _desc attribute value.
+
+        Returns:
+            str : _desc attribute, or empty string if _desc is None.
+
         >>> at = Attr('new')
         >>> at.Desc
         ''
@@ -51,13 +57,14 @@ class Attr(object):
 
     @Desc.setter
     def Desc(self, theValue):
-        """
+        """Sets _desc attribute value.
         """
         self._desc = theValue
 
     @property
     def Base(self):
-        """
+        """Gets _base attribute value.
+
         >>> at = Attr('old')
         >>> at.Base
         0
@@ -66,7 +73,8 @@ class Attr(object):
 
     @Base.setter
     def Base(self, theValue):
-        """
+        """Sets _base attribute value.
+
         >>> at = Attr('old')
         >>> at.Base = 10
         >>> at.Base
@@ -76,7 +84,8 @@ class Attr(object):
 
     @property
     def Delta(self):
-        """
+        """Gets _delta attribute value.
+
         >>> at = Attr('old')
         >>> at.Delta
         0
@@ -85,7 +94,8 @@ class Attr(object):
 
     @Delta.setter
     def Delta(self, theValue):
-        """
+        """Sets _delta attribute value.
+
         >>> at = Attr('old')
         >>> at.Delta = 1
         >>> at.Delta
@@ -95,7 +105,8 @@ class Attr(object):
 
     @property
     def Buffs(self):
-        """
+        """Gets _buffs attribute value.
+
         >>> at = Attr('old')
         >>> at.Buffs
         {}
@@ -104,7 +115,8 @@ class Attr(object):
 
     @property
     def Now(self):
-        """
+        """Gets Now value which is function of Base, Buffs and _now attributes.
+
         >>> at = Attr('old')
         >>> at.Base = 5
         >>> at.Now
@@ -113,7 +125,8 @@ class Attr(object):
         return self.Base + sum(self.Buffs.values()) + self._now
 
     def dec(self, theValue):
-        """
+        """Decrements _now attribute a given value.
+
         >>> at = Attr('new')
         >>> at.Base = 10
         >>> at.dec(1)
@@ -123,7 +136,8 @@ class Attr(object):
         self._now -= theValue
 
     def inc(self, theValue):
-        """
+        """Increments _now attribute a given value.
+
         >>> at = Attr('new')
         >>> at.Base = 10
         >>> at.inc(2)
@@ -133,7 +147,8 @@ class Attr(object):
         self._now += theValue
 
     def addBuff(self, theName, theValue):
-        """
+        """Adds a new value to Buffs attribute.
+
         >>> at = Attr('old')
         >>> at.addBuff('st', 5)
         True
@@ -148,7 +163,8 @@ class Attr(object):
         return True
 
     def delBuff(self, theName):
-        """
+        """Deletes a value from Buffs attribute.
+
         >>> at = Attr('old')
         >>> at.addBuff('st', 5)
         True
@@ -165,7 +181,10 @@ class Attr(object):
         return True
 
     def levelUp(self, theLevel=1):
-        """
+        """Levels up the attribute a given number of times.
+
+        For every level the Base value in incremented a Delta value.
+
         >>> at = Attr('old')
         >>> at.Base = 10
         >>> at.Delta = 2
@@ -182,7 +201,8 @@ class Attr(object):
             self.Base += self.Delta * int(theLevel / abs(theLevel))
 
     def setupAttr(self, theBase=None, theDelta=None, theBuffs=None):
-        """
+        """Setups instance with given Base, Delta and Buffs values.
+
         >>> at = Attr('new')
         >>> at, at.Delta, at.Buffs
         (new: 0/0, 0, {})
@@ -204,7 +224,8 @@ class Attr(object):
         return self
 
     def setupAttrFromJSON(self, theJSON):
-        """
+        """Setups instance with values from a JSON variable.
+
         >>> at = Attr('new')
         >>> at, at.Delta, at.Buffs
         (new: 0/0, 0, {})
@@ -221,7 +242,8 @@ class Attr(object):
                               dicta['buffs'] if dicta['buffs'] != 'None' else None)
 
     def __repr__(self):
-        """
+        """Instace string representation.
+
         >>> at = Attr('old')
         >>> at
         old: 0/0
@@ -257,7 +279,8 @@ class Attributes(StrItero):
         super(Attributes, self).__init__(Attr, self._buildAttrName)
 
     def _buildAttrName(self, theName):
-        """
+        """Builds the name used to identify an attribute.
+
         >>> ats = Attributes()
         >>> ats._buildAttrName('new')
         'NEW'
@@ -265,7 +288,8 @@ class Attributes(StrItero):
         return '{0}'.format(theName.upper())
 
     def addAttr(self, theAttr):
-        """
+        """Adds a new attribute.
+
         >>> ats = Attributes()
         >>> ats.addAttr(Attr('hp'))
         hp: 0/0
@@ -278,7 +302,8 @@ class Attributes(StrItero):
         return theAttr
 
     def setupAttrs(self, theAttrs):
-        """
+        """Adds all attributes given in the passed list.
+
         >>> ats = Attributes()
         >>> ats.setupAttrs([Attr('hp'), Attr('mp')])
         >>> ats
@@ -289,7 +314,9 @@ class Attributes(StrItero):
             self.addAttr(attrib)
 
     def setupAttrsByName(self, theNames):
-        """
+        """Adds all attributes in the list, which provides just the
+        attribute name.
+
         >>> ats = Attributes()
         >>> ats.setupAttrsByName(['hp', 'mp'])
         >>> ats
@@ -300,7 +327,8 @@ class Attributes(StrItero):
             self.addAttr(Attr(name))
 
     def setupAttrsFromJSON(self, theJSON):
-        """
+        """Setups instance from the given JSON variable.
+
         >>> ats = Attributes()
         >>> data = '[{"hp": {"base": 10, "delta": 2, "buffs": "None"}},\
                 {"mp": {"base": 5, "delta": 1, "buffs": {"one": 2}}}]'
@@ -320,14 +348,15 @@ class Attributes(StrItero):
             self.addAttr(Attr(k)).setupAttrFromJSON(v)
 
     def setupAttrsFromFile(self, theFile):
-        """
+        """Setups instance from teh values in the given JSON file.
         """
         with open(theFile, 'r') as file:
             data = json.load(file)
         self.setupAttrsFromJSON(json.dumps(data))
 
     def levelUp(self, theLevel=1):
-        """
+        """Levels up all attributes stored a given number of times.
+
         >>> ats = Attributes()
         >>> hp = Attr('hp')
         >>> hp.Base = 10
@@ -357,7 +386,8 @@ class Attributes(StrItero):
         return True
 
     def __repr__(self):
-        """
+        """Instance string representation.
+
         >>> ats = Attributes()
         >>> ats.addAttr(Attr('hp'))
         hp: 0/0

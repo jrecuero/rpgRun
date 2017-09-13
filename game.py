@@ -29,61 +29,63 @@ class Game(object):
 
     @property
     def Board(self):
-        """
+        """Gets _board attribute value.
         """
         return self._board
 
     @property
     def BHandler(self):
-        """
+        """Gets _bhandler attribute value.
         """
         return self._bhandler
 
     @property
     def Player(self):
-        """
+        """Gets _player attribute value.
         """
         return self._player
 
     @Player.setter
     def Player(self, theValue):
-        """
+        """Sets _player attribute value.
         """
         self._player = theValue
 
     @property
     def Actors(self):
-        """
+        """Gets _actors attribute value.
         """
         return self._actors
 
     @property
     def TargetChoice(self):
-        """
+        """Gets _targetChoice attribute value.
         """
         return self._targetChoice
 
     @TargetChoice.setter
     def TargetChoice(self, theValue):
-        """
+        """Sets _targetChoice attribute value.
         """
         self._targetChoice = theValue
 
     def addActor(self, theActor, thePlayer=False):
-        """
+        """Adds the given actor to the game.
         """
         self._actors.append(theActor)
         if thePlayer:
             self.Player = theActor
 
     def _removeActor(self, theActor):
-        """
+        """Removes the given actor from the game.
         """
         self.Board.removeCell(theActor)
         self._actors.remove(theActor)
 
     def _updateActors(self):
-        """
+        """Updates all actors in the game.
+
+        It removes all actors that are not in the board.
         """
         for _actor in self.Actors:
             if not _actor.isInBoard():
@@ -181,34 +183,34 @@ class Game(object):
             self._updateActors()
 
     def runInit(self):
-        """
+        """Initializes the run cycle.
         """
         self.__runner = self._run()
         next(self.__runner)
 
     def runSelectAction(self, theAction):
-        """
+        """Steps on the action selection.
         """
         self.__runner.send(theAction)
         return theAction.Type
 
     def runSelectTarget(self, theTarget):
-        """
+        """Steps on the action target selection.
         """
         self.__runner.send(self.__action_select.send(theTarget))
 
     def runSelectRequires(self, **kwargs):
-        """
+        """Steps on the requires selection.
         """
         self.__runner.send(self.__action_requires.send({}))
 
     def runSelectMovement(self, theLocation=None, thePosition=None):
-        """
+        """Steps on the action movement selection.
         """
         self.__runner.send(self.__action_requires.send({'theLocation': theLocation,
                                                         'thePosition': thePosition}))
 
     def runner(self, theValue):
-        """
+        """Steps on the run cycle.
         """
         self.__runner.send(theValue)

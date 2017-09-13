@@ -3,6 +3,8 @@ from bcell import BCell
 
 @staticmethod
 def isSurface():
+    """Returns if the instance is a BSurface.
+    """
     return False
 
 

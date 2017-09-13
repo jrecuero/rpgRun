@@ -17,6 +17,7 @@ class BRow(Itero):
 
     def __init__(self, theMaxLen):
         """BRow class initialization method.
+
         >>> row = BRow(5)
         >>> row.MaxLen
         5
@@ -28,7 +29,8 @@ class BRow(Itero):
 
     @property
     def Width(self):
-        """
+        """Gets _maxlen attribute value.
+
         >>> row = BRow(10)
         >>> row.Width
         10
@@ -37,7 +39,8 @@ class BRow(Itero):
 
     @property
     def CellRow(self):
-        """
+        """Gets _cellRow attribute value using the underlying layer.
+
         >>> row = BRow(2)
         >>> row.CellRow
         >>> row[0].append(BCell(0, 1, None))
@@ -56,13 +59,16 @@ class BRow(Itero):
 
     @CellRow.setter
     def CellRow(self, theValue):
+        """Set _cellRow attribute value
+        """
         if self._cellRow is None:
             self._cellRow = theValue
         else:
             assert self._cellRow == theValue
 
     def append(self, theValue):
-        """
+        """Appends a new layer to the row. Not allowed.
+
         >>> row = BRow(2)
         >>> try:
         ...     row.append(None)
@@ -73,7 +79,8 @@ class BRow(Itero):
         raise NotImplementedError
 
     def pop(self):
-        """
+        """Returns the last layer from the row. Not Allowed.
+
         >>> row = BRow(2)
         >>> try:
         ...     row.pop()
@@ -84,7 +91,8 @@ class BRow(Itero):
         raise NotImplementedError
 
     def addCellToLayer(self, theCell, theLayer):
-        """
+        """Adds a new cell to the given layer.
+
         >>> row = BRow(2)
         >>> row.addCellToLayer(BCell(0, 0, None), LType.SURFACE)
         True
@@ -99,7 +107,8 @@ class BRow(Itero):
         return True
 
     def removeCellFromLayer(self, theCell, theLayer):
-        """
+        """Removes a cell from the given layer.
+
         >>> row = BRow(2)
         >>> cell = BCell(0, 0, None)
         >>> row.addCellToLayer(cell, LType.SURFACE)
@@ -162,7 +171,8 @@ class BRow(Itero):
         return True
 
     def getCellsFromLayer(self, theLayers):
-        """
+        """Returns all cells from the given layer.
+
         """
         cells  = []
         for layer in [x for x in self if x.Type in theLayers]:
@@ -170,7 +180,7 @@ class BRow(Itero):
         return cells
 
     def rowToString(self):
-        """Return strinf with row representation
+        """Returns string with row representation
 
         Returns:
             str : String with all cells in the row.

@@ -36,7 +36,8 @@ class BLayer(Itero):
 
     @property
     def Width(self):
-        """
+        """Gets _maxlen attribute value.
+
         >>> layer = BLayer(LType.SURFACE, 10)
         >>> layer.Width
         10
@@ -45,7 +46,8 @@ class BLayer(Itero):
 
     @property
     def Type(self):
-        """
+        """Gets _type attribute value.
+
         >>> layer = BLayer(LType.SURFACE, 10)
         >>> layer.Type
         <LType.SURFACE: 2>
@@ -54,7 +56,8 @@ class BLayer(Itero):
 
     @property
     def CellRow(self):
-        """
+        """Gets _cellRow attribute value.
+
         >>> layer = BLayer(LType.SURFACE, 10)
         >>> layer.CellRow
         >>> layer.append(BCell(1, 2, None))
@@ -63,8 +66,9 @@ class BLayer(Itero):
         """
         return self._cellRow
 
-    def append(self, theValue):
-        """
+    def append(self, theCell):
+        """Appends a new cell to the layer.
+
         >>> layer = BLayer(LType.OBJECT, 5)
         >>> layer.append(BCell(0, 0, None))
         >>> layer[0]
@@ -78,12 +82,12 @@ class BLayer(Itero):
         ...     print('Assert')
         Assert
         """
-        assert isinstance(theValue, BCell)
+        assert isinstance(theCell, BCell)
         if self.CellRow is None:
-            self._cellRow = theValue.Row
+            self._cellRow = theCell.Row
         else:
-            assert self.CellRow == theValue.Row
-        super(BLayer, self).append(theValue)
+            assert self.CellRow == theCell.Row
+        super(BLayer, self).append(theCell)
 
     def __repr__(self):
         """String representation for the BLayer instance.

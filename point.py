@@ -328,6 +328,7 @@ class Point(object):
     def isYlower(self, theOther):
         """Checks if point Y-coordinate is lower than the one from the
         given point.
+
         >>> p = Point(1, 1)
         >>> p.isYlower(Point(0, 0))
         False
@@ -341,6 +342,7 @@ class Point(object):
     def isYeq(self, theOther):
         """Checks if point Y-coordinate is equal than the one from the
         given point.
+
         >>> p = Point(1, 1)
         >>> p.isYeq(Point(0, 1))
         True

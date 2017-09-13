@@ -4,6 +4,8 @@ from actor import Actor
 
 @staticmethod
 def isPlayer():
+    """Returns if the instance is an PActor.
+    """
     return False
 
 

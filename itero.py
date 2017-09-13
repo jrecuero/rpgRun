@@ -17,7 +17,8 @@ class Itero(Iterator):
 
     @property
     def MaxLen(self):
-        """
+        """Gets _maxLen attribute value.
+
         >>> it = Itero(str, 10)
         >>> it.MaxLen
         10
@@ -25,7 +26,8 @@ class Itero(Iterator):
         return self.__maxLen
 
     def __getitem__(self, theKey):
-        """
+        """Allows retriving data using indexed values for the instance.
+
         >>> it = Itero(str)
         >>> it.append('one')
         >>> it[0]
@@ -35,7 +37,8 @@ class Itero(Iterator):
         return self.__stream[theKey]
 
     def __setitem__(self, theKey, theValue):
-        """
+        """Allows updating data using indexed values for the instance.
+
         >>> it = Itero(str)
         >>> it.append('one')
         >>> it[0]
@@ -49,7 +52,8 @@ class Itero(Iterator):
         self.__stream[theKey] = theValue
 
     def __delitem__(self, theKey):
-        """
+        """Allows deleting data using indexed values for the instance.
+
         >>> it = Itero(str)
         >>> it.append('one')
         >>> it.append('two')
@@ -63,26 +67,29 @@ class Itero(Iterator):
         del self.__stream[theKey]
 
     def __iter__(self):
-        """
-         >>> it = Itero(str)
-         >>> for x in ['one', 'two', 'three', 'four', 'five']:
-         ...     it.append(x)
-         >>> it[0], it[1], it[2], it[3], it[4]
-         ('one', 'two', 'three', 'four', 'five')
-         >>> for i, v in enumerate(it):
-         ...     it[i] = v.upper()
-         >>> for x in it:
-         ...     print(x)
-         ONE
-         TWO
-         THREE
-         FOUR
-         FIVE
+        """Allows iterating the instance (initialize the iteration).
+
+        >>> it = Itero(str)
+        >>> for x in ['one', 'two', 'three', 'four', 'five']:
+        ...     it.append(x)
+        >>> it[0], it[1], it[2], it[3], it[4]
+        ('one', 'two', 'three', 'four', 'five')
+        >>> for i, v in enumerate(it):
+        ...     it[i] = v.upper()
+        >>> for x in it:
+        ...     print(x)
+        ONE
+        TWO
+        THREE
+        FOUR
+        FIVE
         """
         self.__index = 0
         return self
 
     def __next__(self):
+        """Allows iteratinf the instace (next instance in the iteration).
+        """
         if self.__index >= len(self.__stream):
             self.__index = 0
             raise StopIteration
@@ -91,7 +98,8 @@ class Itero(Iterator):
         return _
 
     def __len__(self):
-        """
+        """Retrieves the lenght for the instance.
+
         >>> it = Itero(str)
         >>> len(it)
         0
@@ -102,7 +110,8 @@ class Itero(Iterator):
         return len(self.__stream)
 
     def append(self, theValue):
-        """
+        """Appends a value to the instance at the end.
+
         >>> it = Itero(str, 2)
         >>> it.append('one')
         >>> it[0]
@@ -122,7 +131,8 @@ class Itero(Iterator):
         self.__stream.append(theValue)
 
     def pop(self):
-        """
+        """Retrieves and removes the last value from the instance.
+
         >>> it = Itero(str)
         >>> it.append('one')
         >>> it.pop()
@@ -131,7 +141,8 @@ class Itero(Iterator):
         return self.__stream.pop()
 
     def remove(self, theValue):
-        """
+        """Removes the given value from the instance.
+
         >>> it = Itero(str, 2)
         >>> it.append('one')
         >>> it.append('two')
@@ -161,7 +172,8 @@ class StrItero(Iterator):
         self.__processKey = theProcessKey
 
     def __getitem__(self, theKey):
-        """
+        """Allows retriving data using indexed values for the instance.
+
         >>> it = StrItero(int)
         >>> it.update('one', 1)
         >>> it['one']
@@ -172,7 +184,8 @@ class StrItero(Iterator):
         return OrderedDict.__getitem__(self.__stream, key)
 
     def __setitem__(self, theKey, theValue):
-        """
+        """Allows updating data using indexed values for the instance.
+
         >>> it = StrItero(int)
         >>> it['two'] = 2
         >>> it['two']
@@ -184,7 +197,8 @@ class StrItero(Iterator):
         OrderedDict.__setitem__(self.__stream, key, theValue)
 
     def __len__(self):
-        """
+        """Retrieves the lenght for the instance.
+
         >>> it = StrItero(int)
         >>> it['one'] = 1
         >>> it['two'] = 2
@@ -194,7 +208,8 @@ class StrItero(Iterator):
         return len(self.__stream)
 
     def __delitem__(self, theKey):
-        """
+        """Allows deleting data using indexed values for the instance.
+
         >>> it = StrItero(int)
         >>> it['one'] = 1
         >>> it['two'] = 2
@@ -209,7 +224,8 @@ class StrItero(Iterator):
         OrderedDict.__delitem__(self.__stream, key)
 
     def __iter__(self):
-        """
+        """Allows iterating the instance (initialize the iteration).
+
         >>> it = StrItero(int)
         >>> for i, v in enumerate(['zero', 'one', 'two']):
         ...     it[v] = i
@@ -226,7 +242,7 @@ class StrItero(Iterator):
         return self
 
     def __next__(self):
-        """
+        """Allows iteratinf the instace (next instance in the iteration).
         """
         if self.__index >= len(self.__streamAsList):
             self.__index = 0
@@ -236,7 +252,8 @@ class StrItero(Iterator):
         return _
 
     def __contains__(self, theOther):
-        """
+        """Checks if the given value is in the instance.
+
         >>> it = StrItero(int)
         >>> for i, v in enumerate(['zero', 'one', 'two']):
         ...     it[v] = i
@@ -249,7 +266,8 @@ class StrItero(Iterator):
         return other in self.__stream
 
     def items(self):
-        """
+        """Returns all key-value pairs for the instance.
+
         >>> it = StrItero(int)
         >>> for i, v in enumerate(['zero', 'one', 'two']):
         ...     it[v] = i
@@ -262,7 +280,8 @@ class StrItero(Iterator):
         return self.__stream.items()
 
     def update(self, theKey, theValue):
-        """
+        """Updates the instance with the given key-value pairs.
+
         >>> it = StrItero(int)
         >>> it.update('one', 1)
         >>> it['one']

@@ -27,7 +27,8 @@ class Location(Enum):
         self.__right = 4
 
     def isFront(self):
-        """
+        """Checks if the location contains FRONT.
+
         >>> Location.FRONT.isFront()
         True
         >>> Location.FRONT_LEFT.isFront()
@@ -40,7 +41,8 @@ class Location(Enum):
         return self.__front in self.value
 
     def isBack(self):
-        """
+        """Checks if the location contains BACK.
+
         >>> Location.BACK.isBack()
         True
         >>> Location.BACK_LEFT.isBack()
@@ -53,7 +55,8 @@ class Location(Enum):
         return self.__back in self.value
 
     def isLeft(self):
-        """
+        """Checks if the location contains LEFT.
+
         >>> Location.LEFT.isLeft()
         True
         >>> Location.FRONT_LEFT.isLeft()
@@ -66,7 +69,8 @@ class Location(Enum):
         return self.__left in self.value
 
     def isRight(self):
-        """
+        """Checks if the location contains RIGHT.
+
         >>> Location.RIGHT.isRight()
         True
         >>> Location.FRONT_RIGHT.isRight()
@@ -80,13 +84,17 @@ class Location(Enum):
 
     @staticmethod
     def userMoves():
-        """
+        """Returns all possible location when user is prompted to move.
+
+        >>> Location.userMoves()
+        [<Location.FRONT: (1, 0)>, <Location.RIGHT: (4, 0)>, <Location.LEFT: (3, 0)>]
         """
         return [Location.FRONT, Location.RIGHT, Location.LEFT]
 
     @staticmethod
     def get(theBpointA, theBpointB):
-        """
+        """Checks the location from the first point to the second point.
+
         >>> Location.get(BPoint(1, 2), BPoint(1, 1))
         <Location.FRONT: (1, 0)>
         >>> Location.get(BPoint(1, 0), BPoint(1, 1))
@@ -143,7 +151,8 @@ class BPoint(Point):
                         Location.BACK_RIGHT: None}
 
     def isFront(self, theOther):
-        """
+        """Checks if the point is in front of the given point.
+
         >>> bp = BPoint(1, 1)
         >>> bp.isFront(BPoint(0, 0))
         True
@@ -155,7 +164,8 @@ class BPoint(Point):
         return self.isYgreater(theOther)
 
     def isBack(self, theOther):
-        """
+        """Checks if the point is in the back of the given point.
+
         >>> bp = BPoint(1, 1)
         >>> bp.isBack(BPoint(0, 0))
         False
@@ -167,7 +177,8 @@ class BPoint(Point):
         return self.isYlower(theOther)
 
     def isLeft(self, theOther):
-        """
+        """Checks if the point is to the left of the given point.
+
         >>> bp = BPoint(1, 1)
         >>> bp.isLeft(BPoint(0, 0))
         False
@@ -179,7 +190,8 @@ class BPoint(Point):
         return self.isXlower(theOther)
 
     def isRight(self, theOther):
-        """
+        """Checks if the point is to the right of the given point.
+
         >>> bp = BPoint(1, 1)
         >>> bp.isRight(BPoint(0, 0))
         True
@@ -191,7 +203,8 @@ class BPoint(Point):
         return self.isXgreater(theOther)
 
     def isFrontLeft(self, theOther):
-        """
+        """Checks if the point is to the front-left of the given point.
+
         >>> bp = BPoint(1, 1)
         >>> bp.isFrontLeft(BPoint(0, 0))
         False
@@ -201,7 +214,8 @@ class BPoint(Point):
         return self.isFront(theOther) and self.isLeft(theOther)
 
     def isFrontRight(self, theOther):
-        """
+        """Checks if the point is to the front-right of the given point.
+
         >>> bp = BPoint(1, 1)
         >>> bp.isFrontRight(BPoint(0, 0))
         True
@@ -211,7 +225,8 @@ class BPoint(Point):
         return self.isFront(theOther) and self.isRight(theOther)
 
     def isBackLeft(self, theOther):
-        """
+        """Checks if the point is to the back-left of the given point.
+
         >>> bp = BPoint(1, 1)
         >>> bp.isBackLeft(BPoint(0, 0))
         False
@@ -221,7 +236,8 @@ class BPoint(Point):
         return self.isBack(theOther) and self.isLeft(theOther)
 
     def isBackRight(self, theOther):
-        """
+        """Checks if the point is to the back-right of the given point.
+
         >>> bp = BPoint(1, 1)
         >>> bp.isBackRight(BPoint(0, 0))
         False
@@ -231,7 +247,8 @@ class BPoint(Point):
         return self.isBack(theOther) and self.isRight(theOther)
 
     def isJustFront(self, theOther):
-        """
+        """Checks if the point is just in front of the given point (same Y).
+
         >>> bp = BPoint(1, 1)
         >>> bp.isJustFront(BPoint(0, 0))
         False
@@ -241,7 +258,8 @@ class BPoint(Point):
         return self.isFront(theOther) and self.isXeq(theOther)
 
     def isJustBack(self, theOther):
-        """
+        """Checks if the point is just in back of the given point (same Y).
+
         >>> bp = BPoint(1, 1)
         >>> bp.isJustBack(BPoint(0, 0))
         False
@@ -251,7 +269,8 @@ class BPoint(Point):
         return self.isBack(theOther) and self.isXeq(theOther)
 
     def isJustLeft(self, theOther):
-        """
+        """Checks if the point is just to the left of the given point (same X).
+
         >>> bp = BPoint(1, 1)
         >>> bp.isJustLeft(BPoint(0, 0))
         False
@@ -261,7 +280,8 @@ class BPoint(Point):
         return self.isLeft(theOther) and self.isYeq(theOther)
 
     def isJustRight(self, theOther):
-        """
+        """Checks if the point is just to the right of the given point (same X).
+
         >>> bp = BPoint(1, 1)
         >>> bp.isJustRight(BPoint(0, 0))
         False
@@ -271,7 +291,8 @@ class BPoint(Point):
         return self.isRight(theOther) and self.isYeq(theOther)
 
     def moveToFront(self, theMove=1):
-        """
+        """Moves point to the front a given number of positions.
+
         >>> bp = BPoint(1, 1)
         >>> bp.moveToFront()
         (1, 2)
@@ -281,7 +302,8 @@ class BPoint(Point):
         return self.yMove(theMove)
 
     def moveToBack(self, theMove=1):
-        """
+        """Moves point to the back a given number of positions.
+
         >>> bp = BPoint(1, 10)
         >>> bp.moveToBack()
         (1, 9)
@@ -291,7 +313,8 @@ class BPoint(Point):
         return self.yMove(-theMove)
 
     def moveToRight(self, theMove=1):
-        """
+        """Moves point to the right a given number of positions.
+
         >>> bp = BPoint(1, 1)
         >>> bp.moveToRight()
         (2, 1)
@@ -301,7 +324,8 @@ class BPoint(Point):
         return self.xMove(theMove)
 
     def moveToLeft(self, theMove=1):
-        """
+        """Moves point to the left a given number of positions.
+
         >>> bp = BPoint(10, 1)
         >>> bp.moveToLeft()
         (9, 1)

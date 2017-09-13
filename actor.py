@@ -5,6 +5,8 @@ from bobject import BObject
 
 @staticmethod
 def isActor():
+    """Returns if the instance is an Actor.
+    """
     return False
 
 
@@ -29,12 +31,12 @@ class Actor(BObject):
         return True
 
     def isInBoard(self):
-        """
+        """Checks if the actor is in the board.
         """
         return self.isAlive()
 
     def isAlive(self):
-        """
+        """Checks if the actor is alive.
         """
         try:
             return self.HP > 0
@@ -43,8 +45,13 @@ class Actor(BObject):
 
     @property
     def Actions(self):
+        """Gets _actions attribute value.
+        """
         return self._actions
 
     @Actions.setter
     def Actions(self, theValue):
+        """Sets _actions attribute value. It appends the given value to
+        the _actions list.
+        """
         self._actions.append(theValue)

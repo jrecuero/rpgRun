@@ -4,6 +4,8 @@ from attr import Attributes
 
 @staticmethod
 def isObject():
+    """Returns if the instance is a BObject.
+    """
     return False
 
 
@@ -48,12 +50,12 @@ class BObject(BCell):
 
     @property
     def Attrs(self):
-        """
+        """Gets _attrs attribute value.
         """
         return self._attrs
 
     def addAttr(self, theAttr):
-        """
+        """Add a new attribute to the Attrs attribute.
 
         >>> from attr import Attr
         >>> obj = BObject(0, 0, 'new')
