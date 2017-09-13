@@ -4,13 +4,14 @@
 import game
 from blayer import LType
 from bpoint import Point, Location
+from shapes import Quad
 from base import Cli
 from decorators import argo, syntax, setsyntax
 from argtypes import Int, Str
 from brow import BRow
 from action import AType
 from assets import GreenSurface, PlayerActor, EnemyActor, Pillar
-from assets import WeaponAction, MoveAction
+from assets import WeaponAction, RangeAction, MoveAction
 import loggerator
 
 
@@ -98,6 +99,7 @@ class Play(Cli):
 
         player = PlayerActor(2, 4, self._sprWidth)
         player.Actions = WeaponAction('weapon', AType.WEAPONIZE)
+        player.Actions = RangeAction('range', AType.WEAPONIZE, theWidth=2, theHeight=2, theShape=Quad)
         player.Actions = MoveAction('move', AType.MOVEMENT)
         enemy = EnemyActor(4, 6, self._sprWidth)
         pillar = Pillar(0, 6, self._sprWidth)

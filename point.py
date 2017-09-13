@@ -1,56 +1,5 @@
 import math
-
-
-class Range(object):
-    """Range class provides a container for range, where a minimum and a
-    maximum value.
-    """
-
-    def __init__(self, theMin, theMax):
-        """Range class initialization method.
-
-        Args:
-            theMin (int) : minimum value for the range.
-            theMax (int) : maximum value for the range.
-        """
-        self._min = int(theMin)
-        self._max = int(theMax)
-
-    @property
-    def Min(self):
-        """Property that returns the _min attribute.
-
-        Returns:
-            int : minimum range attribute.
-        """
-        return self._min
-
-    @Min.setter
-    def Min(self, theValue):
-        """Property that sets a new value for the _min attribute.
-
-        Args:
-            theValue (int) : new minimum range attribute.
-        """
-        self._min = int(theValue)
-
-    @property
-    def Max(self):
-        """Property that returns the _max attribute.
-
-        Returns:
-            int : maximum range attribute.
-        """
-        return self._max
-
-    @Max.setter
-    def Max(self, theValue):
-        """Property that sets a new value for the _max attribute.
-
-        Args:
-            theValue (int) : new maximum range attribute.
-        """
-        self._max = int(theValue)
+from range import Range
 
 
 class Point(object):
@@ -79,6 +28,10 @@ class Point(object):
 
         Returns:
             int : X-axis coordinate attribute.
+
+        >>> p = Point(1, 0)
+        >>> p.X
+        1
         """
         return self._x
 
@@ -88,6 +41,13 @@ class Point(object):
 
         Args:
             theValue (int) : new value for the X-axis coordinate attribute.
+
+        >>> p = Point(1, 0)
+        >>> p.X
+        1
+        >>> p.X = 2
+        >>> p.X
+        2
         """
         self._x = int(theValue)
 
@@ -97,6 +57,10 @@ class Point(object):
 
         Returns:
             int : Y-axis coordinate attribute.
+
+        >>> p = Point(1, 2)
+        >>> p.Y
+        2
         """
         return self._y
 
@@ -106,41 +70,78 @@ class Point(object):
 
         Args:
             theValue (int) : new value for the Y-axis coordinate attribute.
+
+        >>> p = Point(1, 2)
+        >>> p.Y
+        2
+        >>> p.Y = 10
+        >>> p.Y
+        10
         """
         self._y = int(theValue)
 
-    def _isPositive(self, theAttr):
+    @property
+    def Klass(self):
+        """Gets the class to be used for arithmetical operations.
+
+        >>> p = Point(1, 1)
+        >>> p.Klass
+        <class 'point.Point'>
+        """
+        return self.__class__
+
+    def _isPositive(self, theValue):
         """Checks if the value passed is in the positive axe.
 
         Args:
-            theAttr (int) : value to check.
+            theValue (int) : value to check.
 
         Returns:
             boolean : True is value is in the positive axe, False else.
-        """
-        return theAttr > 0
 
-    def _isNegative(self, theAttr):
+        >>> p = Point(0, 0)
+        >>> p._isPositive(1)
+        True
+        >>> p._isPositive(-1)
+        False
+        """
+        return theValue > 0
+
+    def _isNegative(self, theValue):
         """Checks if the value passed is in the negative axe.
 
         Args:
-            theAttr (int) : value to check.
+            theValue (int) : value to check.
 
         Returns:
             boolean : True is value is in the negative axe, False else.
-        """
-        return theAttr < 0
 
-    def _isZero(self, theAttr):
+        >>> p = Point(0, 0)
+        >>> p._isNegative(1)
+        False
+        >>> p._isNegative(-1)
+        True
+        """
+        return theValue < 0
+
+    def _isZero(self, theValue):
         """Checks if the value passed is in the axe origin.
 
         Args:
-            theAttr (int) : value to check.
+            theValue (int) : value to check.
 
         Returns:
             boolean : True is value is in the axe origin, False else.
+
+        >>> p = Point(0, 0)
+        >>> p._isZero(0)
+        True
+        >>> p._isZero(1)
+        False
+        >>> p._isZero(-1)
+        False
         """
-        return theAttr == 0
+        return theValue == 0
 
     def isXpositive(self):
         """Check if the point is in the positive X-axe.
@@ -296,20 +297,44 @@ class Point(object):
             return not self.__eq__(theOther)
         return NotImplemented
 
-    def _isGreater(self, theAttr, theOtherAttr):
+    def _isGreater(self, theValue, theOtherValue):
         """Checks if one value is greater than other.
-        """
-        return theAttr > theOtherAttr
 
-    def _isLower(self, theAttr, theOtherAttr):
+        >>> p = Point(1, 1)
+        >>> p._isGreater(2, 1)
+        True
+        >>> p._isGreater(1, 2)
+        False
+        >>> p._isGreater(1, 1)
+        False
+        """
+        return theValue > theOtherValue
+
+    def _isLower(self, theValue, theOtherValue):
         """Checks if one value is lower than other
-        """
-        return theAttr < theOtherAttr
 
-    def _isEq(self, theAttr, theOtherAttr):
-        """Checks if two values are equal.
+        >>> p = Point(1, 1)
+        >>> p._isLower(2, 1)
+        False
+        >>> p._isLower(1, 2)
+        True
+        >>> p._isLower(1, 1)
+        False
         """
-        return theAttr == theOtherAttr
+        return theValue < theOtherValue
+
+    def _isEq(self, theValue, theOtherValue):
+        """Checks if two values are equal.
+
+        >>> p = Point(1, 1)
+        >>> p._isEq(2, 1)
+        False
+        >>> p._isEq(1, 2)
+        False
+        >>> p._isEq(1, 1)
+        True
+        """
+        return theValue == theOtherValue
 
     def isYgreater(self, theOther):
         """Checks if point Y-coordinate is greater than the one from the
@@ -405,8 +430,7 @@ class Point(object):
         (4, 6)
         """
         if isinstance(theOther, Point):
-            klass = self.__class__
-            return klass(self.X + theOther.X, self.Y + theOther.Y)
+            return self.Klass(self.X + theOther.X, self.Y + theOther.Y)
         return NotImplemented
 
     def __sub__(self, theOther):
@@ -419,8 +443,7 @@ class Point(object):
         (9, 9)
         """
         if isinstance(theOther, Point):
-            klass = self.__class__
-            return klass(self.X - theOther.X, self.Y - theOther.Y)
+            return self.Klass(self.X - theOther.X, self.Y - theOther.Y)
         return NotImplemented
 
     def distance(self, theOther):
@@ -523,7 +546,7 @@ class Point(object):
         >>> p.xTranslate(10)
         (10, 0)
         """
-        return self + Point(int(theX), 0)
+        return self + self.Klass(int(theX), 0)
 
     def yTranslate(self, theY):
         """Translate Y-coordinate the given value.
@@ -532,7 +555,7 @@ class Point(object):
         >>> p.yTranslate(5)
         (0, 5)
         """
-        return self + Point(0, int(theY))
+        return self + self.Klass(0, int(theY))
 
     def xyTranslate(self, theX, theY):
         """Translate X-coordinate and Y-coordinate with given values.
@@ -541,7 +564,7 @@ class Point(object):
         >>> p.xyTranslate(1, 5)
         (1, 5)
         """
-        return self + Point(int(theX), int(theY))
+        return self + self.Klass(int(theX), int(theY))
 
     def _move(self, theAttr, theValue):
         """Add a value to other. Used in move operations.

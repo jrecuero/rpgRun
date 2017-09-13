@@ -5,7 +5,7 @@ from bobject import BObject
 from bsurface import BSurface
 from actor import Actor
 from pactor import PActor
-from action import Action, AType
+from action import Action, AType, AoE
 
 PLAYER_ATTRS = '''[{"hp": {"base": 10, "delta": 2, "buffs": "None"}},
                    {"str": {"base": 9, "delta": 1, "buffs": "None"}},
@@ -55,17 +55,41 @@ class WeaponAction(Action):
         return [LType.OBJECT, ]
 
     def filterTarget(self, theCells):
-        cells = []
-        for cell in [x for x in theCells if x != self.Originator]:
-            if cell.isActor():
-                cells.append(cell)
-        return cells
+        return [x for x in theCells if self.isValidTarget(x)]
 
     def selected(self, theTarget):
         self.Target = theTarget
 
     def execute(self, theGame, **kwargs):
         damage = self.Originator.STR - self.Target[0].CON
+        self.Target[0].Attrs['HP'].dec(damage)
+
+
+class RangeAction(Action):
+
+    def __init__(self, theName, theType=AType.NONE, **kwargs):
+        super(RangeAction, self).__init__(theName, theType, **kwargs)
+        width = kwargs.get('theWidth')
+        height = kwargs.get('theHeight')
+        shape = kwargs.get('theShape')
+        self.AoE = AoE(None, width, height, shape)
+
+    @Action.Originator.setter
+    def Originator(self, theValue):
+        Action.Originator.fset(self, theValue)
+        self.AoE.Shape.Center = theValue
+
+    def layerToTarget(self):
+        return [LType.OBJECT, ]
+
+    def filterTarget(self, theCells):
+        return [x for x in theCells if self.isValidTarget(x) and self.AoE.Shape.isInside(x)]
+
+    def selected(self, theTarget):
+        self.Target = theTarget
+
+    def execute(self, theGame, **kwargs):
+        damage = self.Originator.STR
         self.Target[0].Attrs['HP'].dec(damage)
 
 

@@ -11,24 +11,36 @@ class AType(Enum):
     MAGIC = 4
     ITEM = 5
 
-    @staticmethod
-    def phase(theType):
-        """Checks phase.
+
+class AoE(object):
+
+    def __init__(self, theCenter, theWidth, theHeight, theShape):
+        self._shape = theShape(theCenter, theWidth, theHeight)
+
+    @property
+    def Shape(self):
+        """Gets _shape attribute value.
+
+        >>> from shapes import Quad
+        >>> _ = AoE(None, 0, 0, Quad)
+        >>> _.Shape # doctest: +ELLIPSIS
+        <shapes.Quad object at 0x...>
         """
-        if theType == AType.NONE:
-            raise NotImplementedError
-        elif theType == AType.MOVEMENT:
-            pass
-        elif theType == AType.WEAPONIZE:
-            pass
-        elif theType == AType.SKILL:
-            pass
-        elif theType == AType.MAGIC:
-            pass
-        elif theType == AType.ITEM:
-            pass
-        else:
-            raise NotImplementedError
+        return self._shape
+
+    @Shape.setter
+    def Shape(self, theValue):
+        """Sets _shape attribute value.
+
+        >>> from shapes import Quad
+        >>> _ = AoE(None, 0, 0, Quad)
+        >>> _.Shape # doctest: +ELLIPSIS
+        <shapes.Quad object at 0x...>
+        >>> _.Shape = 'shape'
+        >>> _.Shape
+        'shape'
+        """
+        self._shape = theValue
 
 
 class Action(object):
@@ -77,6 +89,12 @@ class Action(object):
     @Type.setter
     def Type(self, theValue):
         """Sets _type attribute value.
+
+        >>> acto = Action('new', AType.SKILL)
+        >>> acto.Type
+        <AType.SKILL: 3>
+        >>> acto.Type = AType.MOVEMENT
+        <AType.MOVEMENT: 1>
         """
         assert isinstance(theValue, AType)
         self._type = theValue
@@ -87,15 +105,18 @@ class Action(object):
 
         >>> acto = Action('new', AType.SKILL)
         >>> acto.Originator
-        >>> acto.Originator = 'me'
-        >>> acto.Originator
-        'me'
         """
         return self._originator
 
     @Originator.setter
     def Originator(self, theValue):
         """Sets _originator attribute value.
+
+        >>> acto = Action('new', AType.SKILL)
+        >>> acto.Originator
+        >>> acto.Originator = 'me'
+        >>> acto.Originator
+        'me'
         """
         self._originator = theValue
 
@@ -106,9 +127,6 @@ class Action(object):
         >>> acto = Action('new', AType.SKILL)
         >>> acto.Target
         []
-        >>> acto.Target = 'me'
-        >>> acto.Target
-        ['me']
         """
         return self._target
 
@@ -116,8 +134,57 @@ class Action(object):
     def Target(self, theValue):
         """Sets _target attribute value. It appends the given value to
         the _target attribute list.
+
+        >>> acto = Action('new', AType.SKILL)
+        >>> acto.Target
+        []
+        >>> acto.Target = 'me'
+        >>> acto.Target
+        ['me']
         """
         self._target.append(theValue)
+
+    @property
+    def AoE(self):
+        """Gets _aoe attribute value.
+
+        >>> acto = Action('new', AType.SKILL)
+        >>> acto.AoE
+        """
+        return self._aoe
+
+    @AoE.setter
+    def AoE(self, theValue):
+        """Sets _aoe attribute value.
+
+        >>> acto = Action('new', AType.SKILL)
+        >>> acto.AoE
+        >>> acto.AoE = 'AoE'
+        'AoE'
+        """
+        self._aoe = theValue
+
+    def isValidTarget(self, theTarget):
+        """Checks if the target is valid.
+
+        By default a valid target should be different from the
+        Originator and it should be an Actor derived.
+
+        >>> from actor import Actor
+        >>> from bsurface import BSurface
+        >>> acto = Action('new', AType.SKILL)
+        >>> o = Actor(0, 0, 'me')
+        >>> t = Actor(1, 1, 'you')
+        >>> s = BSurface(2, 2, 'surface')
+        >>> acto.Originator = o
+        >>> acto.isValidTarget(t)
+        True
+        >>> acto.isValidTarget(o)
+        False
+        >>> acto.isValidTarget(s)
+        False
+        """
+        return theTarget.isActor() and theTarget != self.Originator
 
     def wait(self, theGame):
         """Yields until user provides input..

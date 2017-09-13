@@ -28,53 +28,118 @@ class BSprite(object):
     @property
     def Graph(self):
         """Gets _graph attribute value.
+
+        >>> sp = BSprite()
+        >>> sp.Graph
+        >>> sp = BSprite(theSprGraph=True)
+        >>> sp.Graph
+        True
         """
         return self._graph
 
     @Graph.setter
     def Graph(self, theValue):
         """Sets _graph attribute value.
+
+        >>> sp = BSprite()
+        >>> sp.Graph
+        >>> sp.Graph = True
+        >>> sp.Graph
+        True
         """
         self._graph = theValue
 
     @property
     def Text(self):
         """Gets _text attribute value.
+
+        >>> sp = BSprite()
+        >>> sp.Text
+        >>> sp = BSprite(theSprText=True)
+        >>> sp.Text
+        True
         """
         return self._text
 
     @Text.setter
     def Text(self, theValue):
         """Sets _text attribute value.
+
+        >>> sp = BSprite()
+        >>> sp.Text
+        >>> sp.Text = True
+        >>> sp.Text
+        True
         """
         self._text = theValue
 
     @property
     def Color(self):
         """Gets _color attribute value.
+
+        >>> sp = BSprite()
+        >>> sp.Color
+        >>> sp = BSprite(theColor='Red')
+        >>> sp.Color
+        'Red'
         """
         return self._color
 
     @Color.setter
     def Color(self, theValue):
         """Sets _color attribute value.
+
+        >>> sp = BSprite()
+        >>> sp.Color
+        >>> sp.Color = 'Blue'
+        >>> sp.Color
+        'Blue'
+        >>> sp = BSprite(theColor='Red')
+        >>> sp.Color
+        'Red'
+        >>> sp.Color = 'Yellow'
+        >>> sp.Color
+        'Yellow'
         """
         self._color = theValue
 
     @property
     def Width(self):
         """Get _width attribute value.
+
+        >>> sp = BSprite()
+        >>> sp.Width
+        >>> sp = BSprite(theWidth=10)
+        >>> sp.Width
+        10
         """
         return self._width
 
     @Width.setter
     def Width(self, theValue):
         """Set _width attribute value.
+
+        >>> sp = BSprite()
+        >>> sp.Width
+        >>> sp.Width = 5
+        >>> sp.Width
+        5
         """
         self._width = theValue
 
     def get(self, theRender=BRender.DEFAULT):
         """Gets the sprite to render based on the render type.
+
+        >>> sp = BSprite(theSprText='*')
+        >>> sp.get(BRender.NONE)
+        >>> sp.get(BRender.GRAPH)
+        >>> sp.get(BRender.TEXT)
+        '*'
+        >>> sp = BSprite(theSprGraph=True)
+        >>> sp.get(BRender.NONE)
+        >>> sp.get(BRender.GRAPH)
+        True
+        >>> sp.get(BRender.TEXT)
         """
         if theRender == BRender.GRAPH:
             return self._graph
@@ -152,33 +217,12 @@ class BCell(BPoint):
     @property
     def Name(self):
         """Gets _name attribute value.
+
         >>> cell = BCell(0, 0, 'cell')
         >>> cell.Name
         'cell'
         """
         return self._name
-
-    @property
-    def Desc(self):
-        """Gets _desc attribute value.
-
-        Returns:
-            str: _desc attribute or empty string if _desc is None.
-
-        >>> cell = BCell(0, 0, 'cell')
-        >>> cell.Desc
-        ''
-        >>> cell.Desc = 'new cell'
-        >>> cell.Desc
-        'new cell'
-        """
-        return self._desc if self._desc is not None else ''
-
-    @Desc.setter
-    def Desc(self, theValue):
-        """Sets _desc attribute value.
-        """
-        self._desc = theValue
 
     @Name.setter
     def Name(self, theValue):
@@ -192,6 +236,32 @@ class BCell(BPoint):
         'new cell'
         """
         self._name = theValue
+
+    @property
+    def Desc(self):
+        """Gets _desc attribute value.
+
+        Returns:
+            str: _desc attribute or empty string if _desc is None.
+
+        >>> cell = BCell(0, 0, 'cell')
+        >>> cell.Desc
+        ''
+        """
+        return self._desc if self._desc is not None else ''
+
+    @Desc.setter
+    def Desc(self, theValue):
+        """Sets _desc attribute value.
+
+        >>> cell = BCell(0, 0, 'cell')
+        >>> cell.Desc
+        ''
+        >>> cell.Desc = 'new cell'
+        >>> cell.Desc
+        'new cell'
+        """
+        self._desc = theValue
 
     @property
     def Row(self):
@@ -216,6 +286,7 @@ class BCell(BPoint):
     @property
     def Static(self):
         """Gets _static attribute value.
+
         >>> cell = BCell(1, 2, 'cell')
         >>> cell.Static
         True
@@ -315,17 +386,71 @@ class BCell(BPoint):
 
         >>> cell = BCell(0, 0, 'cell')
         >>> cell.Layer
-        >>> cell.Layer = True
-        >>> cell.Layer
-        True
         """
         return self._layer
 
     @Layer.setter
     def Layer(self, theValue):
         """Sets _layer attribute value.
+
+        >>> cell = BCell(0, 0, 'cell')
+        >>> cell.Layer
+        >>> cell.Layer = True
+        >>> cell.Layer
+        True
         """
         self._layer = theValue
+
+    @property
+    def Klass(self):
+        """
+        >>> cell = BCell(0, 0, 'cell')
+        >>> cell.Klass
+        <class 'bpoint.BPoint'>
+        """
+        return BPoint
+
+    @property
+    def BPoint(self):
+        """Gets a point instance to be used on mathematical operations.
+
+        >>> cell = BCell(0, 0, 'cell')
+        >>> cell.BPoint
+        (0, 0)
+        """
+        return self.Klass(self.X, self.Y)
+
+    def __eq__(self, theOther):
+        """Overload method for the 'equal to' operation between BCell
+        instances.
+
+        Two BCell instances are equal if X and Y coordinates values are
+        equal and name is the same.
+
+        Args:
+            theOther (BCell) : the other BCell instance to check if is equal.
+
+        Returns:
+            boolean : True if BCell instaces are equal, False else.
+
+        >>> BCell(1, 1, "A") == BCell(1, 1, "A")
+        True
+        >>> BCell(1, 1, "A") == BCell(1, 0, "A")
+        False
+        >>> BCell(1, 1, "A") == BCell(0, 1, "A")
+        False
+        >>> BCell(1, 1, "A") in [BCell(0, 0, "A"), BCell(0, 1, "A"), BCell(1, 1, "A")]
+        True
+        >>> BCell(1, 0, "A") in [BCell(0, 0, "A"), BCell(0, 1, "A"), BCell(1, 1, "A")]
+        False
+        >>> BCell(1, 1, "A") == BCell(1, 1, "B")
+        False
+        >>> BCell(0, 0, "A") in [BCell(0, 0, "B"), BCell(0, 1, "A"), BCell(1, 1, "A")]
+        False
+        """
+        if isinstance(theOther, BCell):
+            return super(BCell, self).__eq__(theOther) and self.Name == theOther.Name
+        return NotImplemented
 
     def render(self, theRender=BRender.DEFAULT):
         """Render the cell.

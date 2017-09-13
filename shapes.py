@@ -15,12 +15,9 @@ class Shape(abc.ABC):
             theWidth (int) : Shape width dimension (x-axis).
             theHeight (int) : Shape height dimension (y-axis).
         """
-        if isinstance(theCenter, BPoint):
-            self._center = theCenter
-            self._width = theWidth
-            self._height = theHeight
-        else:
-            raise NotImplementedError
+        self._center = theCenter
+        self._width = theWidth
+        self._height = theHeight
 
     @property
     def Center(self):
@@ -145,7 +142,7 @@ class Quad(Shape):
         """
         topLeft, topRight, bottomLeft, bottomRight = self.getCorners()
         return (topLeft.X <= theOther.X <= topRight.X) and\
-               (bottomRight.Y <= theOther.Y <= topRight.X)
+               (bottomRight.Y <= theOther.Y <= topRight.Y)
 
     def getAllInsidePoints(self):
         """Returns all points contained in the shape.
