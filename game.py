@@ -76,6 +76,14 @@ class Game(object):
         if thePlayer:
             self.Player = theActor
 
+    def findActorByName(self, theName):
+        """Finds an actor by its name.
+        """
+        for _actor in self._actors:
+            if _actor.Name == theName:
+                return _actor
+        return None
+
     def _removeActor(self, theActor):
         """Removes the given actor from the game.
         """

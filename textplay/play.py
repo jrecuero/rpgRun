@@ -10,7 +10,8 @@ from decorators import argo, syntax, setsyntax
 from argtypes import Int, Str
 from brow import BRow
 from action import AType
-from assets import GreenSurface, PlayerActor, EnemyActor, Pillar
+from actor import Actor
+from assets import GreenSurface, PlayerActor, EnemyActor, MageActor, Pillar
 from assets import WeaponAction, RangeAction, MoveAction
 import loggerator
 
@@ -20,10 +21,37 @@ class T_Target(Str):
     def _helpStr(self):
         return "Enter target for action"
 
-    def complete(self, text):
+    def complete(self, document, text):
         _game = self.Journal.getFromCache('game')
         if _game is not None:
             return [x.Name for x in _game.TargetChoice]
+        return []
+
+
+class T_Actor(Str):
+
+    def _helpStr(self):
+        return "Enter actor name"
+
+    def complete(self, document, text):
+        _game = self.Journal.getFromCache('game')
+        if _game is not None:
+            return [x.Name for x in _game.Actors]
+        return []
+
+
+class T_Attr(Str):
+
+    def _helpStr(self):
+        return "Enter attribute for actor"
+
+    def complete(self, document, text):
+        _game = self.Journal.getFromCache('game')
+        _line = document.text.split()
+        _name = _line[-1] if document.text[-1].strip() == '' else _line[-2]
+        _actor = _game.findActorByName(_name)
+        if _actor is not None:
+            return [x.Name for x in _actor.Attrs]
         return []
 
 
@@ -32,7 +60,7 @@ class T_Action(Str):
     def _helpStr(self):
         return "Enter action"
 
-    def complete(self, text):
+    def complete(self, document, text):
         _game = self.Journal.getFromCache('game')
         if _game is not None:
             return [x.Name for x in _game.Player.Actions]
@@ -97,6 +125,7 @@ class Play(Cli):
             for iwidth in range(self._width):
                 row.addCellToLayer(GreenSurface(iwidth, iheight, self._sprWidth), LType.SURFACE)
 
+        Actor.LIFE = 'hp'
         player = PlayerActor(2, 4, self._sprWidth)
         player.Actions = WeaponAction('weapon', AType.WEAPONIZE)
         player.Actions = RangeAction('range', AType.WEAPONIZE, theWidth=2, theHeight=2, theShape=Quad)
@@ -105,6 +134,8 @@ class Play(Cli):
         enemies.append(EnemyActor(4, 6, self._sprWidth, 'GOBLIN'))
         enemies.append(EnemyActor(3, 5, self._sprWidth, 'ORC'))
         enemies.append(EnemyActor(1, 6, self._sprWidth, 'TROLL'))
+        enemies.append(MageActor(0, 5, self._sprWidth, 'MAGE'))
+        enemies[-1].Life = 'mp'
         pillar = Pillar(0, 6, self._sprWidth)
 
         self._game.addActor(player, True)
@@ -138,10 +169,11 @@ class Play(Cli):
     def do_print_player(self, name):
         """Print player information.
         """
+        _actor = self._game.findActorByName(name)
         self._logger.display("Data for  : {0}".format(name))
-        self._logger.display("Name      : {0}".format(self._game.Player.Name))
-        self._logger.display("Position  : {0}".format(Point.__repr__(self._game.Player)))
-        self._logger.display("Attributes:\n{0}".format(self._game.Player.Attrs))
+        self._logger.display("Name      : {0}".format(_actor.Name))
+        self._logger.display("Position  : {0}".format(_actor.BPoint))
+        self._logger.display("Attributes:\n{0}".format(_actor.Attrs))
 
     @Cli.command('ACTORS')
     def do_print_actors(self, *args):
@@ -194,7 +226,7 @@ class Play(Cli):
             for i, x in enumerate(self._game.TargetChoice):
                 print('{0} : {1}'.format(i, x))
             self.RPrompt = '<select-target>'
-            self.Prompt = '[Target <name>] rpgRun> '
+            self.Prompt = '[TARGET <name>] rpgRun> '
         elif _actionType == AType.MOVEMENT:
             print('select player movement (use command: MOVEMENT <loc> <pos>)')
             self.RPrompt = '<select-movement>'
@@ -228,13 +260,33 @@ class Play(Cli):
         self._game.runSelectMovement(loc, pos)
         self.RPrompt = '<play>'
 
+    @Cli.command()
+    @setsyntax
+    @syntax("debug aname attr value")
+    @argo('aname', T_Actor, None)
+    @argo('attr', T_Attr, None)
+    @argo('value', Int, None)
+    def do_debug_player(self, aname, attr, value):
+        """Updates actor attribute.
+        """
+        _actor = self._game.findActorByName(aname)
+        if _actor:
+            _actor.Attrs[attr].Base = value
+            self.do_print_player("name={}".format(aname))
+
+    @Cli.command('REFRESH')
+    def do_refresh(self, *args):
+        """Refreshes board game.
+        """
+        self._game._updateActors()
+
 
 if __name__ == '__main__':
 
     cli = Play()
     try:
-        cli.Prompt = 'rpgRun> '
-        cli.cmdloop()
+        # cli.Prompt = 'rpgRun> '
+        cli.cmdloop('rpgRun> ')
     except KeyboardInterrupt:
         cli._logger.display("")
         pass

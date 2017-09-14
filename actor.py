@@ -18,12 +18,44 @@ class Actor(BObject):
     functions for any actor placed on the board.
     """
 
+    LIFE = None
+
     def __init__(self, theX, theY, theName, **kwargs):
         """Actor class initialization method.
         """
         super(Actor, self).__init__(theX, theY, theName, **kwargs)
         self.Walkable = False
         self._actions = []
+        self._life = None
+
+    @property
+    def Actions(self):
+        """Gets _actions attribute value.
+        """
+        return self._actions
+
+    @Actions.setter
+    def Actions(self, theValue):
+        """Sets _actions attribute value. It appends the given value to
+        the _actions list.
+        """
+        self._actions.append(theValue)
+
+    @property
+    def Life(self):
+        """
+        """
+        if self._life is not None:
+            return self.Attrs[self._life].Now
+        elif Actor.LIFE is not None:
+            return self.Attrs[Actor.LIFE].Now
+        raise NotImplementedError
+
+    @Life.setter
+    def Life(self, theValue):
+        """
+        """
+        self._life = theValue
 
     def isActor(self):
         """Returns if the instance is an Actor.
@@ -39,19 +71,6 @@ class Actor(BObject):
         """Checks if the actor is alive.
         """
         try:
-            return self.HP > 0
+            return self.Life > 0
         except KeyError:
             return True
-
-    @property
-    def Actions(self):
-        """Gets _actions attribute value.
-        """
-        return self._actions
-
-    @Actions.setter
-    def Actions(self, theValue):
-        """Sets _actions attribute value. It appends the given value to
-        the _actions list.
-        """
-        self._actions.append(theValue)

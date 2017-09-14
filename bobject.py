@@ -37,7 +37,7 @@ class BObject(BCell):
         """
         if '_attrs' in self.__dict__ and theAttr in self.__dict__['_attrs']:
             return self._attrs[theAttr].Now
-        raise AttributeError
+        return AttributeError
 
     def __setattr__(self, theAttr, theValue):
         """Overwrite __setattr__ method so values from _attrs can not be
