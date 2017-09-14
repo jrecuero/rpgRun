@@ -33,8 +33,8 @@ class PlayerActor(PActor):
 
 class EnemyActor(Actor):
 
-    def __init__(self, theX, theY, theWidth, **kwargs):
-        super(EnemyActor, self).__init__(theX, theY, 'ENEMY', **kwargs)
+    def __init__(self, theX, theY, theWidth, theName='ENEMY', **kwargs):
+        super(EnemyActor, self).__init__(theX, theY, theName, **kwargs)
         self.Sprite = BSprite(theSprText='oOo', theWidth=theWidth, theColor="\x1b[32m" + "\x1b[41m")
         self.Attrs.setupAttrsFromJSON(ACTOR_ATTRS)
 

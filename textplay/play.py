@@ -101,16 +101,22 @@ class Play(Cli):
         player.Actions = WeaponAction('weapon', AType.WEAPONIZE)
         player.Actions = RangeAction('range', AType.WEAPONIZE, theWidth=2, theHeight=2, theShape=Quad)
         player.Actions = MoveAction('move', AType.MOVEMENT)
-        enemy = EnemyActor(4, 6, self._sprWidth)
+        enemies = []
+        enemies.append(EnemyActor(4, 6, self._sprWidth, 'GOBLIN'))
+        enemies.append(EnemyActor(3, 5, self._sprWidth, 'ORC'))
+        enemies.append(EnemyActor(1, 6, self._sprWidth, 'TROLL'))
         pillar = Pillar(0, 6, self._sprWidth)
 
         self._game.addActor(player, True)
-        self._game.addActor(enemy)
+        for x in enemies:
+            self._game.addActor(x)
 
         self._game.Board.getRowFromCell(player).addCellToLayer(player, LType.OBJECT)
         self._game.Board.getRowFromCell(pillar).addCellToLayer(pillar, LType.OBJECT)
-        self._game.Board.getRowFromCell(enemy).addCellToLayer(enemy, LType.OBJECT)
+        for x in enemies:
+            self._game.Board.getRowFromCell(x).addCellToLayer(x, LType.OBJECT)
 
+        self.RPrompt = '<play>'
         self._logger.display('Init rpgRun')
 
     @Cli.command()
@@ -165,6 +171,8 @@ class Play(Cli):
         print('select action (use command: ACTION <name>) ')
         for i, x in enumerate(self._game.Player.Actions):
             print('{0} : {1}'.format(i, x.Name))
+        self.RPrompt = '<select-action>'
+        self.Prompt = '[ACTION <name>] rpgRun> '
 
     @Cli.command()
     @setsyntax
@@ -185,8 +193,12 @@ class Play(Cli):
             print('select target (use command: TARGET <name>)')
             for i, x in enumerate(self._game.TargetChoice):
                 print('{0} : {1}'.format(i, x))
+            self.RPrompt = '<select-target>'
+            self.Prompt = '[Target <name>] rpgRun> '
         elif _actionType == AType.MOVEMENT:
             print('select player movement (use command: MOVEMENT <loc> <pos>)')
+            self.RPrompt = '<select-movement>'
+            self.Prompt = '[MOVEMENT <loc> <pos>] rpgRun> '
 
     @Cli.command()
     @setsyntax
@@ -201,6 +213,8 @@ class Play(Cli):
         else:
             return
         self._game.runSelectTarget(_target)
+        self.RPrompt = '<play>'
+        self.Prompt = 'rpgRun> '
 
     @Cli.command()
     @setsyntax
@@ -212,13 +226,15 @@ class Play(Cli):
         """
         print('player moves {0} to {1}'.format(pos, loc))
         self._game.runSelectMovement(loc, pos)
+        self.RPrompt = '<play>'
 
 
 if __name__ == '__main__':
 
     cli = Play()
     try:
-        cli.cmdloop('rpgRun> ')
+        cli.Prompt = 'rpgRun> '
+        cli.cmdloop()
     except KeyboardInterrupt:
         cli._logger.display("")
         pass
