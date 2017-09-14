@@ -10,6 +10,12 @@ class Point(object):
 
     Y-axis is the vertical axe, it has positive values up and negative values
     down.
+
+    Translate operations returns a new point with the final translation. The
+    original point (self) is unchanged.
+
+    Move operations update the original point (self) with given values for
+    X and Y coordinates.
     """
 
     def __init__(self, theX, theY):
@@ -527,9 +533,15 @@ class Point(object):
         raise NotImplementedError
 
     def translate(self, theOther):
-        """Translates point based on the given point.
+        """Returns a new translated point by the given point.
 
         It basically moves the point adding X-coordinates and Y-coordinates.
+
+        Args:
+            theOther (Point) : other point used for translation.
+
+        Returns:
+            Point : New  point with the translation.
 
         >>> p = Point(1, 1)
         >>> p.translate(Point(2, 3))
@@ -540,7 +552,13 @@ class Point(object):
         raise NotImplementedError
 
     def xTranslate(self, theX):
-        """Translate X-coordinate the given value.
+        """Returns a new translated point by the given X-coordinate.
+
+        Args:
+            theX (int) : X-coordinate value to translate.
+
+        Returns:
+            Point : New  point with the translation.
 
         >>> p = Point(0, 0)
         >>> p.xTranslate(10)
@@ -549,7 +567,13 @@ class Point(object):
         return self + self.Klass(int(theX), 0)
 
     def yTranslate(self, theY):
-        """Translate Y-coordinate the given value.
+        """Returns a new translated point by the given Y-coordinate.
+
+        Args:
+            theY (int) : Y-coordinate value to translate.
+
+        Returns:
+            Point : New  point with the translation.
 
         >>> p = Point(0, 0)
         >>> p.yTranslate(5)
@@ -558,7 +582,15 @@ class Point(object):
         return self + self.Klass(0, int(theY))
 
     def xyTranslate(self, theX, theY):
-        """Translate X-coordinate and Y-coordinate with given values.
+        """Returns a new translated point by the given X-coordinate and
+        Y-coordinate.
+
+        Args:
+            theX (int) : X-coordinate value to translate.
+            theY (int) : Y-coordinate value to translate.
+
+        Returns:
+            Point : New  point with the translation.
 
         >>> p = Point(0, 0)
         >>> p.xyTranslate(1, 5)
@@ -574,7 +606,7 @@ class Point(object):
         return theAttr + int(theValue)
 
     def xMove(self, theX=1):
-        """Moves X-coordinate a given value.
+        """Updates X-coordinate a given value.
 
         >>> p = Point(1, 1)
         >>> p.xMove(1)
@@ -588,7 +620,7 @@ class Point(object):
         return self
 
     def yMove(self, theY=1):
-        """Moves Y-coordinate a given value.
+        """Updates Y-coordinate a given value.
 
         >>> p = Point(1, 1)
         >>> p.yMove(1)
@@ -602,7 +634,7 @@ class Point(object):
         return self
 
     def xyMove(self, theX=1, theY=1):
-        """Moves X-coordinate and Y-coordinates with given values.
+        """Updates X-coordinate and Y-coordinates with given values.
 
         >>> p = Point(1, 1)
         >>> p.xyMove(1, 1)
@@ -629,7 +661,7 @@ class Point(object):
         return theAttr
 
     def xMoveWithinRange(self, theRange, theX=1, theUpTo=False):
-        """Moves X-coordinate a given value but only in the given ranges.
+        """Updates X-coordinate a given value but only in the given ranges.
 
         Args:
             theRange (Range) : range values the X-coordinate can move.
@@ -660,7 +692,7 @@ class Point(object):
             raise NotImplementedError
 
     def yMoveWithinRange(self, theRange, theY=1, theUpTo=False):
-        """Moves Y-coordinate a given value but only in the given ranges.
+        """Updates Y-coordinate a given value but only in the given ranges.
 
         Args:
             theRange (Range) : range values the Y-coordinate can move.
@@ -691,7 +723,7 @@ class Point(object):
             raise NotImplementedError
 
     def xyMoveWithinRange(self, theRangeX, theRangeY, theX=1, theY=1, theUpTo=False):
-        """Moves X-coordiante and Y-coordinate a given value but only in the
+        """Updates X-coordiante and Y-coordinate a given value but only in the
         given ranges.
 
         Args:
@@ -794,7 +826,7 @@ class Point(object):
             raise NotImplementedError
 
     def xMoveWithCollision(self, theCollisions, theX=1, theRangeX=None, theUpTo=False):
-        """Moves X-coordinate a given value in the given range and avoiding any
+        """Updates X-coordinate a given value in the given range and avoiding any
         collision with given Point instances.
 
         Args:
@@ -833,7 +865,7 @@ class Point(object):
         return self._moveWithCollision('X', theCollisions, theX, theRangeX, theUpTo)
 
     def yMoveWithCollision(self, theCollisions, theY=1, theRangeY=None, theUpTo=False):
-        """Moves Y-coordinate a given value in the given range and avoiding any
+        """Updates Y-coordinate a given value in the given range and avoiding any
         collision with given Point instances.
 
         Args:
