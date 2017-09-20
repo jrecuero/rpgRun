@@ -286,7 +286,7 @@ if __name__ == '__main__':
     cli = Play()
     try:
         # cli.Prompt = 'rpgRun> '
-        cli.cmdloop('rpgRun> ')
+        cli.cmdloop(thePrompt='rpgRun> ')
     except KeyboardInterrupt:
         cli._logger.display("")
         pass
