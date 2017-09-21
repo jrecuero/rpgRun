@@ -147,14 +147,17 @@ class Itero(Iterator):
         >>> it.append('one')
         >>> it.append('two')
         >>> it.remove('one')
-        >>> try:
-        ...     it.remove('one')
-        ... except ValueError:
-        ...     print('ValueError')
-        ValueError
+        True
+        >>> it.remove('one')
+        False
         """
         assert isinstance(theValue, self.__streamKlass)
-        self.__stream.remove(theValue)
+        try:
+            index = self.__stream.index(theValue)
+            del self[index]
+            return True
+        except ValueError:
+            return False
 
 
 class StrItero(Iterator):

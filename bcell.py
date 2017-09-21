@@ -201,7 +201,7 @@ class BCell(BPoint):
         super(BCell, self).__init__(theX, theY)
         self._id = next(BCell.__newId)
         self._name = theName
-        self._desc = None
+        self._desc = kwargs.get('theDesc', None)
         self._static = True
         self._walkable = True
         self._solid = True
@@ -247,6 +247,9 @@ class BCell(BPoint):
         >>> cell = BCell(0, 0, 'cell')
         >>> cell.Desc
         ''
+        >>> cell = BCell(0, 0, 'cell', theDesc='this is a cell')
+        >>> cell.Desc
+        'this is a cell'
         """
         return self._desc if self._desc is not None else ''
 

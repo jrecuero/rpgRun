@@ -1,6 +1,8 @@
 from bcell import BCell
 from bobject import BObject
-# from attr import Attr
+from action import Actions
+from inventory import Inventory
+from equipment import Equipment
 
 
 @staticmethod
@@ -25,21 +27,16 @@ class Actor(BObject):
         """
         super(Actor, self).__init__(theX, theY, theName, **kwargs)
         self.Walkable = False
-        self._actions = []
+        self._actions = Actions()
         self._life = None
+        self._inventory = Inventory(theHost=self)
+        self._equipment = Equipment(theHost=self)
 
     @property
     def Actions(self):
         """Gets _actions attribute value.
         """
         return self._actions
-
-    @Actions.setter
-    def Actions(self, theValue):
-        """Sets _actions attribute value. It appends the given value to
-        the _actions list.
-        """
-        self._actions.append(theValue)
 
     @property
     def Life(self):
@@ -56,6 +53,18 @@ class Actor(BObject):
         """
         """
         self._life = theValue
+
+    @property
+    def Inventory(self):
+        """Gets _inventory attribute value.
+        """
+        return self._inventory
+
+    @property
+    def Equipment(self):
+        """Gets _equipment attribute value.
+        """
+        return self._equipment
 
     def isActor(self):
         """Returns if the instance is an Actor.
@@ -74,3 +83,45 @@ class Actor(BObject):
             return self.Life > 0
         except KeyError:
             return True
+
+
+def __integration_doctest():
+    """
+    Test Inventory can hold GItem and GEquip.
+    >>> from equipment import GEquip
+    >>> from gitem import GItem
+    >>> from attr import Attr
+    >>> class Sword(GEquip):
+    ...     def buffHost(self):
+    ...         self.Host.Attrs['hp'].addBuff('swhp', 5)
+    ...     def debuffHost(self):
+    ...         self.Host.Attrs['hp'].delBuff('swhp')
+    >>> a = Actor(0, 0, 'me')
+    >>> it = GItem(theName='box')
+    >>> sw = Sword(theName='sword')
+    >>> a.Inventory.append(it)
+    >>> a.Inventory.append(sw)
+    >>> for x in a.Inventory:
+    ...     print(x.Name)
+    box
+    sword
+
+    Test when adding equipment it buffs properly.
+    >>> ahp = Attr('hp')
+    >>> ahp.setupAttr(theBase=100)
+    hp: 100/100
+    >>> a.addAttr(ahp)
+    hp: 100/100
+    >>> a.HP
+    100
+    >>> a.Equipment.append(sw)
+    >>> a.HP
+    105
+
+    Test when removing equipment it debuffs properly.
+    >>> a.Equipment.remove(sw)
+    True
+    >>> a.HP
+    100
+    """
+    pass

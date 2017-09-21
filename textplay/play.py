@@ -127,9 +127,9 @@ class Play(Cli):
 
         Actor.LIFE = 'hp'
         player = PlayerActor(2, 4, self._sprWidth)
-        player.Actions = WeaponAction('weapon', AType.WEAPONIZE)
-        player.Actions = RangeAction('range', AType.WEAPONIZE, theWidth=2, theHeight=2, theShape=Quad)
-        player.Actions = MoveAction('move', AType.MOVEMENT)
+        player.Actions.append(WeaponAction('weapon', AType.WEAPONIZE))
+        player.Actions.append(RangeAction('range', AType.WEAPONIZE, theWidth=2, theHeight=2, theShape=Quad))
+        player.Actions.append(MoveAction('move', AType.MOVEMENT))
         enemies = []
         enemies.append(EnemyActor(4, 6, self._sprWidth, 'GOBLIN'))
         enemies.append(EnemyActor(3, 5, self._sprWidth, 'ORC'))

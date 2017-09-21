@@ -124,11 +124,7 @@ class BRow(Itero):
         """
         assert isinstance(theCell, BCell)
         assert isinstance(theLayer, LType)
-        try:
-            self[theLayer.value].remove(theCell)
-            return True
-        except ValueError:
-            return False
+        return self[theLayer.value].remove(theCell)
 
     def populateLayer(self, theCell, theLayer):
         """Populate a layer with the same cell.

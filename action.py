@@ -1,4 +1,6 @@
 from enum import Enum
+from gobject import GObject
+from itero import Itero
 
 
 class AType(Enum):
@@ -43,7 +45,7 @@ class AoE(object):
         self._shape = theValue
 
 
-class Action(object):
+class Action(GObject):
     """Action class contains all required information to execute an action.
 
     Action are initiated by an Originator and they are executed against a
@@ -55,8 +57,13 @@ class Action(object):
 
     def __init__(self, theName, theType=AType.NONE, **kwargs):
         """Action class initializaton method.
+
+        >>> acto = Action('new', AType.SKILL)
+        >>> acto.Name
+        'new'
         """
-        self._name = theName
+        kwargs.setdefault('theName', theName)
+        super(Action, self).__init__(**kwargs)
         self.Type = theType
         self._originator = None
         self._target = []
@@ -65,16 +72,6 @@ class Action(object):
         self._preExecCb = None
         self._postExecCb = None
         self._resultCb = None
-
-    @property
-    def Name(self):
-        """Gets _name attribute value.
-
-        >>> acto = Action('new', AType.SKILL)
-        >>> acto.Name
-        'new'
-        """
-        return self._name
 
     @property
     def Type(self):
@@ -259,3 +256,11 @@ class Action(object):
         """Method that provides action results.
         """
         pass
+
+
+class Actions(Itero):
+    """
+    """
+
+    def __init__(self, **kwargs):
+        super(Actions, self).__init__(Action, kwargs.get('theSize', None))
