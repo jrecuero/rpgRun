@@ -21,6 +21,7 @@ Contents:
    equipment
    game
    gitem
+   gequip
    gobject
    inventory
    itero

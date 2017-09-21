@@ -1,15 +1,34 @@
 from gobject import GObject
 
 
+class ItemType(object):
+    """
+    """
+
+    @staticmethod
+    def Name():
+        """
+        """
+        return 'ITEM'
+
+
 class GItem(GObject):
     """
     """
+
+    TYPES = {ItemType.Name: ItemType, }
 
     def __init__(self, **kwargs):
         """GItem class initialization method.
         """
         super(GItem, self).__init__(**kwargs)
         self._host = kwargs.get('theHost', None)
+        self._typename = ItemType.Name
+
+    @staticmethod
+    def addType(theType):
+        assert issubclass(theType, ItemType)
+        GItem.TYPES.update({theType.Name: theType})
 
     @property
     def Host(self):
@@ -42,26 +61,24 @@ class GItem(GObject):
         """
         self._host = theValue
 
+    @property
+    def TypeName(self):
+        """
+        """
+        return self._typename
+
+    @property
+    def Type(self):
+        """
+        """
+        return GItem.TYPES.get(self.TypeName, None)
+
     def buffHost(self):
         """
-
-        >>> it = GItem()
-        >>> try:
-        ...     it.buffHost()
-        ... except NotImplementedError:
-        ...     'NotImplemented'
-        'NotImplemented'
         """
-        raise NotImplementedError
+        pass
 
     def debuffHost(self):
         """
-
-        >>> it = GItem()
-        >>> try:
-        ...     it.debuffHost()
-        ... except NotImplementedError:
-        ...     'NotImplemented'
-        'NotImplemented'
         """
-        raise NotImplementedError
+        pass

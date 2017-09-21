@@ -6,6 +6,7 @@ from bsurface import BSurface
 from actor import Actor
 from pactor import PActor
 from action import Action, AType, AoE
+from gequip import GEquip
 
 PLAYER_ATTRS = '''[{"hp": {"base": 10, "delta": 2, "buffs": "None"}},
                    {"str": {"base": 9, "delta": 1, "buffs": "None"}},
@@ -144,3 +145,33 @@ class MoveAction(Action):
         location = kwargs.get('theLocation', Location.FRONT)
         position = kwargs.get('thePostion', 1)
         theGame.movePlayer(location, position)
+
+
+class Weapon(GEquip):
+
+    def __init__(self, **kwargs):
+        super(Weapon, self).__init__(**kwargs)
+        self.Name = kwargs.get('theName', 'weapon')
+        self._attrBuff = kwargs.get('theAttrBuff', 'str')
+        self._attrBuffVal = kwargs.get('theAttrBuffVal', 5)
+
+    def buffHost(self):
+        self.Host.Attrs[self._attrBuff].addBuff(self.Name, self._attrBuffVal)
+
+    def debuffHost(self):
+        self.Host.Attrs[self._attrBuff].delBuff(self.Name)
+
+
+class Armor(GEquip):
+
+    def __init__(self, **kwargs):
+        super(Armor, self).__init__(**kwargs)
+        self.Name = kwargs.get('theName', 'armor')
+        self._attrBuff = kwargs.get('theAttrBuff', 'hp')
+        self._attrBuffVal = kwargs.get('theAttrBuffVal', 10)
+
+    def buffHost(self):
+        self.Host.Attrs[self._attrBuff].addBuff(self.Name, self._attrBuffVal)
+
+    def debuffHost(self):
+        self.Host.Attrs[self._attrBuff].delBuff(self.Name)

@@ -1,15 +1,5 @@
-from gitem import GItem
+from gequip import GEquip
 from itero import Itero
-
-
-class GEquip(GItem):
-    """
-    """
-
-    def __init__(self, **kwargs):
-        """GEquip class initialization method.
-        """
-        super(GEquip, self).__init__(**kwargs)
 
 
 class Equipment(Itero):
@@ -34,7 +24,7 @@ class Equipment(Itero):
         """
         return self._host
 
-    def append(self, theValue):
+    def append(self, theEquip):
         """
 
         >>> class MyEquip(GEquip):
@@ -42,14 +32,17 @@ class Equipment(Itero):
         ...         print('buff-host')
         ...     def debuffHost(self):
         ...         print('debuff-host')
-        >>> eqp = Equipment()
+        >>> eqp = Equipment(theHost='me')
         >>> myeq = MyEquip()
+        >>> myeq.Host, myeq.Equipped
+        (None, False)
         >>> eqp.append(myeq)
         buff-host
+        >>> myeq.Host, myeq.Equipped
+        ('me', True)
         """
-        theValue.Host = self.Host
-        theValue.buffHost()
-        super(Equipment, self).append(theValue)
+        theEquip.inEquipment(self.Host)
+        super(Equipment, self).append(theEquip)
 
     def __delitem__(self, theKey):
         """
@@ -59,12 +52,16 @@ class Equipment(Itero):
         ...         print('buff-host')
         ...     def debuffHost(self):
         ...         print('debuff-host')
-        >>> eqp = Equipment()
+        >>> eqp = Equipment(theHost='me')
         >>> myeq = MyEquip()
         >>> eqp.append(myeq)
         buff-host
+        >>> myeq.Host, myeq.Equipped
+        ('me', True)
         >>> del eqp[0]
         debuff-host
+        >>> myeq.Host, myeq.Equipped
+        (None, False)
         >>> eqp.append(myeq)
         buff-host
         >>> eqp.remove(myeq)
@@ -72,7 +69,7 @@ class Equipment(Itero):
         True
         """
         equip = self[theKey]
-        equip.debuffHost()
+        equip.outEquipment()
         super(Equipment, self).__delitem__(theKey)
 
     def pop(self):
@@ -83,15 +80,19 @@ class Equipment(Itero):
         ...         print('buff-host')
         ...     def debuffHost(self):
         ...         print('debuff-host')
-        >>> eqp = Equipment()
+        >>> eqp = Equipment(theHost='me')
         >>> myeq = MyEquip(theName='my equip')
         >>> eqp.append(myeq)
         buff-host
+        >>> myeq.Host, myeq.Equipped
+        ('me', True)
         >>> _ = eqp.pop()
         debuff-host
         >>> print(_.Name)
         my equip
+        >>> myeq.Host, myeq.Equipped
+        (None, False)
         """
         equip = super(Equipment, self).pop()
-        equip.debuffHost()
+        equip.outEquipment()
         return equip

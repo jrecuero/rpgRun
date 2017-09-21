@@ -13,6 +13,7 @@ from action import AType
 from actor import Actor
 from assets import GreenSurface, PlayerActor, EnemyActor, MageActor, Pillar
 from assets import WeaponAction, RangeAction, MoveAction
+from assets import Weapon, Armor
 import loggerator
 
 
@@ -33,11 +34,27 @@ class T_Actor(Str):
     def _helpStr(self):
         return "Enter actor name"
 
-    def complete(self, document, text):
+    def completeGetList(self, document, text):
+        """
+        """
         _game = self.Journal.getFromCache('game')
         if _game is not None:
             return [x.Name for x in _game.Actors]
-        return []
+        return None
+
+    # def complete(self, document, text):
+    #     _game = self.Journal.getFromCache('game')
+    #     if _game is not None:
+    #         ret = super(T_Actor, self).complete(document, text)
+    #         if ret is None:
+    #             textToProcess = text.replace(self._prefix, '') if self._prefix else text
+    #             prefix = self._prefix if self._prefix else ''
+    #             if not textToProcess:
+    #                 return [prefix + x.Name for x in _game.Actors]
+    #             else:
+    #                 return [prefix + x.Name for x in _game.Actors if x.startswith(textToProcess)]
+    #         return ret
+    #     return []
 
 
 class T_Attr(Str):
@@ -138,6 +155,13 @@ class Play(Cli):
         enemies[-1].Life = 'mp'
         pillar = Pillar(0, 6, self._sprWidth)
 
+        sword = Weapon()
+        armor = Armor()
+        player.Inventory.append(sword)
+        player.Inventory.append(armor)
+        player.Equipment.append(sword)
+        player.Equipment.append(armor)
+
         self._game.addActor(player, True)
         for x in enemies:
             self._game.addActor(x)
@@ -165,7 +189,7 @@ class Play(Cli):
     @Cli.command()
     @setsyntax
     @syntax("PLAYER [name]?")
-    @argo('name', Str, 'PLAYER')
+    @argo('name', T_Actor, 'PLAYER')
     def do_print_player(self, name):
         """Print player information.
         """
@@ -174,6 +198,30 @@ class Play(Cli):
         self._logger.display("Name      : {0}".format(_actor.Name))
         self._logger.display("Position  : {0}".format(_actor.BPoint))
         self._logger.display("Attributes:\n{0}".format(_actor.Attrs))
+
+    @Cli.command()
+    @setsyntax
+    @syntax("INVENTORY name")
+    @argo('name', T_Actor, None)
+    def do_print_inventory(self, name):
+        """Prints player inventory.
+        """
+        _actor = self._game.findActorByName(name)
+        self._logger.display("Inventory for  : {0}".format(name))
+        for x in _actor.Inventory:
+            self._logger.display(">> {0}".format(x.Name))
+
+    @Cli.command()
+    @setsyntax
+    @syntax("EQUIPEMENT name")
+    @argo('name', T_Actor, None)
+    def do_print_equipment(self, name):
+        """Prints player equipment.
+        """
+        _actor = self._game.findActorByName(name)
+        self._logger.display("Equipment for  : {0}".format(name))
+        for x in _actor.Equipment:
+            self._logger.display(">> {0}".format(x.Name))
 
     @Cli.command('ACTORS')
     def do_print_actors(self, *args):
