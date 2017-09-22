@@ -4,8 +4,14 @@ from gitem import GItem, ItemType
 @staticmethod
 def isEquip():
     """Returns if the instance is a GEquip.
+
+    Returns:
+        bool : False always for none equipment.
     """
     return False
+
+
+GItem.isEquip = isEquip
 
 
 class EquipType(ItemType):
@@ -32,47 +38,60 @@ class GEquip(GItem):
 
     @property
     def Equipped(self):
-        """Gets _equipped attribute value.
+        """Property for _equipped attribute.
 
-        >>> eq = GEquip()
-        >>> eq.Equipped
-        False
+        :getter: Gets _equipped attribute value.
+        :setter: Sets _equipped attribute value.
+
+        Returns:
+            bool : True if equip is equipped
+
+        Example:
+            >>> eq = GEquip()
+            >>> eq.Equipped
+            False
+            >>> eq.Equipped = True
+            >>> eq.Equipped
+            True
         """
         return self._equipped
 
     @Equipped.setter
     def Equipped(self, theValue):
-        """Sets _equipped attribute value.
-
-        >>> eq = GEquip()
-        >>> eq.Equipped
-        False
-        >>> eq.Equipped = True
-        >>> eq.Equipped
-        True
+        """Set property for _equipped attribute.
         """
         self._equipped = theValue
 
     def isEquip(self):
         """Returns if the instance is a GEquip.
+
+        Returns:
+            bool : True always for equipment.
         """
         return True
 
     def inEquipment(self, theHost):
         """Equips equipment items.
 
-        >>> class MyEquip(GEquip):
-        ...     def buffHost(self):
-        ...         print('buff-host')
-        ...     def debuffHost(self):
-        ...         print('debuff-host')
-        >>> eq = MyEquip()
-        >>> eq.Host, eq.Equipped
-        (None, False)
-        >>> eq.inEquipment('me')
-        buff-host
-        >>> eq.Host, eq.Equipped
-        ('me', True)
+        Args:
+            theHost (Actor) : Actor where equip will be equipped.
+
+        Returns:
+            None
+
+        Example:
+            >>> class MyEquip(GEquip):
+            ...     def buffHost(self):
+            ...         print('buff-host')
+            ...     def debuffHost(self):
+            ...         print('debuff-host')
+            >>> eq = MyEquip()
+            >>> eq.Host, eq.Equipped
+            (None, False)
+            >>> eq.inEquipment('me')
+            buff-host
+            >>> eq.Host, eq.Equipped
+            ('me', True)
         """
         self.Host = theHost
         self.Equipped = True
@@ -81,20 +100,24 @@ class GEquip(GItem):
     def outEquipment(self):
         """Unequips equipment item.
 
-        >>> class MyEquip(GEquip):
-        ...     def buffHost(self):
-        ...         print('buff-host')
-        ...     def debuffHost(self):
-        ...         print('debuff-host')
-        >>> eq = MyEquip()
-        >>> eq.inEquipment('me')
-        buff-host
-        >>> eq.Host, eq.Equipped
-        ('me', True)
-        >>> eq.outEquipment()
-        debuff-host
-        >>> eq.Host, eq.Equipped
-        (None, False)
+        Returns:
+            None
+
+        Example:
+            >>> class MyEquip(GEquip):
+            ...     def buffHost(self):
+            ...         print('buff-host')
+            ...     def debuffHost(self):
+            ...         print('debuff-host')
+            >>> eq = MyEquip()
+            >>> eq.inEquipment('me')
+            buff-host
+            >>> eq.Host, eq.Equipped
+            ('me', True)
+            >>> eq.outEquipment()
+            debuff-host
+            >>> eq.Host, eq.Equipped
+            (None, False)
         """
         self.debuffHost()
         self.Host = None

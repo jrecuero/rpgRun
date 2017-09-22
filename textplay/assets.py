@@ -1,11 +1,11 @@
 from bpoint import Location
 from bcell import BSprite
-from blayer import LType
+# from blayer import LType
 from bobject import BObject
 from bsurface import BSurface
 from actor import Actor
 from pactor import PActor
-from action import Action, AType, AoE
+from action import Action, AType, AoE, TargetAction, MoveAction
 from gequip import GEquip
 
 PLAYER_ATTRS = '''[{"hp": {"base": 10, "delta": 2, "buffs": "None"}},
@@ -60,86 +60,42 @@ class Pillar(BObject):
         self.Sprite = BSprite(theSprText='|||||||', theWidth=theWidth, theColor="\x1b[44m")
 
 
-class WeaponAction(Action):
+class WeaponAction(TargetAction):
 
     def __init__(self, theName, theType=AType.NONE, **kwargs):
         super(WeaponAction, self).__init__(theName, theType, **kwargs)
-
-    def layerToTarget(self):
-        return [LType.OBJECT, ]
-
-    def filterTarget(self, theCells):
-        return [x for x in theCells if self.isValidTarget(x)]
-
-    def selected(self, theTarget):
-        self.Target = theTarget
 
     def execute(self, theGame, **kwargs):
         damage = self.Originator.STR - self.Target[0].CON
         self.Target[0].Attrs['HP'].dec(damage)
 
 
-class RangeAction(Action):
+class RangeAction(TargetAction):
 
     def __init__(self, theName, theType=AType.NONE, **kwargs):
         super(RangeAction, self).__init__(theName, theType, **kwargs)
         width = kwargs.get('theWidth')
         height = kwargs.get('theHeight')
         shape = kwargs.get('theShape')
-        self.AoE = AoE(None, width, height, shape)
+        self.setAoE(AoE(None, width, height, shape))
 
     @Action.Originator.setter
     def Originator(self, theValue):
         Action.Originator.fset(self, theValue)
-        self.AoE.Shape.Center = theValue
-
-    def layerToTarget(self):
-        return [LType.OBJECT, ]
+        self.getAoE().getShape().Center = theValue
 
     def filterTarget(self, theCells):
-        return [x for x in theCells if self.isValidTarget(x) and self.AoE.Shape.isInside(x)]
-
-    def selected(self, theTarget):
-        self.Target = theTarget
+        return [x for x in theCells if self.isValidTarget(x) and self.getAoE().getShape().isInside(x)]
 
     def execute(self, theGame, **kwargs):
         damage = self.Originator.STR
         self.Target[0].Attrs['HP'].dec(damage)
 
 
-class MoveAction(Action):
+class MoveAction(MoveAction):
 
     def __init__(self, theName, theType=AType.NONE, **kwargs):
         super(MoveAction, self).__init__(theName, theType, **kwargs)
-
-    @Action.Originator.setter
-    def Originator(self, theValue):
-        self._originator = theValue
-        self.Target = theValue
-
-    def requires(self, theGame):
-        print('requires to enter Location and Position for movement')
-        target = yield
-        yield target
-
-    def requiresTarget(self):
-        """
-        """
-        return False
-
-    def requiresMovement(self):
-        """
-        """
-        return True
-
-    def layerToTarget(self):
-        return None
-
-    def filterTarget(self, theCells):
-        return [self.Originator, ]
-
-    def selected(self, theTarget):
-        self.Target = theTarget
 
     def execute(self, theGame, **kwargs):
         location = kwargs.get('theLocation', Location.FRONT)
@@ -150,28 +106,19 @@ class MoveAction(Action):
 class Weapon(GEquip):
 
     def __init__(self, **kwargs):
+        kwargs.setdefault('theName', 'weapon')
         super(Weapon, self).__init__(**kwargs)
-        self.Name = kwargs.get('theName', 'weapon')
-        self._attrBuff = kwargs.get('theAttrBuff', 'str')
-        self._attrBuffVal = kwargs.get('theAttrBuffVal', 5)
-
-    def buffHost(self):
-        self.Host.Attrs[self._attrBuff].addBuff(self.Name, self._attrBuffVal)
-
-    def debuffHost(self):
-        self.Host.Attrs[self._attrBuff].delBuff(self.Name)
 
 
 class Armor(GEquip):
 
     def __init__(self, **kwargs):
+        kwargs.setdefault('theName', 'armor')
         super(Armor, self).__init__(**kwargs)
-        self.Name = kwargs.get('theName', 'armor')
-        self._attrBuff = kwargs.get('theAttrBuff', 'hp')
-        self._attrBuffVal = kwargs.get('theAttrBuffVal', 10)
 
-    def buffHost(self):
-        self.Host.Attrs[self._attrBuff].addBuff(self.Name, self._attrBuffVal)
 
-    def debuffHost(self):
-        self.Host.Attrs[self._attrBuff].delBuff(self.Name)
+class Shield(GEquip):
+
+    def __init__(self, **kwargs):
+        kwargs.setdefault('theName', 'shield')
+        super(Shield, self).__init__(**kwargs)

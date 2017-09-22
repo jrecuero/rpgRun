@@ -66,6 +66,14 @@ class Actor(BObject):
         """
         return self._equipment
 
+    def getEquipFromInventory(self):
+        """Returns all equip items from the inventory.
+
+        Returns:
+            list[GEquip] : list with all equip items.
+        """
+        return [x for x in self.Inventory if x.isEquip()]
+
     def isActor(self):
         """Returns if the instance is an Actor.
         """
@@ -91,20 +99,18 @@ def __integration_doctest():
     >>> from equipment import GEquip
     >>> from gitem import GItem
     >>> from attr import Attr
-    >>> class Sword(GEquip):
-    ...     def buffHost(self):
-    ...         self.Host.Attrs['hp'].addBuff('swhp', 5)
-    ...     def debuffHost(self):
-    ...         self.Host.Attrs['hp'].delBuff('swhp')
     >>> a = Actor(0, 0, 'me')
     >>> it = GItem(theName='box')
-    >>> sw = Sword(theName='sword')
+    >>> sw1 = GEquip(theName='sword', theAttrBuff={'hp': 5})
+    >>> sw2 = GEquip(theName='great sword')
     >>> a.Inventory.append(it)
-    >>> a.Inventory.append(sw)
+    >>> a.Inventory.append(sw1)
+    >>> a.Inventory.append(sw2)
     >>> for x in a.Inventory:
     ...     print(x.Name)
     box
     sword
+    great sword
 
     Test when adding equipment it buffs properly.
     >>> ahp = Attr('hp')
@@ -114,12 +120,19 @@ def __integration_doctest():
     hp: 100/100
     >>> a.HP
     100
-    >>> a.Equipment.append(sw)
+    >>> a.Equipment.append(sw1)
     >>> a.HP
     105
+    >>> for x in a.Equipment:
+    ...     print(x.Name)
+    sword
+    >>> for x in a.getEquipFromInventory():
+    ...     print(x.Name)
+    sword
+    great sword
 
     Test when removing equipment it debuffs properly.
-    >>> a.Equipment.remove(sw)
+    >>> a.Equipment.remove(sw1)
     True
     >>> a.HP
     100

@@ -13,7 +13,7 @@ from action import AType
 from actor import Actor
 from assets import GreenSurface, PlayerActor, EnemyActor, MageActor, Pillar
 from assets import WeaponAction, RangeAction, MoveAction
-from assets import Weapon, Armor
+from assets import Weapon, Armor, Shield
 import loggerator
 
 
@@ -41,20 +41,6 @@ class T_Actor(Str):
         if _game is not None:
             return [x.Name for x in _game.Actors]
         return None
-
-    # def complete(self, document, text):
-    #     _game = self.Journal.getFromCache('game')
-    #     if _game is not None:
-    #         ret = super(T_Actor, self).complete(document, text)
-    #         if ret is None:
-    #             textToProcess = text.replace(self._prefix, '') if self._prefix else text
-    #             prefix = self._prefix if self._prefix else ''
-    #             if not textToProcess:
-    #                 return [prefix + x.Name for x in _game.Actors]
-    #             else:
-    #                 return [prefix + x.Name for x in _game.Actors if x.startswith(textToProcess)]
-    #         return ret
-    #     return []
 
 
 class T_Attr(Str):
@@ -155,12 +141,15 @@ class Play(Cli):
         enemies[-1].Life = 'mp'
         pillar = Pillar(0, 6, self._sprWidth)
 
-        sword = Weapon()
-        armor = Armor()
+        sword = Weapon(theAttrBuff={'str': 5})
+        armor = Armor(theAttrBuff={'hp': 10})
+        shield = Shield(theAttrBuff={'hp': 7, 'str': 1})
         player.Inventory.append(sword)
         player.Inventory.append(armor)
+        player.Inventory.append(shield)
         player.Equipment.append(sword)
         player.Equipment.append(armor)
+        player.Equipment.append(shield)
 
         self._game.addActor(player, True)
         for x in enemies:
@@ -209,7 +198,7 @@ class Play(Cli):
         _actor = self._game.findActorByName(name)
         self._logger.display("Inventory for  : {0}".format(name))
         for x in _actor.Inventory:
-            self._logger.display(">> {0}".format(x.Name))
+            self._logger.display(">> {0}".format(x))
 
     @Cli.command()
     @setsyntax
@@ -221,7 +210,7 @@ class Play(Cli):
         _actor = self._game.findActorByName(name)
         self._logger.display("Equipment for  : {0}".format(name))
         for x in _actor.Equipment:
-            self._logger.display(">> {0}".format(x.Name))
+            self._logger.display(">> {0}".format(x))
 
     @Cli.command('ACTORS')
     def do_print_actors(self, *args):
