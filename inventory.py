@@ -23,3 +23,17 @@ class Inventory(Itero):
         'me'
         """
         return self._host
+
+    def findByName(self, theName):
+        """Finds an item by its name.
+
+        Args:
+            theName (str) : String with the item name.
+
+        Returns:
+            GItem : Item instance with the given item name.
+        """
+        for equip in self:
+            if equip.Name == theName:
+                return equip
+        return None

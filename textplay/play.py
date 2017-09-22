@@ -43,6 +43,32 @@ class T_Actor(Str):
         return None
 
 
+class T_Equip(Str):
+
+    def __init__(self, **kwargs):
+        super(T_Equip, self).__init__(**kwargs)
+        self._equipFlag = kwargs.get('equip', True)
+
+    def _checkFlag(self, theEquip):
+        if self._equipFlag:
+            return theEquip.isEquipe and not theEquip.Equipped
+        else:
+            return theEquip.isEquipe and theEquip.Equipped
+
+    def _helpStr(self):
+        return "Enter a piece of equipment"
+
+    def completeGetList(self, document, text):
+        _game = self.Journal.getFromCache('game')
+        if _game is not None:
+            _line = document.text.split()
+            _name = _line[-1] if document.text[-1].strip() == '' else _line[-2]
+            _actor = _game.findActorByName(_name)
+            if _actor is not None:
+                return [x.Name for x in _actor.Inventory if self._checkFlag(x)]
+        return None
+
+
 class T_Attr(Str):
 
     def _helpStr(self):
@@ -50,11 +76,12 @@ class T_Attr(Str):
 
     def complete(self, document, text):
         _game = self.Journal.getFromCache('game')
-        _line = document.text.split()
-        _name = _line[-1] if document.text[-1].strip() == '' else _line[-2]
-        _actor = _game.findActorByName(_name)
-        if _actor is not None:
-            return [x.Name for x in _actor.Attrs]
+        if _game is not None:
+            _line = document.text.split()
+            _name = _line[-1] if document.text[-1].strip() == '' else _line[-2]
+            _actor = _game.findActorByName(_name)
+            if _actor is not None:
+                return [x.Name for x in _actor.Attrs]
         return []
 
 
@@ -202,7 +229,7 @@ class Play(Cli):
 
     @Cli.command()
     @setsyntax
-    @syntax("EQUIPEMENT name")
+    @syntax("EQUIPMENT name")
     @argo('name', T_Actor, None)
     def do_print_equipment(self, name):
         """Prints player equipment.
@@ -296,6 +323,36 @@ class Play(Cli):
         print('player moves {0} to {1}'.format(pos, loc))
         self._game.runSelectMovement(loc, pos)
         self.RPrompt = '<play>'
+
+    @Cli.command()
+    @setsyntax
+    @syntax("EQUIP aname equip")
+    @argo('aname', T_Actor, None)
+    @argo('equip', T_Equip, None)
+    def do_equip_actor(self, aname, equip):
+        """Equip an item in an actor.
+        """
+        _actor = self._game.findActorByName(aname)
+        if _actor:
+            _equip = _actor.Inventory.findByName(equip)
+            if _equip:
+                print('Equip {0} in {1}'.format(equip, aname))
+                _actor.Equipment.append(_equip)
+
+    @Cli.command()
+    @setsyntax
+    @syntax("UNEQUIP aname equip")
+    @argo('aname', T_Actor, None)
+    @argo('equip', T_Equip, None, theCompleterKwargs={'equip': False})
+    def do_unequip_actor(self, aname, equip):
+        """Equip an item in an actor.
+        """
+        _actor = self._game.findActorByName(aname)
+        if _actor:
+            _equip = _actor.Equipment.findByName(equip)
+            if _equip:
+                print('Unequip {0} in {1}'.format(equip, aname))
+                _actor.Equipment.remove(_equip)
 
     @Cli.command()
     @setsyntax

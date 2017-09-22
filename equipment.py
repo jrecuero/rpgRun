@@ -96,3 +96,17 @@ class Equipment(Itero):
         equip = super(Equipment, self).pop()
         equip.outEquipment()
         return equip
+
+    def findByName(self, theName):
+        """Finds an equip by its name.
+
+        Args:
+            theName (str) : String with the equip name.
+
+        Returns:
+            GEquip : Equip instance with the given equip name.
+        """
+        for equip in self:
+            if equip.Name == theName:
+                return equip
+        return None
