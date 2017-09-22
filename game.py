@@ -142,17 +142,22 @@ class Game(object):
         """Executes run cycle.
 
         Run cycle stages:
-            - Prompt user for operation. Action could be movement and any other
+
+        - Prompt user for operation. Action could be movement and any other
             action (attack, use skills, items, defense, ...). They can be
             selected and executed in any order.
-                * If user select an action, proceed with actions stages, which
+
+            * If user select an action, proceed with actions stages, which
                 should be target selection and action execution.
-                * If user select a movement, check if movement is allowed and
+
+            * If user select a movement, check if movement is allowed and
                 proceed with the move.
-            - After user has finished all operations, then proceed with any
+
+        - After user has finished all operations, then proceed with any
             other actor in the board. Any other actor can not move, they can
             just proceed with an action. Follow the same action rules.
-            - After all actors have taken their turn, scroll the board and end
+
+        - After all actors have taken their turn, scroll the board and end
             the cycle.
         """
         while True:

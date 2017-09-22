@@ -15,8 +15,12 @@ class AType(Enum):
 
 
 class AoE(object):
+    """AoE class is used to represent the Area of Effect.
+    """
 
     def __init__(self, theCenter, theWidth, theHeight, theShape):
+        """AoE class initialization method.
+        """
         self._shape = theShape(theCenter, theWidth, theHeight)
 
     @property
@@ -145,6 +149,9 @@ class Action(GObject):
     def AoE(self):
         """Gets _aoe attribute value.
 
+        Returns:
+            class AoE : AoE instance with the area of effect.
+
         >>> acto = Action('new', AType.SKILL)
         >>> acto.AoE
         """
@@ -156,8 +163,6 @@ class Action(GObject):
 
         >>> acto = Action('new', AType.SKILL)
         >>> acto.AoE
-        >>> acto.AoE = 'AoE'
-        'AoE'
         """
         self._aoe = theValue
 

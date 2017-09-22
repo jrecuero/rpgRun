@@ -19,6 +19,15 @@ class BSprite(object):
 
     def __init__(self, **kwargs):
         """BSprite class initialization method.
+
+        Keyword Args:
+            theSprGraph (object) : sprite instance for graphical rendering.
+
+            theSprText (str) : string to be used for text rendering.
+
+            theColor (str) : string with the color for text rendering.
+
+            theWidth (int) : width size for text rendering.
         """
         self._graph = kwargs.get('theSprGraph', None)
         self._text = kwargs.get('theSprText', None)
@@ -413,12 +422,11 @@ class BCell(BPoint):
         """
         return BPoint
 
-    @property
-    def BPoint(self):
+    def getPoint(self):
         """Gets a point instance to be used on mathematical operations.
 
         >>> cell = BCell(0, 0, 'cell')
-        >>> cell.BPoint
+        >>> cell.getPoint()
         (0, 0)
         """
         return self.Klass(self.X, self.Y)

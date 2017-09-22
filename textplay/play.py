@@ -196,7 +196,7 @@ class Play(Cli):
         _actor = self._game.findActorByName(name)
         self._logger.display("Data for  : {0}".format(name))
         self._logger.display("Name      : {0}".format(_actor.Name))
-        self._logger.display("Position  : {0}".format(_actor.BPoint))
+        self._logger.display("Position  : {0}".format(_actor.getPoint()))
         self._logger.display("Attributes:\n{0}".format(_actor.Attrs))
 
     @Cli.command()

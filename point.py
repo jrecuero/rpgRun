@@ -30,59 +30,59 @@ class Point(object):
 
     @property
     def X(self):
-        """Property that returns the _x attribute.
+        """Property for _x attribute.
+
+        :getter: Gets _x attribute value.
+        :setter: Sets _x attribute value.
 
         Returns:
             int : X-axis coordinate attribute.
 
-        >>> p = Point(1, 0)
-        >>> p.X
-        1
+        Example:
+            >>> p = Point(1, 0)
+            >>> p.X
+            1
+            >>> p.X = 2
+            >>> p.X
+            2
         """
         return self._x
 
     @X.setter
     def X(self, theValue):
-        """Property that sets a new value for the _x attribute.
+        """Set property for _x attribute.
 
         Args:
             theValue (int) : new value for the X-axis coordinate attribute.
-
-        >>> p = Point(1, 0)
-        >>> p.X
-        1
-        >>> p.X = 2
-        >>> p.X
-        2
         """
         self._x = int(theValue)
 
     @property
     def Y(self):
-        """Property that returns the _y attribute.
+        """Property for _y attribute.
+
+        :getter: Gets _y attribute value.
+        :setter: Sets _y attribute value.
 
         Returns:
             int : Y-axis coordinate attribute.
 
-        >>> p = Point(1, 2)
-        >>> p.Y
-        2
+        Example:
+            >>> p = Point(1, 2)
+            >>> p.Y
+            2
+            >>> p.Y = 10
+            >>> p.Y
+            10
         """
         return self._y
 
     @Y.setter
     def Y(self, theValue):
-        """Property that sets a new value for the _y attribute.
+        """Set property for _y attribute.
 
         Args:
             theValue (int) : new value for the Y-axis coordinate attribute.
-
-        >>> p = Point(1, 2)
-        >>> p.Y
-        2
-        >>> p.Y = 10
-        >>> p.Y
-        10
         """
         self._y = int(theValue)
 
@@ -90,9 +90,13 @@ class Point(object):
     def Klass(self):
         """Gets the class to be used for arithmetical operations.
 
-        >>> p = Point(1, 1)
-        >>> p.Klass
-        <class 'point.Point'>
+        Returns:
+            object : class for the Point instance.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.Klass
+            <class 'point.Point'>
         """
         return self.__class__
 
@@ -103,13 +107,14 @@ class Point(object):
             theValue (int) : value to check.
 
         Returns:
-            boolean : True is value is in the positive axe, False else.
+            bool : True is value is in the positive axe, False else.
 
-        >>> p = Point(0, 0)
-        >>> p._isPositive(1)
-        True
-        >>> p._isPositive(-1)
-        False
+        Example:
+            >>> p = Point(0, 0)
+            >>> p._isPositive(1)
+            True
+            >>> p._isPositive(-1)
+            False
         """
         return theValue > 0
 
@@ -120,13 +125,14 @@ class Point(object):
             theValue (int) : value to check.
 
         Returns:
-            boolean : True is value is in the negative axe, False else.
+            bool : True is value is in the negative axe, False else.
 
-        >>> p = Point(0, 0)
-        >>> p._isNegative(1)
-        False
-        >>> p._isNegative(-1)
-        True
+        Example:k
+            >>> p = Point(0, 0)
+            >>> p._isNegative(1)
+            False
+            >>> p._isNegative(-1)
+            True
         """
         return theValue < 0
 
@@ -137,15 +143,16 @@ class Point(object):
             theValue (int) : value to check.
 
         Returns:
-            boolean : True is value is in the axe origin, False else.
+            bool : True is value is in the axe origin, False else.
 
-        >>> p = Point(0, 0)
-        >>> p._isZero(0)
-        True
-        >>> p._isZero(1)
-        False
-        >>> p._isZero(-1)
-        False
+        Example:
+            >>> p = Point(0, 0)
+            >>> p._isZero(0)
+            True
+            >>> p._isZero(1)
+            False
+            >>> p._isZero(-1)
+            False
         """
         return theValue == 0
 
@@ -153,14 +160,15 @@ class Point(object):
         """Check if the point is in the positive X-axe.
 
         Returns:
-            boolean : True if point is in the positive X-axe, False else.
+            bool : True if point is in the positive X-axe, False else.
 
-        >>> p = Point(1, 1)
-        >>> p.isXpositive()
-        True
-        >>> p = Point(-1, 1)
-        >>> p.isXpositive()
-        False
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.isXpositive()
+            True
+            >>> p = Point(-1, 1)
+            >>> p.isXpositive()
+            False
         """
         return self._isPositive(self.X)
 
@@ -168,14 +176,15 @@ class Point(object):
         """Check if the point is in the negative X-axe.
 
         Returns:
-            boolean : True if point is in the negative X-axe, False else.
+            bool : True if point is in the negative X-axe, False else.
 
-        >>> p = Point(1, 0)
-        >>> p.isXnegative()
-        False
-        >>> p = Point(-1, 0)
-        >>> p.isXnegative()
-        True
+        Example:
+            >>> p = Point(1, 0)
+            >>> p.isXnegative()
+            False
+            >>> p = Point(-1, 0)
+            >>> p.isXnegative()
+            True
         """
         return self._isNegative(self.X)
 
@@ -183,14 +192,15 @@ class Point(object):
         """Check if the point is the X-axe origin.
 
         Returns:
-            boolean : True if point is in the X-axe origin, False else.
+            bool : True if point is in the X-axe origin, False else.
 
-        >>> p = Point(0, 1)
-        >>> p.isXzero()
-        True
-        >>> p = Point(1, 0)
-        >>> p.isXzero()
-        False
+        Example:
+            >>> p = Point(0, 1)
+            >>> p.isXzero()
+            True
+            >>> p = Point(1, 0)
+            >>> p.isXzero()
+            False
         """
         return self._isZero(self.X)
 
@@ -198,14 +208,15 @@ class Point(object):
         """Check if the point is in the positive Y-axe.
 
         Returns:
-            boolean : True if point is in the positive Y-axe, False else.
+            bool : True if point is in the positive Y-axe, False else.
 
-        >>> p = Point(0, 1)
-        >>> p.isYpositive()
-        True
-        >>> p = Point(0, -1)
-        >>> p.isYpositive()
-        False
+        Example:
+            >>> p = Point(0, 1)
+            >>> p.isYpositive()
+            True
+            >>> p = Point(0, -1)
+            >>> p.isYpositive()
+            False
         """
         return self._isPositive(self.Y)
 
@@ -213,14 +224,15 @@ class Point(object):
         """Check if the point is in the negative Y-axe.
 
         Returns:
-            boolean : True if point is in the negative Y-axe, False else.
+            bool : True if point is in the negative Y-axe, False else.
 
-        >>> p = Point(0, 1)
-        >>> p.isYnegative()
-        False
-        >>> p = Point(0, -1)
-        >>> p.isYnegative()
-        True
+        Example:
+            >>> p = Point(0, 1)
+            >>> p.isYnegative()
+            False
+            >>> p = Point(0, -1)
+            >>> p.isYnegative()
+            True
         """
         return self._isNegative(self.Y)
 
@@ -228,14 +240,15 @@ class Point(object):
         """Check if the point is the Y-axe origin.
 
         Returns:
-            boolean : True if point is in the Y-axe origin, False else.
+            bool : True if point is in the Y-axe origin, False else.
 
-        >>> p = Point(1, 0)
-        >>> p.isYzero()
-        True
-        >>> p = Point(0, 1)
-        >>> p.isYzero()
-        False
+        Example:
+            >>> p = Point(1, 0)
+            >>> p.isYzero()
+            True
+            >>> p = Point(0, 1)
+            >>> p.isYzero()
+            False
         """
         return self._isZero(self.Y)
 
@@ -245,8 +258,9 @@ class Point(object):
         Returns:
             str : string with the Point instance representation.
 
-        >>> str(Point(0, 0))
-        '(0, 0)'
+        Example:
+            >>> str(Point(0, 0))
+            '(0, 0)'
         """
         return '({0}, {1})'.format(self.X, self.Y)
 
@@ -261,18 +275,19 @@ class Point(object):
             theOther (Point) : the other Point instance to check if is equal.
 
         Returns:
-            boolean : True if Point instaces are equal, False else.
+            bool : True if Point instaces are equal, False else.
 
-        >>> Point(1, 1) == Point(1, 1)
-        True
-        >>> Point(1, 1) == Point(1, 0)
-        False
-        >>> Point(1, 1) == Point(0, 1)
-        False
-        >>> Point(1, 1) in [Point(0, 0), Point(0, 1), Point(1, 1)]
-        True
-        >>> Point(1, 0) in [Point(0, 0), Point(0, 1), Point(1, 1)]
-        False
+        Example:
+            >>> Point(1, 1) == Point(1, 1)
+            True
+            >>> Point(1, 1) == Point(1, 0)
+            False
+            >>> Point(1, 1) == Point(0, 1)
+            False
+            >>> Point(1, 1) in [Point(0, 0), Point(0, 1), Point(1, 1)]
+            True
+            >>> Point(1, 0) in [Point(0, 0), Point(0, 1), Point(1, 1)]
+            False
         """
         if isinstance(theOther, Point):
             return self.isXeq(theOther) and self.isYeq(theOther)
@@ -290,14 +305,15 @@ class Point(object):
             equal.
 
         Returns:
-            boolean : True if Point instaces are not equal, False else.
+            bool : True if Point instaces are not equal, False else.
 
-        >>> Point(1, 1) != Point(1, 1)
-        False
-        >>> Point(1, 1) != Point(1, 0)
-        True
-        >>> Point(1, 1) != Point(0, 1)
-        True
+        Example:
+            >>> Point(1, 1) != Point(1, 1)
+            False
+            >>> Point(1, 1) != Point(1, 0)
+            True
+            >>> Point(1, 1) != Point(0, 1)
+            True
         """
         if isinstance(theOther, Point):
             return not self.__eq__(theOther)
@@ -306,39 +322,63 @@ class Point(object):
     def _isGreater(self, theValue, theOtherValue):
         """Checks if one value is greater than other.
 
-        >>> p = Point(1, 1)
-        >>> p._isGreater(2, 1)
-        True
-        >>> p._isGreater(1, 2)
-        False
-        >>> p._isGreater(1, 1)
-        False
+        Args:
+            theValue (int) : value to check if greater than the second.
+            theOtherValue (int) : other value to check.
+
+        Returns:
+            bool : True if first value is greater.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p._isGreater(2, 1)
+            True
+            >>> p._isGreater(1, 2)
+            False
+            >>> p._isGreater(1, 1)
+            False
         """
         return theValue > theOtherValue
 
     def _isLower(self, theValue, theOtherValue):
         """Checks if one value is lower than other
 
-        >>> p = Point(1, 1)
-        >>> p._isLower(2, 1)
-        False
-        >>> p._isLower(1, 2)
-        True
-        >>> p._isLower(1, 1)
-        False
+        Args:
+            theValue (int) : value to check if lower than the second.
+            theOtherValue (int) : other value to check.
+
+        Returns:
+            bool : True if first value is lower.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p._isLower(2, 1)
+            False
+            >>> p._isLower(1, 2)
+            True
+            >>> p._isLower(1, 1)
+            False
         """
         return theValue < theOtherValue
 
     def _isEq(self, theValue, theOtherValue):
         """Checks if two values are equal.
 
-        >>> p = Point(1, 1)
-        >>> p._isEq(2, 1)
-        False
-        >>> p._isEq(1, 2)
-        False
-        >>> p._isEq(1, 1)
-        True
+        Args:
+            theValue (int) : value to check if equal than the second.
+            theOtherValue (int) : other value to check.
+
+        Returns:
+            bool : True if first value is equal.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p._isEq(2, 1)
+            False
+            >>> p._isEq(1, 2)
+            False
+            >>> p._isEq(1, 1)
+            True
         """
         return theValue == theOtherValue
 
@@ -346,11 +386,21 @@ class Point(object):
         """Checks if point Y-coordinate is greater than the one from the
         given point.
 
-        >>> p = Point(1, 1)
-        >>> p.isYgreater(Point(0, 0))
-        True
-        >>> p.isYgreater(Point(0, 2))
-        False
+        Args:
+            theOther (Point) : other point to check if Y-coordinate is greater.
+
+        Returns:
+            bool : True if point Y-coordinate is greater than the given Point.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.isYgreater(Point(0, 0))
+            True
+            >>> p.isYgreater(Point(0, 2))
+            False
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theOther, Point):
             return self._isGreater(self.Y, theOther.Y)
@@ -360,11 +410,21 @@ class Point(object):
         """Checks if point Y-coordinate is lower than the one from the
         given point.
 
-        >>> p = Point(1, 1)
-        >>> p.isYlower(Point(0, 0))
-        False
-        >>> p.isYlower(Point(0, 2))
-        True
+        Args:
+            theOther (Point) : other point to check if Y-coordinate is lower.
+
+        Returns:
+            bool : True if point Y-coordinate is lower than the given Point.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.isYlower(Point(0, 0))
+            False
+            >>> p.isYlower(Point(0, 2))
+            True
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theOther, Point):
             return self._isLower(self.Y, theOther.Y)
@@ -374,11 +434,21 @@ class Point(object):
         """Checks if point Y-coordinate is equal than the one from the
         given point.
 
-        >>> p = Point(1, 1)
-        >>> p.isYeq(Point(0, 1))
-        True
-        >>> p.isYeq(Point(0, 0))
-        False
+        Args:
+            theOther (Point) : other point to check if Y-coordinate is equal.
+
+        Returns:
+            bool : True if point Y-coordinate is equal than the given Point.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.isYeq(Point(0, 1))
+            True
+            >>> p.isYeq(Point(0, 0))
+            False
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theOther, Point):
             return self._isEq(self.Y, theOther.Y)
@@ -388,11 +458,21 @@ class Point(object):
         """Checks if point X-coordinate is greated than the one form the
         given point.
 
-        >>> p = Point(1, 1)
-        >>> p.isXgreater(Point(0, 0))
-        True
-        >>> p.isXgreater(Point(2, 0))
-        False
+        Args:
+            theOther (Point) : other point to check if X-coordinate is greater.
+
+        Returns:
+            bool : True if point X-coordinate is greater than the given Point.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.isXgreater(Point(0, 0))
+            True
+            >>> p.isXgreater(Point(2, 0))
+            False
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theOther, Point):
             return self._isGreater(self.X, theOther.X)
@@ -402,11 +482,21 @@ class Point(object):
         """Checks if point X-coordinate is lower than the one form the
         given point.
 
-        >>> p = Point(1, 1)
-        >>> p.isXlower(Point(0, 0))
-        False
-        >>> p.isXlower(Point(2, 0))
-        True
+        Args:
+            theOther (Point) : other point to check if X-coordinate is lower.
+
+        Returns:
+            bool : True if point X-coordinate is lower than the given Point.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.isXlower(Point(0, 0))
+            False
+            >>> p.isXlower(Point(2, 0))
+            True
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theOther, Point):
             return self._isLower(self.X, theOther.X)
@@ -416,11 +506,21 @@ class Point(object):
         """Checks if point X-coordinate is equal than the one form the
         given point.
 
-        >>> p = Point(1, 1)
-        >>> p.isXeq(Point(0, 0))
-        False
-        >>> p.isXeq(Point(1, 0))
-        True
+        Args:
+            theOther (Point) : other point to check if X-coordinate is equal.
+
+        Returns:
+            bool : True if point X-coordinate is equal than the given Point.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.isXeq(Point(0, 0))
+            False
+            >>> p.isXeq(Point(1, 0))
+            True
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theOther, Point):
             return self._isEq(self.X, theOther.X)
@@ -429,11 +529,18 @@ class Point(object):
     def __add__(self, theOther):
         """Overload addition operation between two Point instances.
 
-        >>> p = Point(1, 1)
-        >>> p + Point(1, 2)
-        (2, 3)
-        >>> Point(3, 5) + p
-        (4, 6)
+        Args:
+            theOther (Point) : the other point for the addition.
+
+        Returns:
+            Point : new Point with both Point addition.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p + Point(1, 2)
+            (2, 3)
+            >>> Point(3, 5) + p
+            (4, 6)
         """
         if isinstance(theOther, Point):
             return self.Klass(self.X + theOther.X, self.Y + theOther.Y)
@@ -442,11 +549,18 @@ class Point(object):
     def __sub__(self, theOther):
         """Overload substract operation between two Point instances.
 
-        >>> p = Point(1, 1)
-        >>> p - Point(2, 0)
-        (-1, 1)
-        >>> Point(10, 10) - p
-        (9, 9)
+        Args:
+            theOther (Point) : the other point for the substraction.
+
+        Returns:
+            Point : new Point with both Point substraction.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p - Point(2, 0)
+            (-1, 1)
+            >>> Point(10, 10) - p
+            (9, 9)
         """
         if isinstance(theOther, Point):
             return self.Klass(self.X - theOther.X, self.Y - theOther.Y)
@@ -461,9 +575,13 @@ class Point(object):
         Returns:
             float : distance between two points.
 
-        >>> p = Point(0, 0)
-        >>> p.distance(Point(2, 2))
-        2.8284271247461903
+        Example:
+            >>> p = Point(0, 0)
+            >>> p.distance(Point(2, 2))
+            2.8284271247461903
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theOther, Point):
             return math.hypot(theOther.X - self.X, theOther.Y - self.Y)
@@ -479,9 +597,13 @@ class Point(object):
         Returns:
             int : distance between two points.
 
-        >>> p = Point(0, 0)
-        >>> p.intDistance(Point(2, 2))
-        2
+        Example:
+            >>> p = Point(0, 0)
+            >>> p.intDistance(Point(2, 2))
+            2
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theOther, Point):
             return int(self.distance(theOther))
@@ -497,9 +619,13 @@ class Point(object):
         Returns:
             Point : distance between two points as a Point.
 
-        >>> p = Point(1, 1)
-        >>> p.pointDistance(Point(2, 3))
-        (1, 2)
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.pointDistance(Point(2, 3))
+            (1, 2)
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theOther, Point):
             return theOther - self
@@ -507,15 +633,32 @@ class Point(object):
 
     def _distance(self, theAttr, theOtherAttr):
         """Retuns the distance (difference) between two values.
+
+        Args:
+            theAttr (Point) : first instance for checking distance.
+            theOtherAttr (Point) : second instance for checking distance.
+
+        Returns:
+            Point : distance between both instances.
         """
         return theAttr - theOtherAttr
 
     def xDistance(self, theOther):
         """Returns the X-coordinate distance between two points.
 
-        >>> p = Point(1, 1)
-        >>> p.xDistance(Point(2, 1))
-        1
+        Args:
+            theOther (Point) : X-coordinate distance will be returned to this Point.
+
+        Returns:
+            Point : new Point instance with the X-coord distance.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.xDistance(Point(2, 1))
+            1
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theOther, Point):
             return self._distance(theOther.X, self.X)
@@ -524,9 +667,19 @@ class Point(object):
     def yDistance(self, theOther):
         """Returns the Y-coordinate distance between two points.
 
-        >>> p = Point(1, 1)
-        >>> p.yDistance(Point(2, 1))
-        0
+        Args:
+            theOther (Point) : Y-coordinate distance will be returned to this Point.
+
+        Returns:
+            Point : new Point instance with the Y-coord distance.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.yDistance(Point(2, 1))
+            0
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theOther, Point):
             return self._distance(theOther.Y, self.Y)
@@ -543,9 +696,13 @@ class Point(object):
         Returns:
             Point : New  point with the translation.
 
-        >>> p = Point(1, 1)
-        >>> p.translate(Point(2, 3))
-        (3, 4)
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.translate(Point(2, 3))
+            (3, 4)
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theOther, Point):
             return self + theOther
@@ -558,11 +715,12 @@ class Point(object):
             theX (int) : X-coordinate value to translate.
 
         Returns:
-            Point : New  point with the translation.
+            Point : New Point with the translation.
 
-        >>> p = Point(0, 0)
-        >>> p.xTranslate(10)
-        (10, 0)
+        Example:
+            >>> p = Point(0, 0)
+            >>> p.xTranslate(10)
+            (10, 0)
         """
         return self + self.Klass(int(theX), 0)
 
@@ -573,11 +731,12 @@ class Point(object):
             theY (int) : Y-coordinate value to translate.
 
         Returns:
-            Point : New  point with the translation.
+            Point : New Point with the translation.
 
-        >>> p = Point(0, 0)
-        >>> p.yTranslate(5)
-        (0, 5)
+        Example:
+            >>> p = Point(0, 0)
+            >>> p.yTranslate(5)
+            (0, 5)
         """
         return self + self.Klass(0, int(theY))
 
@@ -590,11 +749,12 @@ class Point(object):
             theY (int) : Y-coordinate value to translate.
 
         Returns:
-            Point : New  point with the translation.
+            Point : New Point with the translation.
 
-        >>> p = Point(0, 0)
-        >>> p.xyTranslate(1, 5)
-        (1, 5)
+        Example:
+            >>> p = Point(0, 0)
+            >>> p.xyTranslate(1, 5)
+            (1, 5)
         """
         return self + self.Klass(int(theX), int(theY))
 
@@ -602,19 +762,33 @@ class Point(object):
         """Add a value to other. Used in move operations.
 
         This methow allows to make generic operations on X-axis and Y-axis.
+
+        Args:
+            theAttr (int) : first attribute to be moved.
+            theValue (int) : value to move the attribute
+
+        Returns:
+            int : result of the movement.
         """
         return theAttr + int(theValue)
 
     def xMove(self, theX=1):
         """Updates X-coordinate a given value.
 
-        >>> p = Point(1, 1)
-        >>> p.xMove(1)
-        (2, 1)
-        >>> p.xMove()
-        (3, 1)
-        >>> p.xMove(2).xMove()
-        (6, 1)
+        Args:
+            theX (int) : distance to move the X-coordinate (Default=1)
+
+        Returns:
+            Point : self point moved the given X-coordinate distance.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.xMove(1)
+            (2, 1)
+            >>> p.xMove()
+            (3, 1)
+            >>> p.xMove(2).xMove()
+            (6, 1)
         """
         self.X = self._move(self.X, theX)
         return self
@@ -622,13 +796,20 @@ class Point(object):
     def yMove(self, theY=1):
         """Updates Y-coordinate a given value.
 
-        >>> p = Point(1, 1)
-        >>> p.yMove(1)
-        (1, 2)
-        >>> p.yMove()
-        (1, 3)
-        >>> p.yMove(2).yMove()
-        (1, 6)
+        Args:
+            theX (int) : distance to move the Y-coordinate (Default=1)
+
+        Returns:
+            Point : self point moved the given Y-coordinate distance.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.yMove(1)
+            (1, 2)
+            >>> p.yMove()
+            (1, 3)
+            >>> p.yMove(2).yMove()
+            (1, 6)
         """
         self.Y = self._move(self.Y, theY)
         return self
@@ -636,11 +817,20 @@ class Point(object):
     def xyMove(self, theX=1, theY=1):
         """Updates X-coordinate and Y-coordinates with given values.
 
-        >>> p = Point(1, 1)
-        >>> p.xyMove(1, 1)
-        (2, 2)
-        >>> p.xyMove(1).xyMove(0, 2).xyMove()
-        (4, 6)
+        Args:
+            theX (int) : distance to move the Y-coordinate (Default=1)
+            theY (int) : distance to move the Y-coordinate (Default=1)
+
+        Returns:
+            Point : self point moved the given X-coordinate and\
+            Y-coordinate distance.
+
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.xyMove(1, 1)
+            (2, 2)
+            >>> p.xyMove(1).xyMove(0, 2).xyMove()
+            (4, 6)
         """
         self.xMove(theX)
         self.yMove(theY)
@@ -650,6 +840,20 @@ class Point(object):
         """Move a coordinate a given value but only in the given range.
 
         This method is used to make generic X-axis and Y-axis operations.
+
+        Args:
+            theAttr (int) : attribute to move.
+
+            theRange (Range) : range values the X-coordinate can move.
+
+            theValue (int) : value to increase.
+
+            theUpTo (bool) : when flag is True the movement is the closest\
+            to the final position. False means the movement is not done if it\
+            is out of range.
+
+        Returns:
+            int : attribute value already moved.
         """
         value = theAttr + int(theValue)
         if theRange.Min <= value <= theRange.Max:
@@ -668,22 +872,26 @@ class Point(object):
 
             theX (int) : value to increase the X-coordinate (default = 1).
 
-            theUpTo (boolean) : when flag is True the movement is the closest
-            to the final position. False means the movement is not done if it
+            theUpTo (bool) : when flag is True the movement is the closest\
+            to the final position. False means the movement is not done if it\
             is out of range.
 
         Returns:
             Point : Point instace after the X-coordinate movement.
 
-        >>> p = Point(1, 1)
-        >>> p.xMoveWithinRange(Range(0, 10))
-        (2, 1)
-        >>> p.xMoveWithinRange(Range(0, 10), 5)
-        (7, 1)
-        >>> p.xMoveWithinRange(Range(0, 10), 5)
-        (7, 1)
-        >>> p.xMoveWithinRange(Range(0, 10), 5, True)
-        (10, 1)
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.xMoveWithinRange(Range(0, 10))
+            (2, 1)
+            >>> p.xMoveWithinRange(Range(0, 10), 5)
+            (7, 1)
+            >>> p.xMoveWithinRange(Range(0, 10), 5)
+            (7, 1)
+            >>> p.xMoveWithinRange(Range(0, 10), 5, True)
+            (10, 1)
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theRange, Range):
             self.X = self._moveWithinRange(self.X, theRange, theX, theUpTo)
@@ -699,22 +907,26 @@ class Point(object):
 
             theY (int) : value to increase the Y-coordinate (default = 1).
 
-            theUpTo (boolean) : when flag is True the movement is the closest
-            to the final position. False means the movement is not done if it
+            theUpTo (bool) : when flag is True the movement is the closest\
+            to the final position. False means the movement is not done if it\
             is out of range.
 
         Returns:
             Point : Point instace after the Y-coordinate movement.
 
-        >>> p = Point(1, 1)
-        >>> p.yMoveWithinRange(Range(0, 10))
-        (1, 2)
-        >>> p.yMoveWithinRange(Range(0, 10), 2)
-        (1, 4)
-        >>> p.yMoveWithinRange(Range(0, 10), 10)
-        (1, 4)
-        >>> p.yMoveWithinRange(Range(0, 10), 10, True)
-        (1, 10)
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.yMoveWithinRange(Range(0, 10))
+            (1, 2)
+            >>> p.yMoveWithinRange(Range(0, 10), 2)
+            (1, 4)
+            >>> p.yMoveWithinRange(Range(0, 10), 10)
+            (1, 4)
+            >>> p.yMoveWithinRange(Range(0, 10), 10, True)
+            (1, 10)
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theRange, Range):
             self.Y = self._moveWithinRange(self.Y, theRange, theY, theUpTo)
@@ -733,24 +945,28 @@ class Point(object):
             theX (int) : value to increase the X-coordinate (default = 1).
             theY (int) : value to increase the Y-coordinate (default = 1).
 
-            theUpTo (boolean) : when flag is True the movement is the closest
-            to the final position. False means the movement is not done if it
+            theUpTo (bool) : when flag is True the movement is the closest\
+            to the final position. False means the movement is not done if it\
             is out of range.
 
         Returns:
             Point : Point instace after the Y-coordinate movement.
 
-        >>> p = Point(1, 1)
-        >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7))
-        (2, 2)
-        >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7), 2, 1)
-        (4, 3)
-        >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7), 1, 5)
-        (5, 3)
-        >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7), 10, 1)
-        (5, 4)
-        >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7), 10, 10, True)
-        (10, 7)
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7))
+            (2, 2)
+            >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7), 2, 1)
+            (4, 3)
+            >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7), 1, 5)
+            (5, 3)
+            >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7), 10, 1)
+            (5, 4)
+            >>> p.xyMoveWithinRange(Range(0, 10), Range(0, 7), 10, 10, True)
+            (10, 7)
+
+        Raises:
+            NotImplementedError
         """
         if isinstance(theRangeX, Range) and isinstance(theRangeY, Range):
             self.xMoveWithinRange(theRangeX, theX, theUpTo)
@@ -770,24 +986,26 @@ class Point(object):
         destination or just don't move at all.
 
         Args:
-            theAttrName (str) : String with the name of the positional
+            theAttrName (str) : String with the name of the positional\
             attribute to update. It could be 'X' or 'Y'.
 
-            theCollisions (list/tuple) : list or tuple of Points with
+            theCollisions (List[Point]) : list or tuple of Points with\
             possible collisions. These points will block the movement.
 
             theValue (int) : movement value.
 
-            theRange (Range) : range instance with the minimum and
+            theRange (Range) : range instance with the minimum and\
             maximum final position values.
 
-            theUpTo (bool) : boolean that flags if returning initial
-            position if the final one is not possible if False, or
+            theUpTo (bool) : boolean that flags if returning initial\
+            position if the final one is not possible if False, or\
             move to the closest position to the destination if True.
 
         Returns:
-
             Point : point instance with the final movement position.
+
+        Raises:
+            NotImplementedError
         """
         if type(theCollisions) in (list, tuple) and theCollisions:
             # Keep the initial attribute value, just is case we have to roll
@@ -830,37 +1048,38 @@ class Point(object):
         collision with given Point instances.
 
         Args:
-            theCollisions (list/tuple) : list or tuple of Points with
+            theCollisions (list[Point]) : list or tuple of Points with\
             possible collisions. These points will block the movement.
 
             theX (int) : x-coordinate movement value.
 
-            theRangeX (Range) : range instance with the minimum and
+            theRangeX (Range) : range instance with the minimum and\
             maximum final position values.
 
-            theUpTo (bool) : boolean that flags if returning initial
-            position if the final one is not possible if False, or
+            theUpTo (bool) : boolean that flags if returning initial\
+            position if the final one is not possible if False, or\
             move to the closest position to the destination if True.
 
         Returns:
 
             Point : point instance with the final movement position.
 
-        >>> p = Point(1, 1)
-        >>> p.xMoveWithCollision([Point(0, 0)])
-        (2, 1)
-        >>> p.xMoveWithCollision([Point(0, 0)], 2)
-        (4, 1)
-        >>> p.xMoveWithCollision([Point(0, 0), Point(6, 1)], 2)
-        (4, 1)
-        >>> p.xMoveWithCollision([Point(0, 0), Point(6, 1)], 2, None, True)
-        (5, 1)
-        >>> p.xMoveWithCollision([Point(0, 0), Point(9, 1), Point(10, 1)], 5, None, True)
-        (8, 1)
-        >>> p.xMoveWithCollision([Point(0, 0)], 10, Range(0, 10))
-        (8, 1)
-        >>> p.xMoveWithCollision([Point(0, 0)], 10, Range(0, 10), True)
-        (10, 1)
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.xMoveWithCollision([Point(0, 0)])
+            (2, 1)
+            >>> p.xMoveWithCollision([Point(0, 0)], 2)
+            (4, 1)
+            >>> p.xMoveWithCollision([Point(0, 0), Point(6, 1)], 2)
+            (4, 1)
+            >>> p.xMoveWithCollision([Point(0, 0), Point(6, 1)], 2, None, True)
+            (5, 1)
+            >>> p.xMoveWithCollision([Point(0, 0), Point(9, 1), Point(10, 1)], 5, None, True)
+            (8, 1)
+            >>> p.xMoveWithCollision([Point(0, 0)], 10, Range(0, 10))
+            (8, 1)
+            >>> p.xMoveWithCollision([Point(0, 0)], 10, Range(0, 10), True)
+            (10, 1)
         """
         return self._moveWithCollision('X', theCollisions, theX, theRangeX, theUpTo)
 
@@ -869,37 +1088,38 @@ class Point(object):
         collision with given Point instances.
 
         Args:
-            theCollisions (list/tuple) : list or tuple of Points with
+            theCollisions (list[Point]) : list or tuple of Points with\
             possible collisions. These points will block the movement.
 
             theX (int) : Y-coordinate movement value.
 
-            theRangeX (Range) : range instance with the minimum and
+            theRangeX (Range) : range instance with the minimum and\
             maximum final position values.
 
-            theUpTo (bool) : boolean that flags if returning initial
-            position if the final one is not possible if False, or
+            theUpTo (bool) : boolean that flags if returning initial\
+            position if the final one is not possible if False, or\
             move to the closest position to the destination if True.
 
         Returns:
 
             Point : point instance with the final movement position.
 
-        >>> p = Point(1, 1)
-        >>> p.yMoveWithCollision([Point(0, 0)])
-        (1, 2)
-        >>> p.yMoveWithCollision([Point(0, 0)], 2)
-        (1, 4)
-        >>> p.yMoveWithCollision([Point(0, 0), Point(1, 6)], 2)
-        (1, 4)
-        >>> p.yMoveWithCollision([Point(0, 0), Point(1, 6)], 2, None, True)
-        (1, 5)
-        >>> p.yMoveWithCollision([Point(0, 0), Point(1, 9), Point(1, 10)], 5, None, True)
-        (1, 8)
-        >>> p.yMoveWithCollision([Point(0, 0)], 10, Range(0, 10))
-        (1, 8)
-        >>> p.yMoveWithCollision([Point(0, 0)], 10, Range(0, 10), True)
-        (1, 10)
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.yMoveWithCollision([Point(0, 0)])
+            (1, 2)
+            >>> p.yMoveWithCollision([Point(0, 0)], 2)
+            (1, 4)
+            >>> p.yMoveWithCollision([Point(0, 0), Point(1, 6)], 2)
+            (1, 4)
+            >>> p.yMoveWithCollision([Point(0, 0), Point(1, 6)], 2, None, True)
+            (1, 5)
+            >>> p.yMoveWithCollision([Point(0, 0), Point(1, 9), Point(1, 10)], 5, None, True)
+            (1, 8)
+            >>> p.yMoveWithCollision([Point(0, 0)], 10, Range(0, 10))
+            (1, 8)
+            >>> p.yMoveWithCollision([Point(0, 0)], 10, Range(0, 10), True)
+            (1, 10)
         """
         return self._moveWithCollision('Y', theCollisions, theY, theRangeY, theUpTo)
 
@@ -911,20 +1131,22 @@ class Point(object):
         the minimum and maximum values.
 
         Args:
-            theAttrName (str) : String with the name of the positional
+            theAttrName (str) : String with the name of the positional\
             attribute to update. It could be 'X' or 'Y'.
 
-            theCollisions (list/tuple) : list or tuple of Points with
+            theCollisions (list[Point]) : list or tuple of Points with\
             possible collisions. These points will block the movement.
 
             theValue (int) : movement value.
 
-            theRange (Range) : range instance with the minimum and
+            theRange (Range) : range instance with the minimum and\
             maximum final position values.
 
         Returns:
+            bool : True if movement is possible, False else
 
-            boolean : True if movement is possible, False else
+        Raises:
+            NotImplementedError
         """
         trav = Point(self.X, self.Y)
         if type(theCollisions) in (list, tuple) and theCollisions:
@@ -949,33 +1171,34 @@ class Point(object):
         """Check if X-coordinate movement is valid.
 
         Args:
-            theCollisions (list/tuple) : list or tuple of Points with
+            theCollisions (list[Point]) : list or tuple of Points with\
             possible collisions. These points will block the movement.
 
             theX (int) : x-coordinate movement value.
 
-            theRangeX (Range) : range instance with the minimum and
+            theRangeX (Range) : range instance with the minimum and\
             maximum final position values.
 
         Returns:
 
-            boolean : True if movement is possible, False else
+            bool : True if movement is possible, False else
 
-        >>> p = Point(1, 1)
-        >>> p.xIsValidMove([Point(0, 0)])
-        True
-        >>> p.xIsValidMove([Point(0, 0)], 2)
-        True
-        >>> p.xIsValidMove([Point(0, 0), Point(6, 1)], 2)
-        True
-        >>> p.xIsValidMove([Point(0, 0), Point(6, 1)], 6)
-        False
-        >>> p.xIsValidMove([Point(0, 0), Point(6, 1)], 2, None)
-        True
-        >>> p.xIsValidMove([Point(0, 0), Point(6, 1)], 7, None)
-        False
-        >>> p.xIsValidMove([Point(0, 0)], 10, Range(0, 10))
-        False
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.xIsValidMove([Point(0, 0)])
+            True
+            >>> p.xIsValidMove([Point(0, 0)], 2)
+            True
+            >>> p.xIsValidMove([Point(0, 0), Point(6, 1)], 2)
+            True
+            >>> p.xIsValidMove([Point(0, 0), Point(6, 1)], 6)
+            False
+            >>> p.xIsValidMove([Point(0, 0), Point(6, 1)], 2, None)
+            True
+            >>> p.xIsValidMove([Point(0, 0), Point(6, 1)], 7, None)
+            False
+            >>> p.xIsValidMove([Point(0, 0)], 10, Range(0, 10))
+            False
         """
         return self._isValidMove('X', theCollisions, theX, theRangeX)
 
@@ -983,33 +1206,34 @@ class Point(object):
         """Check if Y-coordinate movement is valid.
 
         Args:
-            theCollisions (list/tuple) : list or tuple of Points with
+            theCollisions (list[Point]) : list or tuple of Points with\
             possible collisions. These points will block the movement.
 
             theY (int) : Y-coordinate movement value.
 
-            theRangeY (Range) : range instance with the minimum and
+            theRangeY (Range) : range instance with the minimum and\
             maximum final position values.
 
         Returns:
 
-            boolean : True if movement is possible, False else
+            bool : True if movement is possible, False else
 
-        >>> p = Point(1, 1)
-        >>> p.yIsValidMove([Point(0, 0)])
-        True
-        >>> p.yIsValidMove([Point(0, 0)], 2)
-        True
-        >>> p.yIsValidMove([Point(0, 0), Point(1, 6)], 2)
-        True
-        >>> p.yIsValidMove([Point(0, 0), Point(1, 6)], 6)
-        False
-        >>> p.yIsValidMove([Point(0, 0), Point(1, 6)], 2, None)
-        True
-        >>> p.yIsValidMove([Point(0, 0), Point(1, 6)], 7, None)
-        False
-        >>> p.yIsValidMove([Point(0, 0)], 10, Range(0, 10))
-        False
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.yIsValidMove([Point(0, 0)])
+            True
+            >>> p.yIsValidMove([Point(0, 0)], 2)
+            True
+            >>> p.yIsValidMove([Point(0, 0), Point(1, 6)], 2)
+            True
+            >>> p.yIsValidMove([Point(0, 0), Point(1, 6)], 6)
+            False
+            >>> p.yIsValidMove([Point(0, 0), Point(1, 6)], 2, None)
+            True
+            >>> p.yIsValidMove([Point(0, 0), Point(1, 6)], 7, None)
+            False
+            >>> p.yIsValidMove([Point(0, 0)], 10, Range(0, 10))
+            False
         """
         return self._isValidMove('Y', theCollisions, theY, theRangeY)
 
@@ -1020,19 +1244,20 @@ class Point(object):
         Args:
             theTranslate (Point) : translation point
 
-            theCollisions (list/tuple) : list or tuple of Points with
+            theCollisions (list[Point]) : list or tuple of Points with\
             possible collisions. These points will block the movement.
 
         Returns:
-            boolean : True if there is any collision, False else.
+            bool : True if there is any collision, False else.
 
-        >>> p = Point(1, 1)
-        >>> p.isCollision(Point(1, 1), [Point(0, 0)])
-        False
-        >>> p.isCollision(Point(1, 1), [Point(2, 2)])
-        True
-        >>> p.isCollision(Point(1, 1), [Point(1, 0), Point(2, 2)])
-        True
+        Example:
+            >>> p = Point(1, 1)
+            >>> p.isCollision(Point(1, 1), [Point(0, 0)])
+            False
+            >>> p.isCollision(Point(1, 1), [Point(2, 2)])
+            True
+            >>> p.isCollision(Point(1, 1), [Point(1, 0), Point(2, 2)])
+            True
         """
         newPoint = self.translate(theTranslate)
         for p in theCollisions:
