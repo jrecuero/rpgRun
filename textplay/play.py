@@ -110,7 +110,7 @@ class T_Location(Str):
     def _helpStr(self):
         return "Enter location for movement"
 
-    def complete(self, text):
+    def complete(self, document, text):
         return [x.name for x in Location.userMoves()]
 
 
@@ -322,6 +322,7 @@ class Play(Cli):
         """
         print('player moves {0} to {1}'.format(pos, loc))
         self._game.runSelectMovement(loc, pos)
+        self._scroll()
         self.RPrompt = '<play>'
 
     @Cli.command()
