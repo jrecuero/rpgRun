@@ -2,6 +2,8 @@
 itero
 *****
 
+.. _rst_itero:
+
 itero module
 ============
 

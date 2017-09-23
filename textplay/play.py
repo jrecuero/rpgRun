@@ -334,7 +334,7 @@ class Play(Cli):
         """
         _actor = self._game.findActorByName(aname)
         if _actor:
-            _equip = _actor.Inventory.findByName(equip)
+            _equip = _actor.Inventory[equip]
             if _equip:
                 print('Equip {0} in {1}'.format(equip, aname))
                 _actor.Equipment.append(_equip)
@@ -349,7 +349,7 @@ class Play(Cli):
         """
         _actor = self._game.findActorByName(aname)
         if _actor:
-            _equip = _actor.Equipment.findByName(equip)
+            _equip = _actor.Equipment[equip]
             if _equip:
                 print('Unequip {0} in {1}'.format(equip, aname))
                 _actor.Equipment.remove(_equip)

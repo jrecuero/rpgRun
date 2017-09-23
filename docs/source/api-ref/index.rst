@@ -20,6 +20,7 @@ Contents:
    bsurface
    equipment
    game
+   gcatalog
    gitem
    gequip
    gobject
