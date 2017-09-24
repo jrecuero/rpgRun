@@ -23,8 +23,8 @@ class Game(object):
         self._actors = []
         self._action = None
         self._targetChoice = None
-        self.__action_select = None
-        self.__action_requires = None
+        self.__action_select_target = None
+        self.__action_select_move = None
         self._logger = loggerator.getLoggerator('GAME')
 
     @property
@@ -174,9 +174,9 @@ class Game(object):
                 self.TargetChoice = self._action.filterTarget(_cells)
 
                 # Yield for user to select the target.
-                self.__action_select = self._action.select(self)
-                next(self.__action_select)
-                _target = yield self.__action_select
+                self.__action_select_target = self._action.selectTarget(self)
+                next(self.__action_select_target)
+                _target = yield self.__action_select_target
             else:
                 _target = self._action.Target
 
@@ -186,9 +186,9 @@ class Game(object):
             if self._action.requiresMovement():
                 # Yield for the user to enter any additional data required by the
                 # action.
-                self.__action_requires = self._action.requires(self)
-                next(self.__action_requires)
-                _actionKwargs = yield self.__action_requires
+                self.__action_select_move = self._action.selectMove(self)
+                next(self.__action_select_move)
+                _actionKwargs = yield self.__action_select_move
             else:
                 _actionKwargs = {}
             self._logger.debug('action kwargs: {}'.format(_actionKwargs))
@@ -210,18 +210,18 @@ class Game(object):
     def runSelectTarget(self, theTarget):
         """Steps on the action target selection.
         """
-        self.__runner.send(self.__action_select.send(theTarget))
+        self.__runner.send(self.__action_select_target.send(theTarget))
 
     def runSelectRequires(self, **kwargs):
         """Steps on the requires selection.
         """
-        self.__runner.send(self.__action_requires.send({}))
+        self.__runner.send(self.__action_select_move.send({}))
 
     def runSelectMovement(self, theLocation=None, thePosition=None):
         """Steps on the action movement selection.
         """
-        self.__runner.send(self.__action_requires.send({'theLocation': theLocation,
-                                                        'thePosition': thePosition}))
+        self.__runner.send(self.__action_select_move.send({'theLocation': theLocation,
+                                                           'thePosition': thePosition}))
 
     def runner(self, theValue):
         """Steps on the run cycle.

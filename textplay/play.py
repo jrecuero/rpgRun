@@ -190,6 +190,9 @@ class Play(Cli):
         self.RPrompt = '<play>'
         self._logger.display('Init rpgRun')
 
+        # Run the game engine.
+        self._game.runInit()
+
     @Cli.command()
     @setsyntax
     @syntax("MOVE loc pos")
@@ -283,7 +286,7 @@ class Play(Cli):
         else:
             return
         _action.Originator = self._game.Player
-        self._game.runInit()
+        # self._game.runInit()
         _actionType = self._game.runSelectAction(_action)
         if _actionType == AType.WEAPONIZE:
             print('select target (use command: TARGET <name>)')

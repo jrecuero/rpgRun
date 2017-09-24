@@ -242,8 +242,7 @@ class Action(GObject):
         Args:
             theGame (Game) : Game instance.
         """
-        target = yield
-        yield target
+        return None
 
     def consume(self):
         """Method that consumes action requirements.
@@ -291,8 +290,17 @@ class Action(GObject):
         """
         pass
 
-    def select(self, theGame):
+    def selectTarget(self, theGame):
         """Method that returns action targets.
+
+        Args:
+            theGame (Game) : Game instance.
+        """
+        target = yield
+        yield target
+
+    def selectMove(self, theGame):
+        """Method that returns requirements for the action.
 
         Args:
             theGame (Game) : Game instance.
