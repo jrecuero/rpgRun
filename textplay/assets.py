@@ -5,7 +5,7 @@ from bobject import BObject
 from bsurface import BSurface
 from actor import Actor
 from pactor import PActor
-from action import Action, AType, AoE, TargetAction, MoveAction
+from action import AType, TargetAction, MoveAction, AoETargetAction
 from gequip import GEquip
 
 PLAYER_ATTRS = '''[{"hp": {"base": 10, "delta": 2, "buffs": "None"}},
@@ -70,22 +70,7 @@ class WeaponAction(TargetAction):
         self.Target[0].Attrs['HP'].dec(damage)
 
 
-class RangeAction(TargetAction):
-
-    def __init__(self, theName, theType=AType.NONE, **kwargs):
-        super(RangeAction, self).__init__(theName, theType, **kwargs)
-        width = kwargs.get('theWidth')
-        height = kwargs.get('theHeight')
-        shape = kwargs.get('theShape')
-        self.setAoE(AoE(None, width, height, shape))
-
-    @Action.Originator.setter
-    def Originator(self, theValue):
-        Action.Originator.fset(self, theValue)
-        self.getAoE().getShape().Center = theValue
-
-    def filterTarget(self, theCells):
-        return [x for x in theCells if self.isValidTarget(x) and self.getAoE().getShape().isInside(x)]
+class RangeAction(AoETargetAction):
 
     def execute(self, theGame, **kwargs):
         damage = self.Originator.STR

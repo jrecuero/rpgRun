@@ -350,7 +350,6 @@ class TargetAction(Action):
 
         Args:
             theName (str) : string with the action name.
-
             theType (AType) : AType that represents the action type. Default is\
                     AType.NONE
         """
@@ -377,6 +376,56 @@ class TargetAction(Action):
         return [x for x in theCells if self.isValidTarget(x)]
 
 
+class AoETargetAction(TargetAction):
+    """AoETargetAction class derives from `TargetAction`_ and represent all
+    actions with an Area of Effect where target will be found.
+    """
+
+    def __init__(self, theName, theType=AType.NONE, **kwargs):
+        """AoETargetAction class initialization method.
+
+        Args:
+            theName (str) : string with the action name.
+            theType (AType) : AType that represents the action type. Default is\
+                    AType.NONE
+
+        Keyword Args:
+            theWidth (int) : Area of effect width.
+            theHeight (int) : Area of effect height.
+            theShape (Shape) : Area of effect shape class.
+        """
+        super(AoETargetAction, self).__init__(theName, theType, **kwargs)
+        width = kwargs.get('theWidth')
+        height = kwargs.get('theHeight')
+        shape = kwargs.get('theShape')
+        self.setAoE(AoE(None, width, height, shape))
+
+    @Action.Originator.setter
+    def Originator(self, theValue):
+        """Sets _originator attribute value. Center shape to originator.
+
+        Args:
+            theValue (Actor) : Actor that will be the originator for action.
+        """
+        Action.Originator.fset(self, theValue)
+        self.getAoE().getShape().Center = theValue
+
+    def filterTarget(self, theCells):
+        """Filter the given list with cell and return possible
+        cells to be targeted by the action.
+
+        Movement will be done by the originator, so only the Originator cell
+        should be returned.
+
+        Args:
+            theCells (list[BCell]) : List of cells available to be targeted.
+
+        Returns:
+            list[BCell] : List with the Originator cell.
+        """
+        return [x for x in theCells if self.isValidTarget(x) and self.getAoE().getShape().isInside(x)]
+
+
 class MoveAction(Action):
     """MoveAction class is derived from `Action`_ and represents any action
     that requires a movement selection.
@@ -401,9 +450,10 @@ class MoveAction(Action):
 
     @Action.Originator.setter
     def Originator(self, theValue):
-        """Set property for _originator attribute.
+        """Sets _originator and _target attribute with the given value.
 
-        Sets _originator and _target attribute with the given value.
+        Args:
+            theValue (Actor) : Actor that will be the originator for action.
         """
         self._originator = theValue
         self.Target = theValue
