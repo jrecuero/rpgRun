@@ -6,7 +6,7 @@ API
 Contents:
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 5
 
    action
    actor

@@ -35,8 +35,23 @@ class Actor(BObject):
     @property
     def Actions(self):
         """Gets _actions attribute value.
+
+        Returns:
+            Actions : Actor Actions instance.
         """
         return self._actions
+
+    @property
+    def AllActions(self):
+        """Gets all actions actor can execute.
+
+        Returns:
+            list : List with all actions actor can execute.
+        """
+        _actions = self._actions.Stream[:]
+        for eq in self.Equipment:
+            _actions.extend(eq.Actions)
+        return _actions
 
     @property
     def Life(self):

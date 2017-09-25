@@ -70,6 +70,13 @@ class WeaponAction(TargetAction):
         self.Target[0].Attrs['HP'].dec(damage)
 
 
+class MeleAction(AoETargetAction):
+
+    def execute(self, theGame, **kwargs):
+        damage = self.Originator.STR - self.Target[0].CON
+        self.Target[0].Attrs['HP'].dec(damage)
+
+
 class RangeAction(AoETargetAction):
 
     def execute(self, theGame, **kwargs):

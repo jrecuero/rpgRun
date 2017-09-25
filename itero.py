@@ -35,6 +35,12 @@ class Itero(Iterator):
         """
         return self.__maxLen
 
+    @property
+    def Stream(self):
+        """
+        """
+        return self.__stream
+
     def __getitem__(self, theKey):
         """Allows retriving data using indexed values for the instance.
 
@@ -167,10 +173,38 @@ class Itero(Iterator):
             ...     print('NotImplemented')
             NotImplemented
         """
-        if self.MaxLen is not None and len(self.__stream) >= self.MaxLen:
+        if self.MaxLen is not None and len(self) >= self.MaxLen:
             raise NotImplementedError
         assert isinstance(theValue, self.__streamKlass)
         self.__stream.append(theValue)
+
+    def extend(self, theList):
+        """Extends with the given list.
+
+        Args:
+            theList (list) : List to be added.
+
+        Example:
+            >>> it = Itero(str)
+            >>> it.append('one')
+            >>> it.extend(['two', 'three'])
+            >>> for x in it:
+            ...     print(x)
+            one
+            two
+            three
+        """
+        if self.MaxLen is not None and len(self) + len(theList) >= self.MaxLen:
+            raise NotImplementedError
+        if type(theList) in [list, tuple]:
+            _list = theList
+            for x in _list:
+                assert isinstance(x, self.__streamKlass)
+        elif isinstance(theList, self.__class__):
+            _list = self._Itero__stream
+        else:
+            raise NotImplementedError
+        self.__stream.extend(_list)
 
     def pop(self):
         """Retrieves and removes the last value from the instance.

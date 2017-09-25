@@ -1,4 +1,5 @@
 from gitem import GItem, ItemType
+from action import Actions
 
 
 @staticmethod
@@ -35,6 +36,7 @@ class GEquip(GItem):
         """
         super(GEquip, self).__init__(**kwargs)
         self._equipped = False
+        self._actions = Actions()
 
     @property
     def Equipped(self):
@@ -61,6 +63,12 @@ class GEquip(GItem):
         """Set property for _equipped attribute.
         """
         self._equipped = theValue
+
+    @property
+    def Actions(self):
+        """Gets _actions attribute value.
+        """
+        return self._actions
 
     def isEquip(self):
         """Returns if the instance is a GEquip.

@@ -4,7 +4,7 @@
 import game
 from blayer import LType
 from bpoint import Point, Location
-from shapes import Quad
+from shapes import Quad, Rhomboid
 from base import Cli
 from decorators import argo, syntax, setsyntax
 from argtypes import Int, Str
@@ -12,7 +12,7 @@ from brow import BRow
 from action import AType
 from actor import Actor
 from assets import GreenSurface, PlayerActor, EnemyActor, MageActor, Pillar
-from assets import WeaponAction, RangeAction, MoveAction
+from assets import WeaponAction, MeleAction, RangeAction, MoveAction
 from assets import Weapon, Armor, Shield
 import loggerator
 
@@ -51,9 +51,9 @@ class T_Equip(Str):
 
     def _checkFlag(self, theEquip):
         if self._equipFlag:
-            return theEquip.isEquipe and not theEquip.Equipped
+            return theEquip.isEquip() and not theEquip.Equipped
         else:
-            return theEquip.isEquipe and theEquip.Equipped
+            return theEquip.isEquip() and theEquip.Equipped
 
     def _helpStr(self):
         return "Enter a piece of equipment"
@@ -65,7 +65,10 @@ class T_Equip(Str):
             _name = _line[-1] if document.text[-1].strip() == '' else _line[-2]
             _actor = _game.findActorByName(_name)
             if _actor is not None:
-                return [x.Name for x in _actor.Inventory if self._checkFlag(x)]
+                if self._equipFlag:
+                    return [x.Name for x in _actor.Inventory if self._checkFlag(x)]
+                else:
+                    return [x.Name for x in _actor.Equipment]
         return None
 
 
@@ -158,7 +161,6 @@ class Play(Cli):
         Actor.LIFE = 'hp'
         player = PlayerActor(2, 4, self._sprWidth)
         player.Actions.append(WeaponAction('weapon', AType.WEAPONIZE))
-        player.Actions.append(RangeAction('range', AType.WEAPONIZE, theWidth=2, theHeight=2, theShape=Quad))
         player.Actions.append(MoveAction('move', AType.MOVEMENT))
         enemies = []
         enemies.append(EnemyActor(4, 6, self._sprWidth, 'GOBLIN'))
@@ -168,10 +170,14 @@ class Play(Cli):
         enemies[-1].Life = 'mp'
         pillar = Pillar(0, 6, self._sprWidth)
 
-        sword = Weapon(theAttrBuff={'str': 5})
+        sword = Weapon(theName='sword', theAttrBuff={'str': 5})
+        sword.Actions.append(MeleAction('mele', AType.WEAPONIZE, theWidth=2, theHeight=2, theShape=Quad))
+        bow = Weapon(theName='bow', theAttrBuff={'str': 2})
+        bow.Actions.append(RangeAction('range', AType.WEAPONIZE, theWidth=3, theHeight=3, theShape=Rhomboid))
         armor = Armor(theAttrBuff={'hp': 10})
         shield = Shield(theAttrBuff={'hp': 7, 'str': 1})
         player.Inventory.append(sword)
+        player.Inventory.append(bow)
         player.Inventory.append(armor)
         player.Inventory.append(shield)
         player.Equipment.append(sword)
@@ -268,7 +274,7 @@ class Play(Cli):
         """Run a cycle
         """
         print('select action (use command: ACTION <name>) ')
-        for i, x in enumerate(self._game.Player.Actions):
+        for i, x in enumerate(self._game.Player.AllActions):
             print('{0} : {1}'.format(i, x.Name))
         self.RPrompt = '<select-action>'
         self.Prompt = '[ACTION <name>] rpgRun> '

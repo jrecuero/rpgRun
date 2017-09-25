@@ -339,6 +339,14 @@ class Action(GObject):
         """
         pass
 
+    def __repr__(self):
+        """String representation for the Action instance.
+
+        Returns:
+            str : string with the Action instance representation.
+        """
+        return '{0}: {1}'.format(self.__class__, self.Name)
+
 
 class TargetAction(Action):
     """TargetAction class is derived from `Action`_ and represents any action
@@ -377,7 +385,7 @@ class TargetAction(Action):
 
 
 class AoETargetAction(TargetAction):
-    """AoETargetAction class derives from `TargetAction`_ and represent all
+    """AoETargetAction class derives from :class:`action.TargetAction` and represent all
     actions with an Area of Effect where target will be found.
     """
 
@@ -502,7 +510,7 @@ class MoveAction(Action):
 
 
 class Actions(Itero):
-    """Actions class contains all actions for any Actor.
+    """Actions class derives from :class:`itero.Itero` contains all actions for any Actor.
     """
 
     def __init__(self, **kwargs):
@@ -512,3 +520,11 @@ class Actions(Itero):
             theSize (int) : maximum number of actions. Default is None.
         """
         super(Actions, self).__init__(Action, kwargs.get('theSize', None))
+
+    def __repr__(self):
+        """String representation for the Actions instance.
+
+        Returns:
+            str : string with the Actions instance representation.
+        """
+        return " | ".join([x.Name for x in self])
