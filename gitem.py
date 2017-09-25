@@ -134,4 +134,4 @@ class GItem(GObject):
         Returns:
             str : String with the instance representation.
         """
-        return '{0}: {1} {2}'.format(self.__class__, self.Name, self.AttrBuff)
+        return '{0}: {1} {2}'.format(self.__class__.__name__, self.Name, self.AttrBuff)

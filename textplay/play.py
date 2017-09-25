@@ -128,10 +128,26 @@ class T_Step(Int):
 
 class Play(Cli):
 
+    SYSTEM = ['exit', 'help', 'syntax', 'debug']
+    COMMON = ['PRINT', 'ACTORS', 'PLAYER', 'EQUIPMENT', 'INVENTORY', 'EQUIP', 'UNEQUIP']
+    STAGES = {'wait': ['INIT'],
+              'init': ['RUN'] + COMMON,
+              'run': ['ACTION'] + COMMON,
+              'target': ['TARGET'] + COMMON,
+              'move': ['MOVEMENT'] + COMMON, }
+
     def __init__(self):
         super(Play, self).__init__()
         self._game = None
         self._logger = loggerator.getLoggerator('PLAY')
+        self._stage = 'wait'
+
+    def precmd(self, theCmd, theLine):
+        if theCmd in self.STAGES[self._stage] + self.SYSTEM:
+            return True
+        else:
+            print('command <{0}> not valid in stage <{1}>'.format(theCmd, self._stage))
+            return False
 
     def _scroll(self):
         """Scroll Board.
@@ -193,11 +209,11 @@ class Play(Cli):
         for x in enemies:
             self._game.Board.getRowFromCell(x).addCellToLayer(x, LType.OBJECT)
 
-        self.RPrompt = '<play>'
         self._logger.display('Init rpgRun')
 
         # Run the game engine.
         self._game.runInit()
+        self._stage = 'init'
 
     @Cli.command()
     @setsyntax
@@ -276,8 +292,8 @@ class Play(Cli):
         print('select action (use command: ACTION <name>) ')
         for i, x in enumerate(self._game.Player.AllActions):
             print('{0} : {1}'.format(i, x.Name))
-        self.RPrompt = '<select-action>'
         self.Prompt = '[ACTION <name>] rpgRun> '
+        self._stage = 'run'
 
     @Cli.command()
     @setsyntax
@@ -298,12 +314,12 @@ class Play(Cli):
             print('select target (use command: TARGET <name>)')
             for i, x in enumerate(self._game.TargetChoice):
                 print('{0} : {1}'.format(i, x))
-            self.RPrompt = '<select-target>'
             self.Prompt = '[TARGET <name>] rpgRun> '
+            self._stage = 'target'
         elif _actionType == AType.MOVEMENT:
             print('select player movement (use command: MOVEMENT <loc> <pos>)')
-            self.RPrompt = '<select-movement>'
             self.Prompt = '[MOVEMENT <loc> <pos>] rpgRun> '
+            self._stage = 'move'
 
     @Cli.command()
     @setsyntax
@@ -318,8 +334,8 @@ class Play(Cli):
         else:
             return
         self._game.runSelectTarget(_target)
-        self.RPrompt = '<play>'
         self.Prompt = 'rpgRun> '
+        self._stage = 'init'
 
     @Cli.command()
     @setsyntax
@@ -332,7 +348,7 @@ class Play(Cli):
         print('player moves {0} to {1}'.format(pos, loc))
         self._game.runSelectMovement(loc, pos)
         self._scroll()
-        self.RPrompt = '<play>'
+        self._stage = 'init'
 
     @Cli.command()
     @setsyntax
@@ -384,13 +400,22 @@ class Play(Cli):
         """
         self._game._updateActors()
 
+    def set_toolbar(self):
+        return " | ".join(cli.STAGES[cli._stage])
+
+    def set_rprompt(self):
+        return "<{0}>".format(self._stage)
+
 
 if __name__ == '__main__':
 
     cli = Play()
     try:
         # cli.Prompt = 'rpgRun> '
-        cli.cmdloop(thePrompt='rpgRun> ')
+        cli.cmdloop(thePrompt='rpgRun> ',
+                    theToolBar=cli.set_toolbar,
+                    theRPrompt=cli.set_rprompt,
+                    thePreCmd=True)
     except KeyboardInterrupt:
         cli._logger.display("")
         pass

@@ -345,7 +345,7 @@ class Action(GObject):
         Returns:
             str : string with the Action instance representation.
         """
-        return '{0}: {1}'.format(self.__class__, self.Name)
+        return '{0}: {1}'.format(self.__class__.__name__, self.Name)
 
 
 class TargetAction(Action):
