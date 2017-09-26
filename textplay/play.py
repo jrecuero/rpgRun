@@ -12,7 +12,7 @@ from brow import BRow
 from action import AType
 from actor import Actor
 from assets.surfaces import GreenSurface
-from assets.actors import PlayerActor, EnemyActor, MageActor
+from assets.actors import PlayerActor, EnemyActor, MageActor, BossActor
 from assets.bobjects import Pillar
 from assets.actions import WeaponAction, MeleAction, RangeAction, MoveAction
 from assets.equips import Weapon, Armor, Shield
@@ -77,6 +77,7 @@ class Play(Cli):
         enemies.append(EnemyActor(3, 5, self._sprWidth, 'ORC'))
         enemies.append(EnemyActor(1, 6, self._sprWidth, 'TROLL'))
         enemies.append(MageActor(0, 5, self._sprWidth, 'MAGE'))
+        enemies.append(BossActor(1, 5, self._sprWidth))
         enemies[-1].Life = 'mp'
         pillar = Pillar(0, 6, self._sprWidth)
 

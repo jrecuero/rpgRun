@@ -15,6 +15,16 @@ MAGE_ATTRS = '''[{"hp": {"base": 10, "delta": 2, "buffs": "None"}},
                  {"str": {"base": 5, "delta": 1, "buffs": "None"}},
                  {"con": {"base": 3, "delta": 1, "buffs": "None"}}]'''
 
+BOSS_ATTRS = [("hp", 100, 10), ("mp", 10, 1), ("str", 10, 1), ("con", 10, 2)]
+
+
+class BossActor(Actor):
+
+    def __init__(self, theX, theY, theWidth, theName='BOSS', **kwargs):
+        super(BossActor, self).__init__(theX, theY, theName, **kwargs)
+        self.Sprite = BSprite(theSprText='*&*', theWidth=theWidth, theColor="\x1b[32m" + "\x1b[45m")
+        self.Attrs.setupAttrsFromList(BOSS_ATTRS)
+
 
 class PlayerActor(PActor):
 
@@ -28,7 +38,7 @@ class EnemyActor(Actor):
 
     def __init__(self, theX, theY, theWidth, theName='ENEMY', **kwargs):
         super(EnemyActor, self).__init__(theX, theY, theName, **kwargs)
-        self.Sprite = BSprite(theSprText='oOo', theWidth=theWidth, theColor="\x1b[32m" + "\x1b[41m")
+        self.Sprite = BSprite(theSprText='oOo', theWidth=theWidth, theColor="\x1b[32m" + "\x1b[40m")
         self.Attrs.setupAttrsFromJSON(ACTOR_ATTRS)
 
 
@@ -36,5 +46,5 @@ class MageActor(Actor):
 
     def __init__(self, theX, theY, theWidth, theName='MAGE', **kwargs):
         super(MageActor, self).__init__(theX, theY, theName, **kwargs)
-        self.Sprite = BSprite(theSprText='oOo', theWidth=theWidth, theColor="\x1b[32m" + "\x1b[41m")
+        self.Sprite = BSprite(theSprText='o$o', theWidth=theWidth, theColor="\x1b[32m" + "\x1b[40m")
         self.Attrs.setupAttrsFromJSON(MAGE_ATTRS)

@@ -16,6 +16,39 @@ class Attr(object):
         self._delta = 0
         self._buffs = {}
 
+    @classmethod
+    def createAttr(cls, theAttrData):
+        """Create an attribute from the passed data.
+
+        Attribute data passed is a list with this format:
+
+            * :class:`str` with attribute name. Index is 0.
+
+            * :class:`int` with attribute base value. Index is 1.
+
+            * :class:`int` with attribute delta value. Index is 2
+
+            * :class:`dict` with buff name and buff values. Index is 3.
+
+        Last entry with  buffs can be repeated as many times as required.
+
+        Args:
+            theAttrData (:class:`list`) : Attribute parameters
+
+        Returns:
+            Attr : New attribute instance.
+        """
+        assert type(theAttrData) in [list, tuple]
+        assert len(theAttrData) >= 3, theAttrData
+        assert len(theAttrData) <= 4, theAttrData
+        _attrName = theAttrData[0]
+        _attrBase = theAttrData[1]
+        _attrDelta = theAttrData[2]
+        _attrBuff = theAttrData[3] if len(theAttrData) == 4 else None
+        _attr = cls(_attrName)
+        _attr.setupAttr(_attrBase, _attrDelta, _attrBuff)
+        return _attr
+
     @property
     def Name(self):
         """Gets _name attribute value.
@@ -326,11 +359,28 @@ class Attributes(StrItero):
         for name in theNames:
             self.addAttr(Attr(name))
 
-    def setupAttrsFromJSON(self, theJSON):
-        """Setups instance from the given JSON variable.
+    def setupAttrsFromList(self, theList):
+        """Setups attributes from teh given list.
 
         >>> ats = Attributes()
-        >>> data = '[{"hp": {"base": 10, "delta": 2, "buffs": "None"}},\
+        >>> data = [("hp", 10, 2), ("mp", 5, 1, {'one': 2})]
+        >>> ats.setupAttrsFromList(data)
+        >>> ats
+        hp: 10/10
+        mp: 7/5
+        >>> ats['HP'].Delta
+        2
+        >>> ats['mp'].Delta
+        1
+        """
+        for entry in theList:
+            self.addAttr(Attr.createAttr(entry))
+
+    def setupAttrsFromJSON(self, theJSON):
+        """Setups attributes from the given JSON variable.
+
+        >>> ats = Attributes()
+        >>> data = '[{"hp": {"base": 10, "delta": 2, "buffs": "none"}},\
                 {"mp": {"base": 5, "delta": 1, "buffs": {"one": 2}}}]'
         >>> ats.setupAttrsFromJSON(data)
         >>> ats
