@@ -89,6 +89,29 @@ class BLayer(Itero):
             assert self.CellRow == theCell.Row
         super(BLayer, self).append(theCell)
 
+    def getCellById(self, theId):
+        """Returns a cell by the given ID.
+
+        Args:
+            theId (int) : Integer with the cell ID.
+
+        Returns:
+            BCell : Cell instance with the given ID. None if no cell\
+                    was found.
+        Example:
+            >>> layer = BLayer(LType.OBJECT, 5)
+            >>> c1 = BCell(0, 0, None)
+            >>> c2 = BCell(1, 0, None)
+            >>> layer.append(c1)
+            >>> layer.append(c2)
+            >>> layer.getCellById(c1.Id) == c1
+            True
+        """
+        for _cell in self:
+            if _cell.Id == theId:
+                return _cell
+        return None
+
     def __repr__(self):
         """String representation for the BLayer instance.
 

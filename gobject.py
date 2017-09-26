@@ -1,3 +1,4 @@
+import ids
 from attr import Attributes
 
 
@@ -12,6 +13,13 @@ class GObject(object):
         self._name = kwargs.get('theName', None)
         self._desc = kwargs.get('theDesc', None)
         self._attrs = Attributes()
+        self._id = ids.new_id()
+
+    @property
+    def Id(self):
+        """Gets _id attribute value.
+        """
+        return self._id
 
     @property
     def Name(self):

@@ -521,6 +521,21 @@ class Actions(Itero):
         """
         super(Actions, self).__init__(Action, kwargs.get('theSize', None))
 
+    def getById(self, theId):
+        """Returns an action by the given ID.
+
+        Args:
+            theId (int) : Integer with the action ID.
+
+        Returns:
+            Action : Action instance with the given ID. None if no action\
+                    was found.
+        """
+        for _action in self:
+            if _action.ID == theId:
+                return _action
+        return None
+
     def __repr__(self):
         """String representation for the Actions instance.
 

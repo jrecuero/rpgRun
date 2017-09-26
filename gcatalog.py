@@ -67,3 +67,18 @@ class Catalog(StrItero):
             return True
         except ValueError:
             return False
+
+    def getById(self, theId):
+        """Returns an entry by the given ID.
+
+        Args:
+            theId (int) : Integer with the entry ID.
+
+        Returns:
+            object : Entry instance with the given ID. None if no entry\
+                    was found.
+        """
+        for _entry in self:
+            if _entry.ID == theId:
+                return _entry
+        return None

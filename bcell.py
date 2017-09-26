@@ -1,4 +1,4 @@
-import itertools
+import ids
 from enum import Enum
 from bpoint import BPoint
 
@@ -187,8 +187,6 @@ class BCell(BPoint):
     functionality for any object placed on the board.
     """
 
-    __newId = itertools.count(1)
-
     def __init__(self, theX, theY, theName, **kwargs):
         """BCell class initialization method.
 
@@ -208,7 +206,7 @@ class BCell(BPoint):
         Text[*] Graph[<GRAPH>]
         """
         super(BCell, self).__init__(theX, theY)
-        self._id = next(BCell.__newId)
+        self._id = ids.new_id()
         self._name = theName
         self._desc = kwargs.get('theDesc', None)
         self._static = True

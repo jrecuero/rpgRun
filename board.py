@@ -187,6 +187,37 @@ class Board(Itero):
                 cells.extend(cellsFromRow)
         return cells
 
+    def getCellById(self, theId):
+        """Returns a cell by the given ID.
+
+        Args:
+            theId (int) : Integer with the cell ID.
+
+        Returns:
+            BCell : Cell instance with the given ID. None if no cell\
+                    was found.
+
+        Example:
+            >>> from bcell import BCell
+            >>> from blayer import LType
+            >>> board = Board(5, 5)
+            >>> row = BRow(5)
+            >>> c1 = BCell(0, 0, None)
+            >>> c2 = BCell(1, 0, None)
+            >>> row.addCellToLayer(c1, LType.SURFACE)
+            True
+            >>> row.addCellToLayer(c2, LType.SURFACE)
+            True
+            >>> board.appendleft(row)
+            >>> row.getCellById(c1.Id) == c1
+            True
+        """
+        for _row in self:
+            _cell = _row.getCellById(theId)
+            if _cell is not None:
+                return _cell
+        return None
+
     def addCellToLayer(self, theCell, theLayer):
         """Adds a new cell to the given layer.
 

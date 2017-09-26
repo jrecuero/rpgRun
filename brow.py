@@ -175,6 +175,33 @@ class BRow(Itero):
             cells.extend([cell for cell in layer])
         return cells
 
+    def getCellById(self, theId):
+        """Returns a cell by the given ID.
+
+        Args:
+            theId (int) : Integer with the cell ID.
+
+        Returns:
+            BCell : Cell instance with the given ID. None if no cell\
+                    was found.
+
+        Example:
+            >>> row = BRow(2)
+            >>> c1 = BCell(0, 0, None)
+            >>> c2 = BCell(1, 0, None)
+            >>> row.addCellToLayer(c1, LType.SURFACE)
+            True
+            >>> row.addCellToLayer(c2, LType.SURFACE)
+            True
+            >>> row.getCellById(c1.Id) == c1
+            True
+        """
+        for _layer in self:
+            _cell = _layer.getCellById(theId)
+            if _cell is not None:
+                return _cell
+        return None
+
     def rowToString(self):
         """Returns string with row representation
 
