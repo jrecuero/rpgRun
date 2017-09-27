@@ -22,7 +22,7 @@ import loggerator
 
 class Play(Cli):
 
-    SYSTEM = ['exit', 'help', 'syntax', 'debug']
+    SYSTEM = ['exit', 'help', 'syntax', 'debug', 'HIT']
     COMMON = ['PRINT', 'ACTORS', 'PLAYER', 'EQUIPMENT', 'INVENTORY', 'EQUIP', 'UNEQUIP']
     STAGES = {'wait': ['INIT'],
               'init': ['RUN'] + COMMON,
@@ -294,6 +294,69 @@ class Play(Cli):
         """Refreshes board game.
         """
         self._game._updateActors()
+
+    @Cli.command('HIT')
+    def do_hit(self, *args):
+        """Just a hit.
+        """
+        import time
+        import shutil
+        import os
+        import sys
+        import termios
+        import fcntl
+
+        fd = sys.stdin.fileno()
+        oldterm = termios.tcgetattr(fd)
+        newattr = termios.tcgetattr(fd)
+        newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
+        termios.tcsetattr(fd, termios.TCSANOW, newattr)
+
+        oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
+        fcntl.fcntl(fd, fcntl.F_SETFL, oldflags | os.O_NONBLOCK)
+
+        sys.stdout.write("\033[?25l")
+        sys.stdout.flush()
+
+        # rows, columns = os.popen('stty size', 'r').read().split()
+        columns, rows = shutil.get_terminal_size()
+        t = 0
+        inc = 1
+        delay = 0.02
+        line = ['.'] * columns
+        line[10] = '['
+        line[20] = ']'
+        line[30] = '<'
+        line[40] = '>'
+        line[54] = '<'
+        line[55] = '('
+        line[58] = ')'
+        line[59] = '>'
+        print(''.join(line), end='\r', flush=True)
+        try:
+            while True:
+                # st = '.' * t
+                # st = line[:t] + '|'
+                save = line[t]
+                line[t] = '|'
+                print(''.join(line), end='\r', flush=True)
+                line[t] = save
+                t += inc
+                time.sleep(delay)
+                if ' ' == sys.stdin.read(1):
+                    print('\nstop at {}'.format(t - 1))
+                    break
+                if t == columns - 1 or t == 0:
+                    # print(line, end='\r', flush=True)
+                    # t = 0
+                    inc *= -1
+        except Exception:
+            pass
+        finally:
+            termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
+            fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
+            sys.stdout.write("\033[?25h")
+            sys.stdout.flush()
 
     def set_toolbar(self):
         return " | ".join(cli.STAGES[cli._stage])
