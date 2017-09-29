@@ -96,6 +96,9 @@ class Actor(BObject):
 
     def isInBoard(self):
         """Checks if the actor is in the board.
+
+        Returns:
+            bool : True is actor is still in the board.
         """
         return self.isAlive()
 

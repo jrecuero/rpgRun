@@ -51,21 +51,61 @@ class Board(Itero):
     def TopCellRow(self):
         """Gets the CellRow value for the top row in the board.
 
-        >>> from bcell import BCell
-        >>> from blayer import LType
-        >>> board = Board(5, 5)
-        >>> row = BRow(5)
-        >>> row.addCellToLayer(BCell(0, 0, None), LType.SURFACE)
-        True
-        >>> board.appendleft(row)
-        >>> row = BRow(5)
-        >>> row.addCellToLayer(BCell(0, 1, None), LType.SURFACE)
-        True
-        >>> board.appendleft(row)
-        >>> board.TopCellRow
-        1
+        Returns:
+            int : Integer with the top cell row.
+
+        Example:
+            >>> from bcell import BCell
+            >>> from blayer import LType
+            >>> board = Board(5, 5)
+            >>> row = BRow(5)
+            >>> row.addCellToLayer(BCell(0, 0, None), LType.SURFACE)
+            True
+            >>> board.appendleft(row)
+            >>> row = BRow(5)
+            >>> row.addCellToLayer(BCell(0, 1, None), LType.SURFACE)
+            True
+            >>> board.appendleft(row)
+            >>> board.TopCellRow
+            1
         """
         return self[0].CellRow
+
+    @property
+    def BottomCellRow(self):
+        """Gets the CellRow value for the bottom row in the board.
+
+        Returns:
+            int : Integer with the bottom cell row.
+
+        Example:
+            >>> from bcell import BCell
+            >>> from blayer import LType
+            >>> board = Board(3, 5)
+            >>> row = BRow(5)
+            >>> row.addCellToLayer(BCell(0, 0, None), LType.SURFACE)
+            True
+            >>> board.appendleft(row)
+            >>> row = BRow(5)
+            >>> row.addCellToLayer(BCell(0, 1, None), LType.SURFACE)
+            True
+            >>> board.appendleft(row)
+            >>> row = BRow(5)
+            >>> row.addCellToLayer(BCell(0, 2, None), LType.SURFACE)
+            True
+            >>> board.appendleft(row)
+            >>> board.BottomCellRow
+            0
+            >>> row = BRow(5)
+            >>> row.addCellToLayer(BCell(0, 3, None), LType.SURFACE)
+            True
+            >>> board.scroll(row)
+            >>> board.BottomCellRow
+            1
+            >>> board.TopCellRow
+            3
+        """
+        return self[self.MaxLen - 1].CellRow
 
     def scroll(self, theNewRow):
         """Scrolls the board, removing the row at the bottom (right) and

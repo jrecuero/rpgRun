@@ -43,7 +43,7 @@ class Play(Cli):
             print('command <{0}> not valid in stage <{1}>'.format(theCmd, self._stage))
             return False
 
-    def _scroll(self):
+    def _newRow(self):
         """Scroll Board.
         """
         width = self._game.Board.Width
@@ -51,6 +51,12 @@ class Play(Cli):
         newHeight = self._game.Board.TopCellRow + 1
         for iwidth in range(width):
             row.addCellToLayer(GreenSurface(iwidth, newHeight, self._sprWidth), LType.SURFACE)
+        return row
+
+    def _scroll(self):
+        """Scroll Board.
+        """
+        row = self._newRow()
         self._game.scrollBoard(row)
 
     @Cli.command('INIT')
@@ -75,7 +81,7 @@ class Play(Cli):
         enemies = []
         enemies.append(EnemyActor(4, 6, self._sprWidth, 'GOBLIN'))
         enemies.append(EnemyActor(3, 5, self._sprWidth, 'ORC'))
-        enemies.append(EnemyActor(1, 6, self._sprWidth, 'TROLL'))
+        enemies.append(EnemyActor(1, 0, self._sprWidth, 'TROLL'))
         enemies.append(MageActor(0, 5, self._sprWidth, 'MAGE'))
         enemies.append(BossActor(1, 5, self._sprWidth))
         enemies[-1].Life = 'mp'
@@ -242,7 +248,8 @@ class Play(Cli):
         """
         print('player moves {0} to {1}'.format(pos, loc))
         self._game.runSelectMovement(loc, pos)
-        self._scroll()
+        self._game.runScroll(self._newRow())
+        # self._scroll()
         self._stage = 'init'
 
     @Cli.command()

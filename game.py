@@ -84,10 +84,11 @@ class Game(object):
                 return _actor
         return None
 
-    def _removeActor(self, theActor):
+    def _removeActor(self, theActor, theFromBoard=True):
         """Removes the given actor from the game.
         """
-        self.Board.removeCell(theActor)
+        if theFromBoard:
+            self.Board.removeCell(theActor)
         self._actors.remove(theActor)
 
     def _updateActors(self):
@@ -96,8 +97,11 @@ class Game(object):
         It removes all actors that are not in the board.
         """
         for _actor in self.Actors:
-            if not _actor.isInBoard():
-                self._removeActor(_actor)
+            if self.Board.BottomCellRow <= _actor.Row <= self.Board.TopCellRow:
+                if not _actor.isInBoard():
+                    self._removeActor(_actor)
+            else:
+                self._removeActor(_actor, False)
 
     def movePlayer(self, theDirection, theMove):
         """Moves the player (PActor instace) in the given direction and the
@@ -162,6 +166,7 @@ class Game(object):
         """
         while True:
             # Yield for user to select an action.
+            # Required call: runSelectAction()
             self._action = yield
             assert isinstance(self._action, Action)
             self._logger.debug('action: {}'.format(self._action.Type))
@@ -174,6 +179,7 @@ class Game(object):
                 self.TargetChoice = self._action.filterTarget(_cells)
 
                 # Yield for user to select the target.
+                # Required call: runSelectTarget()
                 self.__action_select_target = self._action.selectTarget(self)
                 next(self.__action_select_target)
                 _target = yield self.__action_select_target
@@ -186,6 +192,7 @@ class Game(object):
             if self._action.requiresMovement():
                 # Yield for the user to enter any additional data required by the
                 # action.
+                # Required call: runSelectMovement()
                 self.__action_select_move = self._action.selectMove(self)
                 next(self.__action_select_move)
                 _actionKwargs = yield self.__action_select_move
@@ -193,6 +200,12 @@ class Game(object):
                 _actionKwargs = {}
             self._logger.debug('action kwargs: {}'.format(_actionKwargs))
             self._action.execute(self, **_actionKwargs)
+
+            # Yield to receive the new row to be added to the board.
+            # Required call: runScroll()
+            newRow = yield
+            self.scrollBoard(newRow)
+            self._logger.debug('scroll new row: {}'.format(newRow))
             self._updateActors()
 
     def runInit(self):
@@ -222,6 +235,11 @@ class Game(object):
         """
         self.__runner.send(self.__action_select_move.send({'theLocation': theLocation,
                                                            'thePosition': thePosition}))
+
+    def runScroll(self, theNewRow):
+        """Steps on the run cycle.
+        """
+        self.__runner.send(theNewRow)
 
     def runner(self, theValue):
         """Steps on the run cycle.
