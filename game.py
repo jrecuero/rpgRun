@@ -12,135 +12,93 @@ class Game(object):
     game.
     """
 
-    def __init__(self, theWidth, theHeight):
+    def __init__(self, width, height):
         """Game class initialization method.
         """
-        self._bwidth = theWidth
-        self._bheight = theHeight
-        self._board = Board(self._bheight, self._bwidth)
-        self._bhandler = BoardHandler(self._board)
-        self._player = None
-        self._actors = []
+        self._bwidth = width
+        self._bheight = height
+        self.board = Board(self._bheight, self._bwidth)
+        self.bhandler = BoardHandler(self.board)
+        self.player = None
+        self.actors = []
         self._action = None
-        self._targetChoice = None
+        self.target_choice = None
         self.__action_select_target = None
         self.__action_select_move = None
         self._logger = loggerator.getLoggerator('GAME')
 
-    @property
-    def Board(self):
-        """Gets _board attribute value.
-        """
-        return self._board
-
-    @property
-    def BHandler(self):
-        """Gets _bhandler attribute value.
-        """
-        return self._bhandler
-
-    @property
-    def Player(self):
-        """Gets _player attribute value.
-        """
-        return self._player
-
-    @Player.setter
-    def Player(self, theValue):
-        """Sets _player attribute value.
-        """
-        self._player = theValue
-
-    @property
-    def Actors(self):
-        """Gets _actors attribute value.
-        """
-        return self._actors
-
-    @property
-    def TargetChoice(self):
-        """Gets _targetChoice attribute value.
-        """
-        return self._targetChoice
-
-    @TargetChoice.setter
-    def TargetChoice(self, theValue):
-        """Sets _targetChoice attribute value.
-        """
-        self._targetChoice = theValue
-
-    def addActor(self, theActor, thePlayer=False):
+    def add_actor(self, actor, player=False):
         """Adds the given actor to the game.
         """
-        self._actors.append(theActor)
-        if thePlayer:
-            self.Player = theActor
+        self.actors.append(actor)
+        if player:
+            self.player = actor
 
-    def findActorByName(self, theName):
+    def find_actor_by_name(self, name):
         """Finds an actor by its name.
         """
-        for _actor in self._actors:
-            if _actor.Name == theName:
-                return _actor
+        for actor in self.actors:
+            if actor.name == name:
+                return actor
         return None
 
-    def _removeActor(self, theActor, theFromBoard=True):
+    def _remove_actor(self, actor, from_board=True):
         """Removes the given actor from the game.
         """
-        if theFromBoard:
-            self.Board.removeCell(theActor)
-        self._actors.remove(theActor)
+        if from_board:
+            self.board.remove_cell(actor)
+        self.actors.remove(actor)
 
-    def _updateActors(self):
+    def _update_actors(self):
         """Updates all actors in the game.
 
         It removes all actors that are not in the board.
         """
-        for _actor in self.Actors:
-            if self.Board.BottomCellRow <= _actor.Row <= self.Board.TopCellRow:
-                if not _actor.isInBoard():
-                    self._removeActor(_actor)
+        for actor in self.actors:
+            if self.board.bottom_cell_row <= actor.row <= self.board.top_cell_row:
+                if not actor.is_in_board():
+                    self._remove_actor(actor)
             else:
-                self._removeActor(_actor, False)
+                self._remove_actor(actor, False)
 
-    def movePlayer(self, theDirection, theMove):
+    def move_player(self, direction, move_val):
         """Moves the player (PActor instace) in the given direction and the
         given value.
 
         Args:
-            theDirection (Location) : direction the player will be moved.
-            theMove (int) : number of cells the player will be moved.
+            direction (Location) : direction the player will be moved.
+            move_val (int) : number of cells the player will be moved.
 
         Returns:
             None
         """
-        assert isinstance(theDirection, Location)
-        oldCellRow = self.Player.Row
+        assert isinstance(direction, Location)
+        old_cell_row = self.player.row
         # This moveTo should be replaced with a move with collision and range
         # check in order to validate the movement.
-        assert self.Player.moveTo(theDirection, theMove) is not None
-        if oldCellRow != self.Player.Row:
-            oldRow = self.Board.getRowFromCellRow(oldCellRow)
-            assert oldRow is not None
-            oldRow.removeCellFromLayer(self.Player, LType.OBJECT)
-            newRow = self.Board.getRowFromCellRow(self.Player.Row)
-            assert newRow is not None
-            newRow.addCellToLayer(self.Player, LType.OBJECT)
+        assert self.player.move_to(direction, move_val) is not None
+        if old_cell_row != self.player.row:
+            old_row = self.board.get_row_from_cell_row(old_cell_row)
+            assert old_row is not None
+            old_row.remove_cell_from_layer(self.player, LType.OBJECT)
+            new_row = self.board.get_row_from_cell_row(self.player.row)
+            assert new_row is not None
+            new_row.add_cell_to_layer(self.player, LType.OBJECT)
 
-    def scrollBoard(self, theNewRow):
+    def scroll_board(self, new_row):
         """Scroll the board, removing one row and adding a new one.
 
         Scroll always moves row to the front, it means to higher
         cell-row values.
 
         Args:
-            theNewRow (BRow) : new row to be added to the board.
+            new_row (BRow) : new row to be added to the board.
 
         Returns:
             None
         """
-        assert isinstance(theNewRow, BRow)
-        self.Board.scroll(theNewRow)
+        assert isinstance(new_row, BRow)
+        self.board.scroll(new_row)
 
     def _run(self):
         """Executes run cycle.
@@ -166,34 +124,34 @@ class Game(object):
         """
         while True:
             # Yield for user to select an action.
-            # Required call: runSelectAction()
+            # Required call: run_select_action()
             self._action = yield
             assert isinstance(self._action, Action)
-            self._logger.debug('action: {}'.format(self._action.Type))
+            self._logger.debug('action: {}'.format(self._action.type))
 
-            if self._action.requiresTarget():
+            if self._action.requires_target():
                 # When action has been selected, ask for cells for target
                 # selection.
-                _layer = self._action.layerToTarget()
-                _cells = self.Board.getCellsFromLayer(_layer) if _layer else None
-                self.TargetChoice = self._action.filterTarget(_cells)
+                layer = self._action.layer_to_target()
+                cells = self.board.get_cells_from_layer(layer) if layer else None
+                self.target_choice = self._action.filter_target(cells)
 
                 # Yield for user to select the target.
-                # Required call: runSelectTarget()
-                self.__action_select_target = self._action.selectTarget(self)
+                # Required call: run_select_target()
+                self.__action_select_target = self._action.select_target(self)
                 next(self.__action_select_target)
-                _target = yield self.__action_select_target
+                target = yield self.__action_select_target
             else:
-                _target = self._action.Target
+                target = self._action.target
 
-            self._action.selected(_target)
-            self._logger.debug('target: {}'.format(_target))
+            self._action.selected(target)
+            self._logger.debug('target: {}'.format(target))
 
-            if self._action.requiresMovement():
+            if self._action.requires_movement():
                 # Yield for the user to enter any additional data required by the
                 # action.
-                # Required call: runSelectMovement()
-                self.__action_select_move = self._action.selectMove(self)
+                # Required call: run_select_movement()
+                self.__action_select_move = self._action.select_move(self)
                 next(self.__action_select_move)
                 _actionKwargs = yield self.__action_select_move
             else:
@@ -201,47 +159,49 @@ class Game(object):
             self._logger.debug('action kwargs: {}'.format(_actionKwargs))
             self._action.execute(self, **_actionKwargs)
 
-            # Yield to receive the new row to be added to the board.
-            # Required call: runScroll()
-            newRow = yield
-            self.scrollBoard(newRow)
-            self._logger.debug('scroll new row: {}'.format(newRow))
-            self._updateActors()
+            if self._action.requires_movement():
+                # Yield to receive the new row to be added to the board.
+                # Required call: run_scroll()
+                new_row = yield
+                self.scroll_board(new_row)
+                self._logger.debug('scroll new row: {}'.format(new_row))
 
-    def runInit(self):
+            self._update_actors()
+
+    def run_init(self):
         """Initializes the run cycle.
         """
-        self.__runner = self._run()
-        next(self.__runner)
+        self._runner = self._run()
+        next(self._runner)
 
-    def runSelectAction(self, theAction):
+    def run_select_action(self, action):
         """Steps on the action selection.
         """
-        self.__runner.send(theAction)
-        return theAction.Type
+        self._runner.send(action)
+        return action.type
 
-    def runSelectTarget(self, theTarget):
+    def run_select_target(self, target):
         """Steps on the action target selection.
         """
-        self.__runner.send(self.__action_select_target.send(theTarget))
+        self._runner.send(self.__action_select_target.send(target))
 
-    def runSelectRequires(self, **kwargs):
+    def run_select_requires(self, **kwargs):
         """Steps on the requires selection.
         """
-        self.__runner.send(self.__action_select_move.send({}))
+        self._runner.send(self.__action_select_move.send({}))
 
-    def runSelectMovement(self, theLocation=None, thePosition=None):
+    def run_select_movement(self, location=None, position=None):
         """Steps on the action movement selection.
         """
-        self.__runner.send(self.__action_select_move.send({'theLocation': theLocation,
-                                                           'thePosition': thePosition}))
+        self._runner.send(self.__action_select_move.send({'location': location,
+                                                          'position': position}))
 
-    def runScroll(self, theNewRow):
+    def run_scroll(self, new_row):
         """Steps on the run cycle.
         """
-        self.__runner.send(theNewRow)
+        self._runner.send(new_row)
 
-    def runner(self, theValue):
+    def runner(self, value):
         """Steps on the run cycle.
         """
-        self.__runner.send(theValue)
+        self._runner.send(value)

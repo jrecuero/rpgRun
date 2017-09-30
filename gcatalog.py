@@ -6,79 +6,100 @@ class Catalog(StrItero):
     use for inventories, equipments and any other resource that requires to
     store information by a key.
 
-    Information stored should have a Name attribute and it shoudl have a Host
+    Information stored should have a name attribute and it shoudl have a Host
     that owns are resources stored.
     """
 
-    def __init__(self, theKlass, **kwargs):
+    def __init__(self, klass, **kwargs):
         """Catalog class initialization method.
+
+        Args:
+            klass (class) : Class conteined in the catalog.
         """
-        assert hasattr(theKlass, 'Name')
-        super(Catalog, self).__init__(theKlass)
-        self._host = kwargs.get('theHost', None)
+        super(Catalog, self).__init__(klass)
+        self.host = kwargs.get('host', None)
 
-    @property
-    def Host(self):
-        """Gets _host attribute value.
-
-        Returns:
-            Actor : Actor that owns the catalog.
-
-        Example:
-            >>> class A(object):
-            ...     Name = None
-            >>> inv = Catalog(A)
-            >>> inv.Host
-            >>> inv = Catalog(A, theHost='me')
-            >>> inv.Host
-            'me'
-            >>> try:
-            ...     inv = Catalog(str)
-            ... except AssertionError:
-            ...     'Assertion'
-            'Assertion'
-        """
-        return self._host
-
-    def append(self, theEntry):
+    def append(self, entry):
         """Updates the instance with the given key-value pairs.
 
         Args:
-            theEntry (object) : Instance to be added.
+            entry (object) : Instance to be added.
 
         Returns:
             None
-        """
-        _key = theEntry.Name
-        super(Catalog, self).update(_key, theEntry)
 
-    def remove(self, theEntry):
+        Example:
+            >>> class Item(object):
+            ...     def __init__(self, name, value):
+            ...         self.name = name
+            ...         self.value = value
+            >>> c = Catalog(Item)
+            >>> it = Item('me', 100)
+            >>> c.append(it)
+            >>> it = Item('you', 50)
+            >>> c.append(it)
+            >>> c['me'].value
+            100
+            >>> c['you'].value
+            50
+        """
+        key = entry.name
+        super(Catalog, self).update(key, entry)
+
+    def remove(self, entry):
         """Removes the given value from the instance.
 
         Args:
-            theEntry (object or str) : Instance or instance name to be deleted.
+            entry (object or str) : Instance or instance name to be deleted.
 
         Returns:
             bool : True if entry was deleted, False else.
+
+        Example:
+            >>> class Item(object):
+            ...     def __init__(self, name, value):
+            ...         self.name = name
+            ...         self.value = value
+            >>> c = Catalog(Item)
+            >>> it = Item('me', 100)
+            >>> c.append(it)
+            >>> it = Item('you', 50)
+            >>> c.append(it)
+            >>> c.remove('me')
+            True
+            >>> try:
+            ...     c['me'].value
+            ... except KeyError:
+            ...     'KeyError for me'
+            'KeyError for me'
+            >>> c.remove('me')
+            False
+            >>> c.remove(it)
+            True
+            >>> try:
+            ...     c['you'].value
+            ... except KeyError:
+            ...     'KeyError for you'
+            'KeyError for you'
         """
         try:
-            _key = theEntry.Name if isinstance(theEntry, self._StrItero__streamKlass) else theEntry
-            del self[_key]
+            key = entry.name if isinstance(entry, self._StrItero__stream_class) else entry
+            del self[key]
             return True
-        except ValueError:
+        except KeyError:
             return False
 
-    def getById(self, theId):
+    def get_by_id(self, id):
         """Returns an entry by the given ID.
 
         Args:
-            theId (int) : Integer with the entry ID.
+            id (int) : Integer with the entry ID.
 
         Returns:
             object : Entry instance with the given ID. None if no entry\
                     was found.
         """
-        for _entry in self:
-            if _entry.ID == theId:
-                return _entry
+        for entry in self:
+            if entry.id == id:
+                return entry
         return None

@@ -36,28 +36,28 @@ class Play(Cli):
         self._logger = loggerator.getLoggerator('PLAY')
         self._stage = 'wait'
 
-    def precmd(self, theCmd, theLine):
-        if theCmd in self.STAGES[self._stage] + self.SYSTEM:
+    def precmd(self, cmd, line):
+        if cmd in self.STAGES[self._stage] + self.SYSTEM:
             return True
         else:
-            print('command <{0}> not valid in stage <{1}>'.format(theCmd, self._stage))
+            print('command <{0}> not valid in stage <{1}>'.format(cmd, self._stage))
             return False
 
-    def _newRow(self):
+    def _new_row(self):
         """Scroll Board.
         """
-        width = self._game.Board.Width
+        width = self._game.board.width
         row = BRow(width)
-        newHeight = self._game.Board.TopCellRow + 1
+        newHeight = self._game.board.top_cell_row + 1
         for iwidth in range(width):
-            row.addCellToLayer(GreenSurface(iwidth, newHeight, self._sprWidth), LType.SURFACE)
+            row.add_cell_to_layer(GreenSurface(iwidth, newHeight, self._spr_width), LType.SURFACE)
         return row
 
     def _scroll(self):
         """Scroll Board.
         """
-        row = self._newRow()
-        self._game.scrollBoard(row)
+        row = self._new_row()
+        self._game.scroll_board(row)
 
     @Cli.command('INIT')
     def do_init(self, *args):
@@ -65,55 +65,55 @@ class Play(Cli):
         """
         self._width = 7
         self._height = 7
-        self._sprWidth = 7
+        self._spr_width = 7
         self._game = game.Game(self._width, self._height)
-        self.Journal.setToCache('game', self._game)
+        self.journal.set_to_cache('game', self._game)
         iheight = self._height
-        for row in self._game.Board:
+        for row in self._game.board:
             iheight -= 1
             for iwidth in range(self._width):
-                row.addCellToLayer(GreenSurface(iwidth, iheight, self._sprWidth), LType.SURFACE)
+                row.add_cell_to_layer(GreenSurface(iwidth, iheight, self._spr_width), LType.SURFACE)
 
         Actor.LIFE = 'hp'
-        player = PlayerActor(2, 4, self._sprWidth)
-        player.Actions.append(WeaponAction('weapon', AType.WEAPONIZE))
-        player.Actions.append(MoveAction('move', AType.MOVEMENT))
+        player = PlayerActor(2, 4, self._spr_width)
+        player.actions.append(WeaponAction('weapon', AType.WEAPONIZE))
+        player.actions.append(MoveAction('move', AType.MOVEMENT))
         enemies = []
-        enemies.append(EnemyActor(4, 6, self._sprWidth, 'GOBLIN'))
-        enemies.append(EnemyActor(3, 5, self._sprWidth, 'ORC'))
-        enemies.append(EnemyActor(1, 0, self._sprWidth, 'TROLL'))
-        enemies.append(MageActor(0, 5, self._sprWidth, 'MAGE'))
-        enemies.append(BossActor(1, 5, self._sprWidth))
+        enemies.append(EnemyActor(4, 6, self._spr_width, 'GOBLIN'))
+        enemies.append(EnemyActor(3, 5, self._spr_width, 'ORC'))
+        enemies.append(EnemyActor(1, 0, self._spr_width, 'TROLL'))
+        enemies.append(MageActor(0, 5, self._spr_width, 'MAGE'))
+        enemies.append(BossActor(1, 5, self._spr_width))
         enemies[-1].Life = 'mp'
-        pillar = Pillar(0, 6, self._sprWidth)
+        pillar = Pillar(0, 6, self._spr_width)
 
-        sword = Weapon(theName='sword', theAttrBuff={'str': 5})
-        sword.Actions.append(MeleAction('mele', AType.WEAPONIZE, theWidth=2, theHeight=2, theShape=Quad))
-        bow = Weapon(theName='bow', theAttrBuff={'str': 2})
-        bow.Actions.append(RangeAction('range', AType.WEAPONIZE, theWidth=3, theHeight=3, theShape=Rhomboid))
-        armor = Armor(theAttrBuff={'hp': 10})
-        shield = Shield(theAttrBuff={'hp': 7, 'str': 1})
-        player.Inventory.append(sword)
-        player.Inventory.append(bow)
-        player.Inventory.append(armor)
-        player.Inventory.append(shield)
-        player.Equipment.append(sword)
-        player.Equipment.append(armor)
-        player.Equipment.append(shield)
+        sword = Weapon(name='sword', attr_buff={'str': 5})
+        sword.actions.append(MeleAction('mele', AType.WEAPONIZE, width=2, height=2, shape=Quad))
+        bow = Weapon(name='bow', attr_buff={'str': 2})
+        bow.actions.append(RangeAction('range', AType.WEAPONIZE, width=3, height=3, shape=Rhomboid))
+        armor = Armor(attr_buff={'hp': 10})
+        shield = Shield(attr_buff={'hp': 7, 'str': 1})
+        player.inventory.append(sword)
+        player.inventory.append(bow)
+        player.inventory.append(armor)
+        player.inventory.append(shield)
+        player.equipment.append(sword)
+        player.equipment.append(armor)
+        player.equipment.append(shield)
 
-        self._game.addActor(player, True)
+        self._game.add_actor(player, True)
         for x in enemies:
-            self._game.addActor(x)
+            self._game.add_actor(x)
 
-        self._game.Board.getRowFromCell(player).addCellToLayer(player, LType.OBJECT)
-        self._game.Board.getRowFromCell(pillar).addCellToLayer(pillar, LType.OBJECT)
+        self._game.board.get_row_from_cell(player).add_cell_to_layer(player, LType.OBJECT)
+        self._game.board.get_row_from_cell(pillar).add_cell_to_layer(pillar, LType.OBJECT)
         for x in enemies:
-            self._game.Board.getRowFromCell(x).addCellToLayer(x, LType.OBJECT)
+            self._game.board.get_row_from_cell(x).add_cell_to_layer(x, LType.OBJECT)
 
         self._logger.display('Init rpgRun')
 
         # Run the game engine.
-        self._game.runInit()
+        self._game.run_init()
         self._stage = 'init'
 
     @Cli.command()
@@ -124,7 +124,7 @@ class Play(Cli):
     def do_move_player(self, loc, pos):
         """Move player a number of positions to given location.
         """
-        self._game.movePlayer(loc, pos)
+        self._game.move_player(loc, pos)
         if loc == Location.FRONT:
             self._scroll()
 
@@ -135,11 +135,11 @@ class Play(Cli):
     def do_print_player(self, name):
         """Print player information.
         """
-        _actor = self._game.findActorByName(name)
+        actor = self._game.find_actor_by_name(name)
         self._logger.display("Data for  : {0}".format(name))
-        self._logger.display("Name      : {0}".format(_actor.Name))
-        self._logger.display("Position  : {0}".format(_actor.getPoint()))
-        self._logger.display("Attributes:\n{0}".format(_actor.Attrs))
+        self._logger.display("Name      : {0}".format(actor.name))
+        self._logger.display("Position  : {0}".format(actor.get_point()))
+        self._logger.display("Attributes:\n{0}".format(actor.attrs))
 
     @Cli.command()
     @setsyntax
@@ -148,9 +148,9 @@ class Play(Cli):
     def do_print_inventory(self, name):
         """Prints player inventory.
         """
-        _actor = self._game.findActorByName(name)
+        actor = self._game.find_actor_by_name(name)
         self._logger.display("Inventory for  : {0}".format(name))
-        for x in _actor.Inventory:
+        for x in actor.inventory:
             self._logger.display(">> {0}".format(x))
 
     @Cli.command()
@@ -160,25 +160,25 @@ class Play(Cli):
     def do_print_equipment(self, name):
         """Prints player equipment.
         """
-        _actor = self._game.findActorByName(name)
+        actor = self._game.find_actor_by_name(name)
         self._logger.display("Equipment for  : {0}".format(name))
-        for x in _actor.Equipment:
+        for x in actor.equipment:
             self._logger.display(">> {0}".format(x))
 
     @Cli.command('ACTORS')
     def do_print_actors(self, *args):
         """Print actors attributes.
         """
-        for _actor in self._game.Actors:
-            self._logger.display("Data for  : {0}".format(_actor.Name))
-            self._logger.display("Position  : {0}".format(Point.__repr__(_actor)))
-            self._logger.display("Attributes:\n{0}".format(_actor.Attrs))
+        for actor in self._game.actors:
+            self._logger.display("Data for  : {0}".format(actor.name))
+            self._logger.display("Position  : {0}".format(Point.__repr__(actor)))
+            self._logger.display("Attributes:\n{0}".format(actor.attrs))
 
     @Cli.command('PRINT')
     def do_print_board(self, *args):
         """Print rpgRUN game board.
         """
-        self._logger.display(self._game.Board.render(theWidth=7))
+        self._logger.display(self._game.board.render(width=7))
 
     @Cli.command('SCROLL')
     def do_scroll_board(self, *args):
@@ -191,9 +191,9 @@ class Play(Cli):
         """Run a cycle
         """
         print('select action (use command: ACTION <name>) ')
-        for i, x in enumerate(self._game.Player.AllActions):
-            print('{0} : {1}'.format(i, x.Name))
-        self.Prompt = '[ACTION <name>] rpgRun> '
+        for i, x in enumerate(self._game.player.all_actions):
+            print('{0} : {1}'.format(i, x.name))
+        self.prompt_str = '[ACTION <name>] rpgRun> '
         self._stage = 'run'
 
     @Cli.command()
@@ -203,23 +203,23 @@ class Play(Cli):
     def do_action(self, name):
         """Select action to run.
         """
-        for _action in self._game.Player.Actions:
-            if _action.Name == name:
+        for action in self._game.player.actions:
+            if action.name == name:
                 break
         else:
             return
-        _action.Originator = self._game.Player
-        # self._game.runInit()
-        _actionType = self._game.runSelectAction(_action)
-        if _actionType == AType.WEAPONIZE:
+        action.originator = self._game.player
+        # self._game.run_init()
+        action_type = self._game.run_select_action(action)
+        if action_type == AType.WEAPONIZE:
             print('select target (use command: TARGET <name>)')
-            for i, x in enumerate(self._game.TargetChoice):
+            for i, x in enumerate(self._game.target_choice):
                 print('{0} : {1}'.format(i, x))
-            self.Prompt = '[TARGET <name>] rpgRun> '
+            self.prompt_str = '[TARGET <name>] rpgRun> '
             self._stage = 'target'
-        elif _actionType == AType.MOVEMENT:
+        elif action_type == AType.MOVEMENT:
             print('select player movement (use command: MOVEMENT <loc> <pos>)')
-            self.Prompt = '[MOVEMENT <loc> <pos>] rpgRun> '
+            self.prompt_str = '[MOVEMENT <loc> <pos>] rpgRun> '
             self._stage = 'move'
 
     @Cli.command()
@@ -229,13 +229,13 @@ class Play(Cli):
     def do_target(self, name):
         """Select target for the action to run.
         """
-        for _target in self._game.TargetChoice:
-            if _target.Name == name:
+        for _target in self._game.target_choice:
+            if _target.name == name:
                 break
         else:
             return
-        self._game.runSelectTarget(_target)
-        self.Prompt = 'rpgRun> '
+        self._game.run_select_target(_target)
+        self.prompt_str = 'rpgRun> '
         self._stage = 'init'
 
     @Cli.command()
@@ -247,8 +247,8 @@ class Play(Cli):
         """Select location and steps for the player to move.
         """
         print('player moves {0} to {1}'.format(pos, loc))
-        self._game.runSelectMovement(loc, pos)
-        self._game.runScroll(self._newRow())
+        self._game.run_select_movement(loc, pos)
+        self._game.run_scroll(self._new_row())
         # self._scroll()
         self._stage = 'init'
 
@@ -260,27 +260,27 @@ class Play(Cli):
     def do_equip_actor(self, aname, equip):
         """Equip an item in an actor.
         """
-        _actor = self._game.findActorByName(aname)
-        if _actor:
-            _equip = _actor.Inventory[equip]
-            if _equip:
+        actor = self._game.find_actor_by_name(aname)
+        if actor:
+            equip = actor.inventory[equip]
+            if equip:
                 print('Equip {0} in {1}'.format(equip, aname))
-                _actor.Equipment.append(_equip)
+                actor.equipment.append(equip)
 
     @Cli.command()
     @setsyntax
     @syntax("UNEQUIP aname equip")
     @argo('aname', T_Actor, None)
-    @argo('equip', T_Equip, None, theCompleterKwargs={'equip': False})
+    @argo('equip', T_Equip, None, completer_kwargs={'equip': False})
     def do_unequip_actor(self, aname, equip):
         """Equip an item in an actor.
         """
-        _actor = self._game.findActorByName(aname)
-        if _actor:
-            _equip = _actor.Equipment[equip]
-            if _equip:
+        actor = self._game.find_actor_by_name(aname)
+        if actor:
+            equip = actor.equipment[equip]
+            if equip:
                 print('Unequip {0} in {1}'.format(equip, aname))
-                _actor.Equipment.remove(_equip)
+                actor.equipment.remove(equip)
 
     @Cli.command()
     @setsyntax
@@ -291,9 +291,9 @@ class Play(Cli):
     def do_debug_player(self, aname, attr, value):
         """Updates actor attribute.
         """
-        _actor = self._game.findActorByName(aname)
-        if _actor:
-            _actor.Attrs[attr].Base = value
+        actor = self._game.find_actor_by_name(aname)
+        if actor:
+            actor.attrs[attr].Base = value
             self.do_print_player("name={}".format(aname))
 
     @Cli.command('REFRESH')
@@ -377,10 +377,10 @@ if __name__ == '__main__':
     cli = Play()
     try:
         # cli.Prompt = 'rpgRun> '
-        cli.cmdloop(thePrompt='rpgRun> ',
-                    theToolBar=cli.set_toolbar,
-                    theRPrompt=cli.set_rprompt,
-                    thePreCmd=True)
+        cli.cmdloop(prompt='rpgRun> ',
+                    toolbar=cli.set_toolbar,
+                    rprompt=cli.set_rprompt,
+                    precmd=True)
     except KeyboardInterrupt:
         cli._logger.display("")
         pass

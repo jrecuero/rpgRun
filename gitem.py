@@ -6,7 +6,7 @@ class ItemType(object):
     """
 
     @staticmethod
-    def Name():
+    def name():
         """
         """
         return 'ITEM'
@@ -16,80 +16,32 @@ class GItem(GObject):
     """
     """
 
-    TYPES = {ItemType.Name: ItemType, }
+    TYPES = {ItemType.name: ItemType, }
 
     def __init__(self, **kwargs):
         """GItem class initialization method.
 
         Keyword Args:
-            theHost (Actor) : Actor instance that owns the item.
+            host (Actor) : Actor instance that owns the item.
 
-            theAttrBuff (dict(str, int)) : Dictionary with pairs of attribute\
+            attr_buff (dict(str, int)) : Dictionary with pairs of attribute\
                     name and attribute value to be used as buff to the Host.
 
         Raises:
             AssertionError
         """
         super(GItem, self).__init__(**kwargs)
-        self._host = kwargs.get('theHost', None)
-        self._typename = ItemType.Name
-        self._attrBuff = kwargs.get('theAttrBuff', {})
-        assert isinstance(self._attrBuff, dict)
+        self.host = kwargs.get('host', None)
+        self.typename = ItemType.name
+        self.attr_buff = kwargs.get('attr_buff', {})
+        assert isinstance(self.attr_buff, dict)
 
     @staticmethod
-    def addType(theType):
-        assert issubclass(theType, ItemType)
-        GItem.TYPES.update({theType.Name: theType})
+    def add_type(type_):
+        assert issubclass(type_, ItemType)
+        GItem.TYPES.update({type_.name: type_})
 
-    @property
-    def Host(self):
-        """Property for _host attribute.
-
-        :getter: Gets _host attribute value.
-        :setter: Sets _host attribute value.
-
-        Returns:
-            Actor : Actor instance that owns the item
-
-        Example:
-            >>> it = GItem()
-            >>> it.Host
-            >>> it = GItem(theHost='me')
-            >>> it.Host
-            'me'
-            >>> it = GItem()
-            >>> it.Host
-            >>> it.Host = 'me'
-            >>> it.Host
-            'me'
-            >>> it = GItem(theHost='you')
-            >>> it.Host
-            'you'
-            >>> it.Host = 'they'
-            >>> it.Host
-            'they'
-        """
-        return self._host
-
-    @Host.setter
-    def Host(self, theValue):
-        """Set property for _host attribute.
-        """
-        self._host = theValue
-
-    @property
-    def TypeName(self):
-        """Property for _typename attribute.
-
-        :getter: Gets _typename attribute value.
-
-        Returns:
-            str : string with the item type.
-        """
-        return self._typename
-
-    @property
-    def Type(self):
+    def get_type(self):
         """Property for the iten type.
 
         :getter: gets item type
@@ -97,36 +49,25 @@ class GItem(GObject):
         Returns:
             ItemType : ItemType value for the item..
         """
-        return GItem.TYPES.get(self.TypeName, None)
+        return GItem.TYPES.get(self.typename, None)
 
-    @property
-    def AttrBuff(self):
-        """Property for _attrBuff attribute.
-
-        :getter: Gets _attrBuff attribute value.
-
-        Returns:
-            dict : Dictionary with all attribute name and value pairs.
-        """
-        return self._attrBuff
-
-    def buffHost(self):
+    def buff_host(self):
         """Add a buff to the Host.
 
         Returns:
             None
         """
-        for k, v in self.AttrBuff.items():
-            self.Host.Attrs[k].addBuff(self.Name, v)
+        for k, v in self.attr_buff.items():
+            self.host.attrs[k].add_buff(self.name, v)
 
-    def debuffHost(self):
+    def debuff_host(self):
         """Removes a buff from the host.
 
         Returns:
             None
         """
-        for k, v in self.AttrBuff.items():
-            self.Host.Attrs[k].delBuff(self.Name)
+        for k, v in self.attr_buff.items():
+            self.host.attrs[k].del_buff(self.name)
 
     def __repr__(self):
         """Instance representation as a string.
@@ -134,4 +75,4 @@ class GItem(GObject):
         Returns:
             str : String with the instance representation.
         """
-        return '{0}: {1} {2}'.format(self.__class__.__name__, self.Name, self.AttrBuff)
+        return '{0}: {1} {2}'.format(self.__class__.__name__, self.name, self.attr_buff)

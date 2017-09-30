@@ -7,45 +7,45 @@ class Itero(Iterator):
     iterator to be used.
     """
 
-    def __init__(self, theStreamKlass, theMaxLen=None):
+    def __init__(self, stream_class, maxlen=None):
         """Itero class initialization method.
 
         Args:
-            theStreamKlass (class) : class used for every entry.
+            stream_class (class) : class used for every entry.
 
-            theMaxLen (int) : maximum storage size.
+            maxlen (int) : maximum storage size.
         """
-        assert theStreamKlass
-        self.__streamKlass = theStreamKlass
+        assert stream_class
+        self.__stream_class = stream_class
         self.__index = 0
         self.__stream = []
-        self.__maxLen = theMaxLen
+        self.__maxlen = maxlen
 
     @property
-    def MaxLen(self):
-        """Gets _maxLen attribute value.
+    def maxlen(self):
+        """Gets __maxlen attribute value.
 
         Returns:
             int : maximum storage size.
 
         Example:
             >>> it = Itero(str, 10)
-            >>> it.MaxLen
+            >>> it.maxlen
             10
         """
-        return self.__maxLen
+        return self.__maxlen
 
     @property
-    def Stream(self):
+    def stream(self):
         """
         """
         return self.__stream
 
-    def __getitem__(self, theKey):
+    def __getitem__(self, key):
         """Allows retriving data using indexed values for the instance.
 
         Args:
-            theKey (int) : Integer to be used a indexed key.
+            key (int) : Integer to be used a indexed key.
 
         Returns:
             object : Instace stored in the given indexed key.
@@ -56,16 +56,16 @@ class Itero(Iterator):
             >>> it[0]
             'one'
         """
-        assert theKey < len(self.__stream)
-        return self.__stream[theKey]
+        assert key < len(self.__stream)
+        return self.__stream[key]
 
-    def __setitem__(self, theKey, theValue):
+    def __setitem__(self, key, value):
         """Allows updating data using indexed values for the instance.
 
         Args:
-            thekey (int) : Integer to be used as indexed key.
+            key (int) : Integer to be used as indexed key.
 
-            theValue (object) : Instance to be stored at the given indexed key.
+            value (object) : Instance to be stored at the given indexed key.
 
         Example:
             >>> it = Itero(str)
@@ -76,15 +76,15 @@ class Itero(Iterator):
             >>> it[0]
             'ONE'
         """
-        assert theKey < len(self.__stream)
-        assert isinstance(theValue, self.__streamKlass)
-        self.__stream[theKey] = theValue
+        assert key < len(self.__stream)
+        assert isinstance(value, self.__stream_class)
+        self.__stream[key] = value
 
-    def __delitem__(self, theKey):
+    def __delitem__(self, key):
         """Allows deleting data using indexed values for the instance.
 
         Args:
-            thekey (int) : Integer to be used as indexed key.
+            key (int) : Integer to be used as indexed key.
 
         Example:
             >>> it = Itero(str)
@@ -96,8 +96,8 @@ class Itero(Iterator):
             >>> len(it)
             1
         """
-        assert theKey < len(self.__stream)
-        del self.__stream[theKey]
+        assert key < len(self.__stream)
+        del self.__stream[key]
 
     def __iter__(self):
         """Allows iterating the instance (initialize the iteration).
@@ -153,11 +153,11 @@ class Itero(Iterator):
         """
         return len(self.__stream)
 
-    def append(self, theValue):
+    def append(self, value):
         """Appends a value to the instance at the end.
 
         Args:
-            theValue (object) : Instance to be stored at the end.
+            value (object) : Instance to be stored at the end.
 
         Example:
             >>> it = Itero(str, 2)
@@ -173,10 +173,10 @@ class Itero(Iterator):
             ...     print('NotImplemented')
             NotImplemented
         """
-        if self.MaxLen is not None and len(self) >= self.MaxLen:
+        if self.maxlen is not None and len(self) >= self.maxlen:
             raise NotImplementedError
-        assert isinstance(theValue, self.__streamKlass)
-        self.__stream.append(theValue)
+        assert isinstance(value, self.__stream_class)
+        self.__stream.append(value)
 
     def extend(self, theList):
         """Extends with the given list.
@@ -194,12 +194,12 @@ class Itero(Iterator):
             two
             three
         """
-        if self.MaxLen is not None and len(self) + len(theList) >= self.MaxLen:
+        if self.maxlen is not None and len(self) + len(theList) >= self.maxlen:
             raise NotImplementedError
         if type(theList) in [list, tuple]:
             _list = theList
             for x in _list:
-                assert isinstance(x, self.__streamKlass)
+                assert isinstance(x, self.__stream_class)
         elif isinstance(theList, self.__class__):
             _list = self._Itero__stream
         else:
@@ -220,11 +220,11 @@ class Itero(Iterator):
         """
         return self.__stream.pop()
 
-    def remove(self, theValue):
+    def remove(self, value):
         """Removes the given value from the instance.
 
         Args:
-            theValue (object) : Instance to be removed from the storage.
+            value (object) : Instance to be removed from the storage.
 
         Returns:
             bool : True if removed properly, False else.
@@ -238,9 +238,9 @@ class Itero(Iterator):
             >>> it.remove('one')
             False
         """
-        assert isinstance(theValue, self.__streamKlass)
+        assert isinstance(value, self.__stream_class)
         try:
-            index = self.__stream.index(theValue)
+            index = self.__stream.index(value)
             del self[index]
             return True
         except ValueError:
@@ -252,25 +252,25 @@ class StrItero(Iterator):
     iterator where indexes are strings instead of integers.
     """
 
-    def __init__(self, theStreamKlass, theProcessKey=None):
+    def __init__(self, stream_class, theProcessKey=None):
         """StrItero class initialization method.
 
         Args:
-            theStreamKlass (class) : class used for every entry.
+            stream_class (class) : class used for every entry.
 
-            theMaxLen (int) : maximum storage size.
+            maxlen (int) : maximum storage size.
         """
-        assert theStreamKlass
-        self.__streamKlass = theStreamKlass
+        assert stream_class
+        self.__stream_class = stream_class
         self.__index = 0
         self.__stream = OrderedDict()
         self.__processKey = theProcessKey
 
-    def __getitem__(self, theKey):
+    def __getitem__(self, key):
         """Allows retriving data using indexed values for the instance.
 
         Args:
-            theKey (str) : String to be used a indexed key.
+            key (str) : String to be used a indexed key.
 
         Returns:
             object : Instace stored in the given indexed key.
@@ -281,17 +281,17 @@ class StrItero(Iterator):
             >>> it['one']
             1
         """
-        assert isinstance(theKey, str)
-        key = self.__processKey(theKey) if self.__processKey else theKey
-        return OrderedDict.__getitem__(self.__stream, key)
+        assert isinstance(key, str)
+        key_ = self.__processKey(key) if self.__processKey else key
+        return OrderedDict.__getitem__(self.__stream, key_)
 
-    def __setitem__(self, theKey, theValue):
+    def __setitem__(self, key, value):
         """Allows updating data using indexed values for the instance.
 
         Args:
             thekey (str) : String to be used as indexed key.
 
-            theValue (object) : Instance to be stored at the given indexed key.
+            value (object) : Instance to be stored at the given indexed key.
 
         Example:
             >>> it = StrItero(int)
@@ -299,12 +299,12 @@ class StrItero(Iterator):
             >>> it['two']
             2
         """
-        assert isinstance(theKey, str)
-        assert isinstance(theValue, self.__streamKlass)
-        key = self.__processKey(theKey) if self.__processKey else theKey
-        OrderedDict.__setitem__(self.__stream, key, theValue)
+        assert isinstance(key, str)
+        assert isinstance(value, self.__stream_class)
+        key_ = self.__processKey(key) if self.__processKey else key
+        OrderedDict.__setitem__(self.__stream, key_, value)
 
-    def __delitem__(self, theKey):
+    def __delitem__(self, key):
         """Allows deleting data using indexed values for the instance.
 
         Args:
@@ -320,9 +320,9 @@ class StrItero(Iterator):
             >>> len(it)
             1
         """
-        assert isinstance(theKey, str)
-        key = self.__processKey(theKey) if self.__processKey else theKey
-        OrderedDict.__delitem__(self.__stream, key)
+        assert isinstance(key, str)
+        key_ = self.__processKey(key) if self.__processKey else key
+        OrderedDict.__delitem__(self.__stream, key_)
 
     def __iter__(self):
         """Allows iterating the instance (initialize the iteration).
@@ -408,13 +408,13 @@ class StrItero(Iterator):
         """
         return self.__stream.items()
 
-    def update(self, theKey, theValue):
+    def update(self, key, value):
         """Updates the instance with the given key-value pairs.
 
         Args:
             thekey (str) : String to be used as indexed key.
 
-            theValue (object) : Instance to be stored.
+            value (object) : Instance to be stored.
 
         Example:
             >>> it = StrItero(int)
@@ -422,10 +422,10 @@ class StrItero(Iterator):
             >>> it['one']
             1
         """
-        assert isinstance(theKey, str)
-        assert isinstance(theValue, self.__streamKlass)
-        key = self.__processKey(theKey) if self.__processKey else theKey
-        OrderedDict.update(self.__stream, {key: theValue})
+        assert isinstance(key, str)
+        assert isinstance(value, self.__stream_class)
+        key_ = self.__processKey(key) if self.__processKey else key
+        OrderedDict.update(self.__stream, {key_: value})
 
     def pop(self):
         """Retrieves and removes the last value from the instance.

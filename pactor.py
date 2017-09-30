@@ -3,13 +3,13 @@ from actor import Actor
 
 
 @staticmethod
-def isPlayer():
+def is_player():
     """Returns if the instance is an PActor.
     """
     return False
 
 
-BCell.isPlayer = isPlayer
+BCell.is_player = is_player
 
 
 class PActor(Actor):
@@ -17,13 +17,13 @@ class PActor(Actor):
     functionality for the player actor placed on the baord.
     """
 
-    def __init__(self, theX, theY, theName, **kwargs):
+    def __init__(self, x, y, name, **kwargs):
         """PActor class initialization method.
         """
-        super(PActor, self).__init__(theX, theY, theName, **kwargs)
-        self.Static = False
+        super(PActor, self).__init__(x, y, name, **kwargs)
+        self.static = False
 
-    def isPlayer(self):
+    def is_player(self):
         """Returns if the instance is an PActor.
         """
         return True

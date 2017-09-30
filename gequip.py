@@ -3,7 +3,7 @@ from action import Actions
 
 
 @staticmethod
-def isEquip():
+def is_equip():
     """Returns if the instance is a GEquip.
 
     Returns:
@@ -12,7 +12,7 @@ def isEquip():
     return False
 
 
-GItem.isEquip = isEquip
+GItem.is_equip = is_equip
 
 
 class EquipType(ItemType):
@@ -20,7 +20,7 @@ class EquipType(ItemType):
     """
 
     @staticmethod
-    def Name():
+    def name():
         """
         """
         return 'EQUIP'
@@ -29,48 +29,16 @@ class EquipType(ItemType):
 class GEquip(GItem):
     """
     """
-    GItem.addType(EquipType)
+    GItem.add_type(EquipType)
 
     def __init__(self, **kwargs):
         """GEquip class initialization method.
         """
         super(GEquip, self).__init__(**kwargs)
-        self._equipped = False
-        self._actions = Actions()
+        self.equipped = False
+        self.actions = Actions()
 
-    @property
-    def Equipped(self):
-        """Property for _equipped attribute.
-
-        :getter: Gets _equipped attribute value.
-        :setter: Sets _equipped attribute value.
-
-        Returns:
-            bool : True if equip is equipped
-
-        Example:
-            >>> eq = GEquip()
-            >>> eq.Equipped
-            False
-            >>> eq.Equipped = True
-            >>> eq.Equipped
-            True
-        """
-        return self._equipped
-
-    @Equipped.setter
-    def Equipped(self, theValue):
-        """Set property for _equipped attribute.
-        """
-        self._equipped = theValue
-
-    @property
-    def Actions(self):
-        """Gets _actions attribute value.
-        """
-        return self._actions
-
-    def isEquip(self):
+    def is_equip(self):
         """Returns if the instance is a GEquip.
 
         Returns:
@@ -78,34 +46,34 @@ class GEquip(GItem):
         """
         return True
 
-    def inEquipment(self, theHost):
+    def in_equipment(self, host):
         """Equips equipment items.
 
         Args:
-            theHost (Actor) : Actor where equip will be equipped.
+            host (Actor) : Actor where equip will be equipped.
 
         Returns:
             None
 
         Example:
             >>> class MyEquip(GEquip):
-            ...     def buffHost(self):
+            ...     def buff_host(self):
             ...         print('buff-host')
-            ...     def debuffHost(self):
+            ...     def debuff_host(self):
             ...         print('debuff-host')
             >>> eq = MyEquip()
-            >>> eq.Host, eq.Equipped
+            >>> eq.host, eq.equipped
             (None, False)
-            >>> eq.inEquipment('me')
+            >>> eq.in_equipment('me')
             buff-host
-            >>> eq.Host, eq.Equipped
+            >>> eq.host, eq.equipped
             ('me', True)
         """
-        self.Host = theHost
-        self.Equipped = True
-        self.buffHost()
+        self.host = host
+        self.equipped = True
+        self.buff_host()
 
-    def outEquipment(self):
+    def out_equipment(self):
         """Unequips equipment item.
 
         Returns:
@@ -113,20 +81,20 @@ class GEquip(GItem):
 
         Example:
             >>> class MyEquip(GEquip):
-            ...     def buffHost(self):
+            ...     def buff_host(self):
             ...         print('buff-host')
-            ...     def debuffHost(self):
+            ...     def debuff_host(self):
             ...         print('debuff-host')
             >>> eq = MyEquip()
-            >>> eq.inEquipment('me')
+            >>> eq.in_equipment('me')
             buff-host
-            >>> eq.Host, eq.Equipped
+            >>> eq.host, eq.equipped
             ('me', True)
-            >>> eq.outEquipment()
+            >>> eq.out_equipment()
             debuff-host
-            >>> eq.Host, eq.Equipped
+            >>> eq.host, eq.equipped
             (None, False)
         """
-        self.debuffHost()
-        self.Host = None
-        self.Equipped = False
+        self.debuff_host()
+        self.host = None
+        self.equipped = False

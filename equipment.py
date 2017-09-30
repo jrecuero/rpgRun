@@ -12,57 +12,57 @@ class Equipment(Catalog):
         """
         super(Equipment, self).__init__(GEquip, **kwargs)
 
-    def append(self, theEquip):
+    def append(self, equip):
         """Appends a new entry to the Equipment.
 
         Args:
-            theEquip (GEquip) : Equip instance to be added.
+            equip (GEquip) : Equip instance to be added.
 
         Returns:
             None
 
         Example:
             >>> class MyEquip(GEquip):
-            ...     def buffHost(self):
+            ...     def buff_host(self):
             ...         print('buff-host')
-            ...     def debuffHost(self):
+            ...     def debuff_host(self):
             ...         print('debuff-host')
-            >>> eqp = Equipment(theHost='me')
-            >>> myeq = MyEquip(theName='myeqpt')
-            >>> myeq.Name, myeq.Host, myeq.Equipped
+            >>> eqp = Equipment(host='me')
+            >>> myeq = MyEquip(name='myeqpt')
+            >>> myeq.name, myeq.host, myeq.equipped
             ('myeqpt', None, False)
             >>> eqp.append(myeq)
             buff-host
-            >>> myeq.Name, myeq.Host, myeq.Equipped
+            >>> myeq.name, myeq.host, myeq.equipped
             ('myeqpt', 'me', True)
         """
-        theEquip.inEquipment(self.Host)
-        super(Equipment, self).append(theEquip)
+        equip.in_equipment(self.host)
+        super(Equipment, self).append(equip)
 
-    def __delitem__(self, theName):
+    def __delitem__(self, name):
         """Allows deleting data using indexed values for the instance.
 
         Args:
-            theName (str) : Name of the equipment to be deleted.
+            name (str) : Name of the equipment to be deleted.
 
         Returns:
             None
 
         Example:
             >>> class MyEquip(GEquip):
-            ...     def buffHost(self):
+            ...     def buff_host(self):
             ...         print('buff-host')
-            ...     def debuffHost(self):
+            ...     def debuff_host(self):
             ...         print('debuff-host')
-            >>> eqp = Equipment(theHost='me')
-            >>> myeq = MyEquip(theName='myeqpt')
+            >>> eqp = Equipment(host='me')
+            >>> myeq = MyEquip(name='myeqpt')
             >>> eqp.append(myeq)
             buff-host
-            >>> myeq.Name, myeq.Host, myeq.Equipped
+            >>> myeq.name, myeq.host, myeq.equipped
             ('myeqpt', 'me', True)
             >>> del eqp['myeqpt']
             debuff-host
-            >>> myeq.Name, myeq.Host, myeq.Equipped
+            >>> myeq.name, myeq.host, myeq.equipped
             ('myeqpt', None, False)
             >>> eqp.append(myeq)
             buff-host
@@ -70,6 +70,6 @@ class Equipment(Catalog):
             debuff-host
             True
         """
-        equip = self[theName]
-        equip.outEquipment()
-        super(Equipment, self).__delitem__(theName)
+        equip = self[name]
+        equip.out_equipment()
+        super(Equipment, self).__delitem__(name)
