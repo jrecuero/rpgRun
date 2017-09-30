@@ -3,18 +3,17 @@ class Range(object):
     maximum value.
     """
 
-    def __init__(self, theMin, theMax):
+    def __init__(self, minimun, maximun):
         """Range class initialization method.
 
         Args:
-            theMin (int) : minimum value for the range.
-            theMax (int) : maximum value for the range.
+            minimun (int) : minimum value for the range.
+            maximun (int) : maximum value for the range.
         """
-        self._min = int(theMin)
-        self._max = int(theMax)
+        self._min = int(minimun)
+        self._max = int(maximun)
 
-    @property
-    def Min(self):
+    def get_min(self):
         """Property that returns the _min attribute.
 
         Returns:
@@ -22,29 +21,10 @@ class Range(object):
         """
         return self._min
 
-    @Min.setter
-    def Min(self, theValue):
-        """Property that sets a new value for the _min attribute.
-
-        Args:
-            theValue (int) : new minimum range attribute.
-        """
-        self._min = int(theValue)
-
-    @property
-    def Max(self):
+    def get_max(self):
         """Property that returns the _max attribute.
 
         Returns:
             int : maximum range attribute.
         """
         return self._max
-
-    @Max.setter
-    def Max(self, theValue):
-        """Property that sets a new value for the _max attribute.
-
-        Args:
-            theValue (int) : new maximum range attribute.
-        """
-        self._max = int(theValue)

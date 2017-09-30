@@ -3,13 +3,13 @@ from attr import Attributes
 
 
 @staticmethod
-def isObject():
+def is_object():
     """Returns if the instance is a BObject.
     """
     return False
 
 
-BCell.isObject = isObject
+BCell.is_object = is_object
 
 
 class BObject(BCell):
@@ -21,65 +21,59 @@ class BObject(BCell):
         """BObject class initialization method.
         """
         super(BObject, self).__init__(theX, theY, theName, **kwargs)
-        self._attrs = Attributes()
-        self.Walkable = False
+        self.attrs = Attributes()
+        self.walkable = False
 
-    def __getattr__(self, theAttr):
-        """Overwrite __getattr__ method allowing to access values inside _attrs
+    def __getattr__(self, attr):
+        """Overwrite __getattr__ method allowing to access values inside attrs
         as regular instance attributes.
 
         >>> from attr import Attr
         >>> obj = BObject(0, 0, 'new')
-        >>> obj.addAttr(Attr('HP'))
+        >>> obj.add_attr(Attr('HP'))
         HP: 0/0
         >>> obj.HP
         0
         """
-        if '_attrs' in self.__dict__ and theAttr in self.__dict__['_attrs']:
-            return self._attrs[theAttr].Now
+        if 'attrs' in self.__dict__ and attr in self.__dict__['attrs']:
+            return self.attrs[attr].now
         return AttributeError
 
-    def __setattr__(self, theAttr, theValue):
-        """Overwrite __setattr__ method so values from _attrs can not be
+    def __setattr__(self, attr, value):
+        """Overwrite __setattr__ method so values from attrs can not be
         modified as instance attributes.
         """
-        if '_attrs' in self.__dict__ and theAttr in self.__dict__['_attrs']:
+        if 'attrs' in self.__dict__ and attr in self.__dict__['attrs']:
             raise AttributeError
         else:
-            super(BObject, self).__setattr__(theAttr, theValue)
+            super(BObject, self).__setattr__(attr, value)
 
-    @property
-    def Attrs(self):
-        """Gets _attrs attribute value.
-        """
-        return self._attrs
-
-    def addAttr(self, theAttr):
-        """Add a new attribute to the Attrs attribute.
+    def add_attr(self, attr):
+        """Add a new attribute to the attrs attribute.
 
         >>> from attr import Attr
         >>> obj = BObject(0, 0, 'new')
-        >>> obj.addAttr(Attr('HP'))
+        >>> obj.add_attr(Attr('HP'))
         HP: 0/0
-        >>> obj.Attrs
+        >>> obj.attrs
         HP: 0/0
         """
-        return self.Attrs.addAttr(theAttr)
+        return self.attrs.add_attr(attr)
 
-    def isObject(self):
+    def is_object(self):
         """Returns if the instance is a BObject.
 
         >>> obj = BObject(0, 0, 'new')
-        >>> obj.isObject()
+        >>> obj.is_object()
         True
         """
         return True
 
-    def isInBoard(self):
+    def is_in_board(self):
         """Returns if the object is still in the board.
 
         >>> obj = BObject(0, 0, 'new')
-        >>> obj.isInBoard()
+        >>> obj.is_in_board()
         True
         """
         return True

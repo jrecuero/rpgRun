@@ -6,18 +6,18 @@ class Attr(object):
     """Attr Class contains all data related with a board object attribute.
     """
 
-    def __init__(self, theName):
+    def __init__(self, name):
         """Attr class initialization method.
         """
-        self._name = theName
-        self._desc = None
-        self._base = 0
-        self._now = 0
-        self._delta = 0
-        self._buffs = {}
+        self.name = name
+        self.desc = ''
+        self.base = 0
+        self.__now = 0
+        self.delta = 0
+        self.buffs = {}
 
     @classmethod
-    def createAttr(cls, theAttrData):
+    def create_attr(cls, attr_data):
         """Create an attribute from the passed data.
 
         Attribute data passed is a list with this format:
@@ -33,246 +33,149 @@ class Attr(object):
         Last entry with  buffs can be repeated as many times as required.
 
         Args:
-            theAttrData (:class:`list`) : Attribute parameters
+            attr_data (:class:`list`) : Attribute parameters
 
         Returns:
             Attr : New attribute instance.
         """
-        assert type(theAttrData) in [list, tuple]
-        assert len(theAttrData) >= 3, theAttrData
-        assert len(theAttrData) <= 4, theAttrData
-        _attrName = theAttrData[0]
-        _attrBase = theAttrData[1]
-        _attrDelta = theAttrData[2]
-        _attrBuff = theAttrData[3] if len(theAttrData) == 4 else None
-        _attr = cls(_attrName)
-        _attr.setupAttr(_attrBase, _attrDelta, _attrBuff)
-        return _attr
+        assert type(attr_data) in [list, tuple]
+        assert len(attr_data) >= 3, attr_data
+        assert len(attr_data) <= 4, attr_data
+        attr_name = attr_data[0]
+        attr_base = attr_data[1]
+        attr_delta = attr_data[2]
+        attr_buff = attr_data[3] if len(attr_data) == 4 else None
+        attr = cls(attr_name)
+        attr.setup_attr(attr_base, attr_delta, attr_buff)
+        return attr
 
     @property
-    def Name(self):
-        """Gets _name attribute value.
-
-        >>> at = Attr('new')
-        >>> at.Name
-        'new'
-        """
-        return self._name
-
-    @Name.setter
-    def Name(self, theValue):
-        """Sets _name attribute value.
+    def now(self):
+        """Gets now value which is function of Base, Buffs and __now attributes.
 
         >>> at = Attr('old')
-        >>> at.Name
-        old
-        >>> at.Name = 'new'
-        >>> at.Name
-        'new'
-        """
-        self._name = theValue
-
-    @property
-    def Desc(self):
-        """Gets _desc attribute value.
-
-        Returns:
-            str : _desc attribute, or empty string if _desc is None.
-
-        >>> at = Attr('new')
-        >>> at.Desc
-        ''
-        >>> at.Desc = 'new attribute'
-        >>> at.Desc
-        'new attribute'
-        """
-        return self._desc if self._desc is not None else ''
-
-    @Desc.setter
-    def Desc(self, theValue):
-        """Sets _desc attribute value.
-        """
-        self._desc = theValue
-
-    @property
-    def Base(self):
-        """Gets _base attribute value.
-
-        >>> at = Attr('old')
-        >>> at.Base
-        0
-        """
-        return self._base
-
-    @Base.setter
-    def Base(self, theValue):
-        """Sets _base attribute value.
-
-        >>> at = Attr('old')
-        >>> at.Base = 10
-        >>> at.Base
-        10
-        """
-        self._base = theValue
-
-    @property
-    def Delta(self):
-        """Gets _delta attribute value.
-
-        >>> at = Attr('old')
-        >>> at.Delta
-        0
-        """
-        return self._delta
-
-    @Delta.setter
-    def Delta(self, theValue):
-        """Sets _delta attribute value.
-
-        >>> at = Attr('old')
-        >>> at.Delta = 1
-        >>> at.Delta
-        1
-        """
-        self._delta = theValue
-
-    @property
-    def Buffs(self):
-        """Gets _buffs attribute value.
-
-        >>> at = Attr('old')
-        >>> at.Buffs
-        {}
-        """
-        return self._buffs
-
-    @property
-    def Now(self):
-        """Gets Now value which is function of Base, Buffs and _now attributes.
-
-        >>> at = Attr('old')
-        >>> at.Base = 5
-        >>> at.Now
+        >>> at.base = 5
+        >>> at.now
         5
         """
-        return self.Base + sum(self.Buffs.values()) + self._now
+        return self.base + sum(self.buffs.values()) + self.__now
 
-    def dec(self, theValue):
-        """Decrements _now attribute a given value.
+    def dec(self, value):
+        """Decrements __now attribute a given value.
 
         >>> at = Attr('new')
-        >>> at.Base = 10
+        >>> at.base = 10
         >>> at.dec(1)
-        >>> at.Now
+        >>> at.now
         9
         """
-        self._now -= theValue
+        self.__now -= value
 
-    def inc(self, theValue):
-        """Increments _now attribute a given value.
+    def inc(self, value):
+        """Increments __now attribute a given value.
 
         >>> at = Attr('new')
-        >>> at.Base = 10
+        >>> at.base = 10
         >>> at.inc(2)
-        >>> at.Now
+        >>> at.now
         12
         """
-        self._now += theValue
+        self.__now += value
 
-    def addBuff(self, theName, theValue):
+    def add_buff(self, name, value):
         """Adds a new value to Buffs attribute.
 
         >>> at = Attr('old')
-        >>> at.addBuff('st', 5)
+        >>> at.add_buff('st', 5)
         True
-        >>> at.addBuff('dx', 3)
+        >>> at.add_buff('dx', 3)
         True
-        >>> at.Buffs
+        >>> at.buffs
         {'st': 5, 'dx': 3}
-        >>> at.Now
+        >>> at.now
         8
         """
-        self._buffs.update({theName: theValue})
+        self.buffs.update({name: value})
         return True
 
-    def delBuff(self, theName):
+    def del_buff(self, name):
         """Deletes a value from Buffs attribute.
 
         >>> at = Attr('old')
-        >>> at.addBuff('st', 5)
+        >>> at.add_buff('st', 5)
         True
-        >>> at.addBuff('dx', 3)
+        >>> at.add_buff('dx', 3)
         True
-        >>> at.Buffs
+        >>> at.buffs
         {'st': 5, 'dx': 3}
-        >>> at.delBuff('st')
+        >>> at.del_buff('st')
         True
-        >>> at.Buffs
+        >>> at.buffs
         {'dx': 3}
         """
-        del self.Buffs[theName]
+        del self.buffs[name]
         return True
 
-    def levelUp(self, theLevel=1):
+    def level_up(self, level_val=1):
         """Levels up the attribute a given number of times.
 
-        For every level the Base value in incremented a Delta value.
+        For every level the Base value in incremented a delta value.
 
         >>> at = Attr('old')
-        >>> at.Base = 10
-        >>> at.Delta = 2
-        >>> at.Base
+        >>> at.base = 10
+        >>> at.delta = 2
+        >>> at.base
         10
-        >>> at.levelUp()
-        >>> at.Base
+        >>> at.level_up()
+        >>> at.base
         12
-        >>> at.levelUp(3)
-        >>> at.Base
+        >>> at.level_up(3)
+        >>> at.base
         18
         """
-        for _ in range(abs(theLevel)):
-            self.Base += self.Delta * int(theLevel / abs(theLevel))
+        for _ in range(abs(level_val)):
+            self.base += self.delta * int(level_val / abs(level_val))
 
-    def setupAttr(self, theBase=None, theDelta=None, theBuffs=None):
-        """Setups instance with given Base, Delta and Buffs values.
+    def setup_attr(self, base=None, delta=None, buffs=None):
+        """Setups instance with given base, delta and buffs values.
 
         >>> at = Attr('new')
-        >>> at, at.Delta, at.Buffs
+        >>> at, at.delta, at.buffs
         (new: 0/0, 0, {})
-        >>> at.setupAttr(), at.Delta, at.Buffs
+        >>> at.setup_attr(), at.delta, at.buffs
         (new: 0/0, 0, {})
-        >>> at.setupAttr(10), at.Delta, at.Buffs
+        >>> at.setup_attr(10), at.delta, at.buffs
         (new: 10/10, 0, {})
-        >>> at.setupAttr(5, 1), at.Delta, at.Buffs
+        >>> at.setup_attr(5, 1), at.delta, at.buffs
         (new: 5/5, 1, {})
-        >>> at.setupAttr(10, None, {'st': 1}), at.Delta, at.Buffs
+        >>> at.setup_attr(10, None, {'st': 1}), at.delta, at.buffs
         (new: 11/10, 1, {'st': 1})
-        >>> at.setupAttr(None, 5, {'ag': 2}), at.Delta, at.Buffs
+        >>> at.setup_attr(None, 5, {'ag': 2}), at.delta, at.buffs
         (new: 13/10, 5, {'st': 1, 'ag': 2})
         """
-        self.Base = theBase if theBase is not None else self.Base
-        self.Delta = theDelta if theDelta is not None else self.Delta
-        if theBuffs is not None and isinstance(theBuffs, dict):
-            self.Buffs.update(theBuffs)
+        self.base = base if base is not None else self.base
+        self.delta = delta if delta is not None else self.delta
+        if buffs is not None and isinstance(buffs, dict):
+            self.buffs.update(buffs)
         return self
 
-    def setupAttrFromJSON(self, theJSON):
+    def setup_attr_from_json(self, json_data):
         """Setups instance with values from a JSON variable.
 
         >>> at = Attr('new')
-        >>> at, at.Delta, at.Buffs
+        >>> at, at.delta, at.buffs
         (new: 0/0, 0, {})
         >>> data = '{"base": 10, "delta": 1, "buffs": "None"}'
-        >>> at.setupAttrFromJSON(data), at.Delta, at.Buffs
+        >>> at.setup_attr_from_json(data), at.delta, at.buffs
         (new: 10/10, 1, {})
         >>> data = '{"base": "None", "delta": 5, "buffs": {"one": 4}}'
-        >>> at.setupAttrFromJSON(data), at.Delta, at.Buffs
+        >>> at.setup_attr_from_json(data), at.delta, at.buffs
         (new: 14/10, 5, {'one': 4})
         """
-        dicta = json.loads(theJSON)
-        return self.setupAttr(int(dicta['base']) if dicta['base'] != "None" else None,
-                              int(dicta['delta']) if dicta['delta'] != "None" else None,
-                              dicta['buffs'] if dicta['buffs'] != 'None' else None)
+        dicta = json.loads(json_data)
+        return self.setup_attr(int(dicta['base']) if dicta['base'] != "None" else None,
+                               int(dicta['delta']) if dicta['delta'] != "None" else None,
+                               dicta['buffs'] if dicta['buffs'] != 'None' else None)
 
     def __repr__(self):
         """Instace string representation.
@@ -281,7 +184,7 @@ class Attr(object):
         >>> at
         old: 0/0
         """
-        return '{0}: {1}/{2}'.format(self.Name, self.Now, self.Base)
+        return '{0}: {1}/{2}'.format(self.name, self.now, self.base)
 
 
 class Attributes(StrItero):
@@ -293,14 +196,14 @@ class Attributes(StrItero):
 
         >>> ats = Attributes()
         >>> ats['hp'] = Attr('hp')
-        >>> ats['hp'].Name
+        >>> ats['hp'].name
         'hp'
-        >>> ats['HP'].Name
+        >>> ats['HP'].name
         'hp'
         >>> ats['MP'] = Attr('mp')
-        >>> ats['mp'].Name
+        >>> ats['mp'].name
         'mp'
-        >>> ats['MP'].Name
+        >>> ats['MP'].name
         'mp'
         >>> del ats['hp']
         >>> try:
@@ -311,137 +214,137 @@ class Attributes(StrItero):
         """
         super(Attributes, self).__init__(Attr, self._buildAttrName)
 
-    def _buildAttrName(self, theName):
+    def _buildAttrName(self, name):
         """Builds the name used to identify an attribute.
 
         >>> ats = Attributes()
         >>> ats._buildAttrName('new')
         'NEW'
         """
-        return '{0}'.format(theName.upper())
+        return '{0}'.format(name.upper())
 
-    def addAttr(self, theAttr):
+    def add_attr(self, attr):
         """Adds a new attribute.
 
         >>> ats = Attributes()
-        >>> ats.addAttr(Attr('hp'))
+        >>> ats.add_attr(Attr('hp'))
         hp: 0/0
-        >>> ats['hp'].Name
+        >>> ats['hp'].name
         'hp'
-        >>> ats['HP'].Name
+        >>> ats['HP'].name
         'hp'
         """
-        self[theAttr.Name] = theAttr
-        return theAttr
+        self[attr.name] = attr
+        return attr
 
-    def setupAttrs(self, theAttrs):
+    def setup_attrs(self, attrs):
         """Adds all attributes given in the passed list.
 
         >>> ats = Attributes()
-        >>> ats.setupAttrs([Attr('hp'), Attr('mp')])
+        >>> ats.setup_attrs([Attr('hp'), Attr('mp')])
         >>> ats
         hp: 0/0
         mp: 0/0
         """
-        for attrib in theAttrs:
-            self.addAttr(attrib)
+        for attrib in attrs:
+            self.add_attr(attrib)
 
-    def setupAttrsByName(self, theNames):
+    def setup_attrs_by_name(self, names):
         """Adds all attributes in the list, which provides just the
         attribute name.
 
         >>> ats = Attributes()
-        >>> ats.setupAttrsByName(['hp', 'mp'])
+        >>> ats.setup_attrs_by_name(['hp', 'mp'])
         >>> ats
         hp: 0/0
         mp: 0/0
         """
-        for name in theNames:
-            self.addAttr(Attr(name))
+        for name in names:
+            self.add_attr(Attr(name))
 
-    def setupAttrsFromList(self, theList):
+    def setup_attrs_from_list(self, lista):
         """Setups attributes from teh given list.
 
         >>> ats = Attributes()
         >>> data = [("hp", 10, 2), ("mp", 5, 1, {'one': 2})]
-        >>> ats.setupAttrsFromList(data)
+        >>> ats.setup_attrs_from_list(data)
         >>> ats
         hp: 10/10
         mp: 7/5
-        >>> ats['HP'].Delta
+        >>> ats['HP'].delta
         2
-        >>> ats['mp'].Delta
+        >>> ats['mp'].delta
         1
         """
-        for entry in theList:
-            self.addAttr(Attr.createAttr(entry))
+        for entry in lista:
+            self.add_attr(Attr.create_attr(entry))
 
-    def setupAttrsFromJSON(self, theJSON):
+    def setup_attrs_from_json(self, json_data):
         """Setups attributes from the given JSON variable.
 
         >>> ats = Attributes()
         >>> data = '[{"hp": {"base": 10, "delta": 2, "buffs": "none"}},\
                 {"mp": {"base": 5, "delta": 1, "buffs": {"one": 2}}}]'
-        >>> ats.setupAttrsFromJSON(data)
+        >>> ats.setup_attrs_from_json(data)
         >>> ats
         hp: 10/10
         mp: 7/5
-        >>> ats['HP'].Delta
+        >>> ats['HP'].delta
         2
-        >>> ats['mp'].Delta
+        >>> ats['mp'].delta
         1
         """
-        lista = json.loads(theJSON)
+        lista = json.loads(json_data)
         for entry in lista:
             k = list(entry.keys())[0]
             v = json.dumps(list(entry.values())[0])
-            self.addAttr(Attr(k)).setupAttrFromJSON(v)
+            self.add_attr(Attr(k)).setup_attr_from_json(v)
 
-    def setupAttrsFromFile(self, theFile):
+    def setup_attrs_from_file(self, filename):
         """Setups instance from teh values in the given JSON file.
         """
-        with open(theFile, 'r') as file:
+        with open(filename, 'r') as file:
             data = json.load(file)
-        self.setupAttrsFromJSON(json.dumps(data))
+        self.setup_attrs_from_json(json.dumps(data))
 
-    def levelUp(self, theLevel=1):
+    def level_up(self, level_val=1):
         """Levels up all attributes stored a given number of times.
 
         >>> ats = Attributes()
         >>> hp = Attr('hp')
-        >>> hp.Base = 10
-        >>> hp.Delta = 3
-        >>> ats.addAttr(hp)
+        >>> hp.base = 10
+        >>> hp.delta = 3
+        >>> ats.add_attr(hp)
         hp: 10/10
         >>> mp = Attr('mp')
-        >>> mp.Base = 5
-        >>> mp.Delta = 2
-        >>> ats.addAttr(mp)
+        >>> mp.base = 5
+        >>> mp.delta = 2
+        >>> ats.add_attr(mp)
         mp: 5/5
-        >>> ats.levelUp()
+        >>> ats.level_up()
         True
-        >>> hp.Base
+        >>> hp.base
         13
-        >>> mp.Base
+        >>> mp.base
         7
-        >>> ats.levelUp(2)
+        >>> ats.level_up(2)
         True
-        >>> hp.Base
+        >>> hp.base
         19
-        >>> mp.Base
+        >>> mp.base
         11
         """
         for attr in self:
-            attr.levelUp(theLevel)
+            attr.level_up(level_val)
         return True
 
     def __repr__(self):
         """Instance string representation.
 
         >>> ats = Attributes()
-        >>> ats.addAttr(Attr('hp'))
+        >>> ats.add_attr(Attr('hp'))
         hp: 0/0
-        >>> ats.addAttr(Attr('mp'))
+        >>> ats.add_attr(Attr('mp'))
         mp: 0/0
         >>> ats
         hp: 0/0

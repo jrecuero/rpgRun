@@ -14,42 +14,32 @@ class Board(Itero):
     Width of the board.
     """
 
-    def __init__(self, theHeight, theWidth):
+    def __init__(self, height, width):
         """Board class initialization method.
 
         >>> board = Board(10, 5)
-        >>> board.MaxLen
+        >>> board.maxlen
         10
         """
-        super(Board, self).__init__(BRow, theHeight)
+        super(Board, self).__init__(BRow, height)
         self._Itero__stream = deque()
-        self._width = theWidth
-        for i in range(self.MaxLen):
-            self.appendleft(BRow(self._width))
+        self.width = width
+        for i in range(self.maxlen):
+            self.appendleft(BRow(self.width))
 
     @property
-    def Height(self):
+    def height(self):
         """Gets _maxlen attribute value.
 
         >>> board = Board(10, 5)
-        >>> board.Height
+        >>> board.height
         10
         """
-        return self.MaxLen
+        return self.maxlen
 
     @property
-    def Width(self):
-        """Gets _width attribute value.
-
-        >>> board = Board(10, 5)
-        >>> board.Width
-        5
-        """
-        return self._width
-
-    @property
-    def TopCellRow(self):
-        """Gets the CellRow value for the top row in the board.
+    def top_cell_row(self):
+        """Gets the cellrow value for the top row in the board.
 
         Returns:
             int : Integer with the top cell row.
@@ -59,21 +49,21 @@ class Board(Itero):
             >>> from blayer import LType
             >>> board = Board(5, 5)
             >>> row = BRow(5)
-            >>> row.addCellToLayer(BCell(0, 0, None), LType.SURFACE)
+            >>> row.add_cell_to_layer(BCell(0, 0, None), LType.SURFACE)
             True
             >>> board.appendleft(row)
             >>> row = BRow(5)
-            >>> row.addCellToLayer(BCell(0, 1, None), LType.SURFACE)
+            >>> row.add_cell_to_layer(BCell(0, 1, None), LType.SURFACE)
             True
             >>> board.appendleft(row)
-            >>> board.TopCellRow
+            >>> board.top_cell_row
             1
         """
-        return self[0].CellRow
+        return self[0].cellrow
 
     @property
-    def BottomCellRow(self):
-        """Gets the CellRow value for the bottom row in the board.
+    def bottom_cell_row(self):
+        """Gets the cellrow value for the bottom row in the board.
 
         Returns:
             int : Integer with the bottom cell row.
@@ -83,31 +73,31 @@ class Board(Itero):
             >>> from blayer import LType
             >>> board = Board(3, 5)
             >>> row = BRow(5)
-            >>> row.addCellToLayer(BCell(0, 0, None), LType.SURFACE)
+            >>> row.add_cell_to_layer(BCell(0, 0, None), LType.SURFACE)
             True
             >>> board.appendleft(row)
             >>> row = BRow(5)
-            >>> row.addCellToLayer(BCell(0, 1, None), LType.SURFACE)
+            >>> row.add_cell_to_layer(BCell(0, 1, None), LType.SURFACE)
             True
             >>> board.appendleft(row)
             >>> row = BRow(5)
-            >>> row.addCellToLayer(BCell(0, 2, None), LType.SURFACE)
+            >>> row.add_cell_to_layer(BCell(0, 2, None), LType.SURFACE)
             True
             >>> board.appendleft(row)
-            >>> board.BottomCellRow
+            >>> board.bottom_cell_row
             0
             >>> row = BRow(5)
-            >>> row.addCellToLayer(BCell(0, 3, None), LType.SURFACE)
+            >>> row.add_cell_to_layer(BCell(0, 3, None), LType.SURFACE)
             True
             >>> board.scroll(row)
-            >>> board.BottomCellRow
+            >>> board.bottom_cell_row
             1
-            >>> board.TopCellRow
+            >>> board.top_cell_row
             3
         """
-        return self[self.MaxLen - 1].CellRow
+        return self[self.maxlen - 1].cellrow
 
-    def scroll(self, theNewRow):
+    def scroll(self, new_row):
         """Scrolls the board, removing the row at the bottom (right) and
         adding a new row at the top (left).
 
@@ -133,11 +123,11 @@ class Board(Itero):
         >>> board[2] == row2
         True
         """
-        assert isinstance(theNewRow, BRow)
+        assert isinstance(new_row, BRow)
         self._Itero__stream.pop()
-        self._Itero__stream.appendleft(theNewRow)
+        self._Itero__stream.appendleft(new_row)
 
-    def appendleft(self, theNewRow):
+    def appendleft(self, new_row):
         """Appends a new row to the left (top).
 
         >>> board = Board(5, 5)
@@ -150,9 +140,9 @@ class Board(Itero):
         >>> board[1] == row1
         True
         """
-        self._Itero__stream.appendleft(theNewRow)
+        self._Itero__stream.appendleft(new_row)
 
-    def append(self, theNewRow):
+    def append(self, new_row):
         """Appends a new row to the right. Not Allowed.
 
         >>> board = Board(5, 5)
@@ -164,74 +154,74 @@ class Board(Itero):
         """
         raise NotImplementedError
 
-    def getRowFromCellRow(self, theCellRow):
-        """Gets the row for the given CellRow.
+    def get_row_from_cell_row(self, cellrow):
+        """Gets the row for the given cellrow.
 
         >>> board = Board(2, 5)
-        >>> board[0].CellRow = 1
-        >>> board.getRowFromCellRow(1).CellRow
+        >>> board[0].cellrow = 1
+        >>> board.get_row_from_cell_row(1).cellrow
         1
-        >>> board.getRowFromCellRow(3)
+        >>> board.get_row_from_cell_row(3)
         """
         for row in self:
-            if row.CellRow == theCellRow:
+            if row.cellrow == cellrow:
                 return row
         return None
 
-    def getIndexFromCellRow(self, theCellRow):
-        """Gets the row index for the given CellRow.
+    def get_index_from_cell_row(self, cellrow):
+        """Gets the row index for the given cellrow.
 
         >>> board = Board(2, 5)
-        >>> board[0].CellRow = 1
-        >>> board.getIndexFromCellRow(1)
+        >>> board[0].cellrow = 1
+        >>> board.get_index_from_cell_row(1)
         0
-        >>> board.getRowFromCellRow(3)
+        >>> board.get_row_from_cell_row(3)
         """
         for index, row in enumerate(self):
-            if row.CellRow == theCellRow:
+            if row.cellrow == cellrow:
                 return index
         return None
 
-    def getRowFromCell(self, theCell):
+    def get_row_from_cell(self, cell):
         """Gets the row for the given Cell..
 
         >>> from bcell import BCell
         >>> board = Board(2, 5)
-        >>> board[0].CellRow = 1
-        >>> board.getRowFromCell(BCell(0, 1, None)).CellRow
+        >>> board[0].cellrow = 1
+        >>> board.get_row_from_cell(BCell(0, 1, None)).cellrow
         1
-        >>> board.getRowFromCellRow(BCell(0, 3, None))
+        >>> board.get_row_from_cell_row(BCell(0, 3, None))
         """
-        return self.getRowFromCellRow(theCell.Y)
+        return self.get_row_from_cell_row(cell.y)
 
-    def getIndexFromCell(self, theCell):
+    def get_index_from_cell(self, cell):
         """Gets the row index for the given Cell.
 
         >>> from bcell import BCell
         >>> board = Board(2, 5)
-        >>> board[0].CellRow = 1
-        >>> board.getIndexFromCell(BCell(0, 1, None))
+        >>> board[0].cellrow = 1
+        >>> board.get_index_from_cell(BCell(0, 1, None))
         0
-        >>> board.getRowFromCellRow(BCell(0, 3, None))
+        >>> board.get_row_from_cell_row(BCell(0, 3, None))
         """
-        return self.getIndexFromCellRow(theCell.Y)
+        return self.get_index_from_cell_row(cell.y)
 
-    def getCellsFromLayer(self, theLayers):
+    def get_cells_from_layer(self, layers):
         """Gets all cell for the given layer.
 
         """
         cells  = []
         for row in self:
-            cellsFromRow = row.getCellsFromLayer(theLayers)
+            cellsFromRow = row.get_cells_from_layer(layers)
             if cellsFromRow:
                 cells.extend(cellsFromRow)
         return cells
 
-    def getCellById(self, theId):
+    def get_cell_by_id(self, id):
         """Returns a cell by the given ID.
 
         Args:
-            theId (int) : Integer with the cell ID.
+            id (int) : Integer with the cell ID.
 
         Returns:
             BCell : Cell instance with the given ID. None if no cell\
@@ -244,53 +234,53 @@ class Board(Itero):
             >>> row = BRow(5)
             >>> c1 = BCell(0, 0, None)
             >>> c2 = BCell(1, 0, None)
-            >>> row.addCellToLayer(c1, LType.SURFACE)
+            >>> row.add_cell_to_layer(c1, LType.SURFACE)
             True
-            >>> row.addCellToLayer(c2, LType.SURFACE)
+            >>> row.add_cell_to_layer(c2, LType.SURFACE)
             True
             >>> board.appendleft(row)
-            >>> row.getCellById(c1.Id) == c1
+            >>> row.get_cell_by_id(c1.id) == c1
             True
         """
         for _row in self:
-            _cell = _row.getCellById(theId)
+            _cell = _row.get_cell_by_id(id)
             if _cell is not None:
                 return _cell
         return None
 
-    def addCellToLayer(self, theCell, theLayer):
+    def add_cell_to_layer(self, cell, layer):
         """Adds a new cell to the given layer.
 
         >>> from bcell import BCell
         >>> from blayer import LType
         >>> board = Board(2, 5)
-        >>> board[0].CellRow = 0
-        >>> board.addCellToLayer(BCell(0, 0, None), LType.SURFACE)
+        >>> board[0].cellrow = 0
+        >>> board.add_cell_to_layer(BCell(0, 0, None), LType.SURFACE)
         True
         >>> board[0][LType.SURFACE.value]
         [LType.SURFACE]  <0>   cell# 1
         """
-        row = self.getRowFromCellRow(theCell.Row)
-        return row.addCellToLayer(theCell, theLayer)
+        row = self.get_row_from_cell_row(cell.row)
+        return row.add_cell_to_layer(cell, layer)
 
-    def removeCell(self, theCell):
+    def remove_cell(self, cell):
         """Removes a cell from the board.
 
         >>> from bcell import BCell
         >>> from blayer import LType
         >>> board = Board(2, 5)
-        >>> board[0].CellRow = 0
+        >>> board[0].cellrow = 0
         >>> cell = BCell(0, 0, None)
-        >>> board.addCellToLayer(cell, LType.SURFACE)
+        >>> board.add_cell_to_layer(cell, LType.SURFACE)
         True
-        >>> board.removeCell(cell)
+        >>> board.remove_cell(cell)
         True
         >>> board[0][LType.SURFACE.value]
         [LType.SURFACE]  <0>   cell# 0
         """
-        cellLayer = theCell.Layer
-        row = self.getRowFromCellRow(theCell.Row)
-        return row.removeCellFromLayer(theCell, cellLayer)
+        cell_layer = cell.Layer
+        row = self.get_row_from_cell_row(cell.row)
+        return row.remove_cell_from_layer(cell, cell_layer)
 
     def render(self, **kwargs):
         """Render the board.
@@ -299,7 +289,7 @@ class Board(Itero):
         """
         st = ''
         for row in self:
-            st += '{0} {1}\n'.format(row.CellRow, row.render(**kwargs))
+            st += '{0} {1}\n'.format(row.cellrow, row.render(**kwargs))
         return st
 
     def __repr__(self):

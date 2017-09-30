@@ -4,6 +4,6 @@ from bobject import BObject
 
 class Pillar(BObject):
 
-    def __init__(self, theX, theY, theWidth, **kwargs):
-        super(Pillar, self).__init__(theX, theY, 'PILLAR', **kwargs)
-        self.Sprite = BSprite(theSprText='|||||||', theWidth=theWidth, theColor="\x1b[44m")
+    def __init__(self, x, y, width, **kwargs):
+        super(Pillar, self).__init__(x, y, 'PILLAR', **kwargs)
+        self.sprite = BSprite(spr_text='|||||||', width=width, color="\x1b[44m")

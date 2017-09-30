@@ -4,6 +4,6 @@ from bsurface import BSurface
 
 class GreenSurface(BSurface):
 
-    def __init__(self, theX, theY, theWidth, **kwargs):
-        super(GreenSurface, self).__init__(theX, theY, '*', **kwargs)
-        self.Sprite = BSprite(theSprText=' ', theColor='\x1b[42m', theWidth=theWidth)
+    def __init__(self, x, y, width, **kwargs):
+        super(GreenSurface, self).__init__(x, y, '*', **kwargs)
+        self.sprite = BSprite(spr_text=' ', color='\x1b[42m', width=width)

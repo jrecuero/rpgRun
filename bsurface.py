@@ -2,13 +2,13 @@ from bcell import BCell
 
 
 @staticmethod
-def isSurface():
+def is_surface():
     """Returns if the instance is a BSurface.
     """
     return False
 
 
-BCell.isSurface = isSurface
+BCell.is_surface = is_surface
 
 
 class BSurface(BCell):
@@ -16,13 +16,13 @@ class BSurface(BCell):
     functionality for cells in the SURFACE layer.
     """
 
-    def __init__(self, theX, theY, theName, **kwargs):
+    def __init__(self, x, y, name, **kwargs):
         """BSurface class initialization method.
         """
-        super(BSurface, self).__init__(theX, theY, theName, **kwargs)
-        self.Solid = False
+        super(BSurface, self).__init__(x, y, name, **kwargs)
+        self.solid = False
 
-    def isSurface(self):
+    def is_surface(self):
         """Returns if the instance is a BSurface.
         """
         return True

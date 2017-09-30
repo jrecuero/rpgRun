@@ -21,155 +21,53 @@ class BSprite(object):
         """BSprite class initialization method.
 
         Keyword Args:
-            theSprGraph (object) : sprite instance for graphical rendering.
+            spr_graph (object) : sprite instance for graphical rendering.
 
-            theSprText (str) : string to be used for text rendering.
+            spr_text (str) : string to be used for text rendering.
 
-            theColor (str) : string with the color for text rendering.
+            color (str) : string with the color for text rendering.
 
-            theWidth (int) : width size for text rendering.
+            width (int) : width size for text rendering.
         """
-        self._graph = kwargs.get('theSprGraph', None)
-        self._text = kwargs.get('theSprText', None)
-        self._color = kwargs.get('theColor', None)
-        self._width = kwargs.get('theWidth', None)
+        self.graph = kwargs.get('spr_graph', None)
+        self.text = kwargs.get('spr_text', None)
+        self.color = kwargs.get('color', None)
+        self.width = kwargs.get('width', None)
 
-    @property
-    def Graph(self):
-        """Gets _graph attribute value.
-
-        >>> sp = BSprite()
-        >>> sp.Graph
-        >>> sp = BSprite(theSprGraph=True)
-        >>> sp.Graph
-        True
-        """
-        return self._graph
-
-    @Graph.setter
-    def Graph(self, theValue):
-        """Sets _graph attribute value.
-
-        >>> sp = BSprite()
-        >>> sp.Graph
-        >>> sp.Graph = True
-        >>> sp.Graph
-        True
-        """
-        self._graph = theValue
-
-    @property
-    def Text(self):
-        """Gets _text attribute value.
-
-        >>> sp = BSprite()
-        >>> sp.Text
-        >>> sp = BSprite(theSprText=True)
-        >>> sp.Text
-        True
-        """
-        return self._text
-
-    @Text.setter
-    def Text(self, theValue):
-        """Sets _text attribute value.
-
-        >>> sp = BSprite()
-        >>> sp.Text
-        >>> sp.Text = True
-        >>> sp.Text
-        True
-        """
-        self._text = theValue
-
-    @property
-    def Color(self):
-        """Gets _color attribute value.
-
-        >>> sp = BSprite()
-        >>> sp.Color
-        >>> sp = BSprite(theColor='Red')
-        >>> sp.Color
-        'Red'
-        """
-        return self._color
-
-    @Color.setter
-    def Color(self, theValue):
-        """Sets _color attribute value.
-
-        >>> sp = BSprite()
-        >>> sp.Color
-        >>> sp.Color = 'Blue'
-        >>> sp.Color
-        'Blue'
-        >>> sp = BSprite(theColor='Red')
-        >>> sp.Color
-        'Red'
-        >>> sp.Color = 'Yellow'
-        >>> sp.Color
-        'Yellow'
-        """
-        self._color = theValue
-
-    @property
-    def Width(self):
-        """Get _width attribute value.
-
-        >>> sp = BSprite()
-        >>> sp.Width
-        >>> sp = BSprite(theWidth=10)
-        >>> sp.Width
-        10
-        """
-        return self._width
-
-    @Width.setter
-    def Width(self, theValue):
-        """Set _width attribute value.
-
-        >>> sp = BSprite()
-        >>> sp.Width
-        >>> sp.Width = 5
-        >>> sp.Width
-        5
-        """
-        self._width = theValue
-
-    def get(self, theRender=BRender.DEFAULT):
+    def get(self, brender=BRender.DEFAULT):
         """Gets the sprite to render based on the render type.
 
-        >>> sp = BSprite(theSprText='*')
+        >>> sp = BSprite(spr_text='*')
         >>> sp.get(BRender.NONE)
         >>> sp.get(BRender.GRAPH)
         >>> sp.get(BRender.TEXT)
         '*'
-        >>> sp = BSprite(theSprGraph=True)
+        >>> sp = BSprite(spr_graph=True)
         >>> sp.get(BRender.NONE)
         >>> sp.get(BRender.GRAPH)
         True
         >>> sp.get(BRender.TEXT)
         """
-        if theRender == BRender.GRAPH:
-            return self._graph
-        elif theRender == BRender.TEXT:
-            return self._text
-        elif theRender == BRender.NONE:
+        if brender == BRender.GRAPH:
+            return self.graph
+        elif brender == BRender.TEXT:
+            return self.text
+        elif brender == BRender.NONE:
             return None
         else:
             raise NotImplementedError
 
-    def render(self, theRender=BRender.DEFAULT):
+    def render(self, brender=BRender.DEFAULT):
         """Renders the sprite for the given render type.
         """
-        if theRender == BRender.GRAPH:
+        if brender == BRender.GRAPH:
             raise NotImplementedError
-        elif theRender == BRender.TEXT:
-            return '{0}{1}{2}'.format(self.Color if self.Color else '',
-                                      self._text.center(self.Width) if self.Width else self._text,
-                                      '\x1b[0m' if self.Color else '')
-            return self._text
-        elif theRender == BRender.NONE:
+        elif brender == BRender.TEXT:
+            return '{0}{1}{2}'.format(self.color if self.color else '',
+                                      self.text.center(self.width) if self.width else self.text,
+                                      '\x1b[0m' if self.color else '')
+            return self.text
+        elif brender == BRender.NONE:
             raise NotImplementedError
         else:
             raise NotImplementedError
@@ -177,8 +75,8 @@ class BSprite(object):
     def __repr__(self):
         """Returns the BSprite instance as a string.
         """
-        st = 'Text[{0}] '.format(self._text if self._text else 'None')
-        st += 'Graph[{0}]'.format('<GRAPH>' if self._graph else 'None')
+        st = 'Text[{0}] '.format(self.text if self.text else 'None')
+        st += 'Graph[{0}]'.format('<GRAPH>' if self.graph else 'None')
         return st
 
 
@@ -187,257 +85,115 @@ class BCell(BPoint):
     functionality for any object placed on the board.
     """
 
-    def __init__(self, theX, theY, theName, **kwargs):
+    def __init__(self, x, y, name, **kwargs):
         """BCell class initialization method.
 
         >>> cell = BCell(0, 0, 'cell')
-        >>> cell.Sprite
-        >>> cell = BCell(0, 0, 'cell', theSprite='*')
-        >>> cell.Sprite
+        >>> cell.sprite
+        >>> cell = BCell(0, 0, 'cell', sprite='*')
+        >>> cell.sprite
         Text[*] Graph[None]
-        >>> cell = BCell(0, 0, 'cell', theSprite=BSprite(theSprText='*'))
-        >>> cell.Sprite
+        >>> cell = BCell(0, 0, 'cell', sprite=BSprite(spr_text='*'))
+        >>> cell.sprite
         Text[*] Graph[None]
-        >>> cell = BCell(0, 0, 'cell', theSprite=BSprite(theSprGraph=True))
-        >>> cell.Sprite
+        >>> cell = BCell(0, 0, 'cell', sprite=BSprite(spr_graph=True))
+        >>> cell.sprite
         Text[None] Graph[<GRAPH>]
-        >>> cell = BCell(0, 0, 'cell', theSprite=BSprite(theSprGraph=True, theSprText='*'))
-        >>> cell.Sprite
+        >>> cell = BCell(0, 0, 'cell', sprite=BSprite(spr_graph=True, spr_text='*'))
+        >>> cell.sprite
         Text[*] Graph[<GRAPH>]
         """
-        super(BCell, self).__init__(theX, theY)
-        self._id = ids.new_id()
-        self._name = theName
-        self._desc = kwargs.get('theDesc', None)
-        self._static = True
-        self._walkable = True
-        self._solid = True
-        self._layer = None
-        self.Sprite = kwargs.get('theSprite', None)
+        super(BCell, self).__init__(x, y)
+        self.__id = ids.new_id()
+        self.name = name
+        self.desc = kwargs.get('desc', '')
+        self.static = True
+        self.walkable = True
+        self.solid = True
+        self.layer = None
+        self.sprite = None
+        self.set_sprite(kwargs.get('sprite', None))
 
     @property
-    def Id(self):
-        """Gets _id attribute value.
+    def id(self):
+        """Gets __id attribute value.
         """
-        return self._id
+        return self.__id
 
     @property
-    def Name(self):
-        """Gets _name attribute value.
-
-        >>> cell = BCell(0, 0, 'cell')
-        >>> cell.Name
-        'cell'
-        """
-        return self._name
-
-    @Name.setter
-    def Name(self, theValue):
-        """Sets _name attribute value.
-
-        >>> cell = BCell(0, 0, 'cell')
-        >>> cell.Name
-        'cell'
-        >>> cell.Name = 'new cell'
-        >>> cell.Name
-        'new cell'
-        """
-        self._name = theValue
-
-    @property
-    def Desc(self):
-        """Gets _desc attribute value.
-
-        Returns:
-            str: _desc attribute or empty string if _desc is None.
-
-        >>> cell = BCell(0, 0, 'cell')
-        >>> cell.Desc
-        ''
-        >>> cell = BCell(0, 0, 'cell', theDesc='this is a cell')
-        >>> cell.Desc
-        'this is a cell'
-        """
-        return self._desc if self._desc is not None else ''
-
-    @Desc.setter
-    def Desc(self, theValue):
-        """Sets _desc attribute value.
-
-        >>> cell = BCell(0, 0, 'cell')
-        >>> cell.Desc
-        ''
-        >>> cell.Desc = 'new cell'
-        >>> cell.Desc
-        'new cell'
-        """
-        self._desc = theValue
-
-    @property
-    def Row(self):
+    def row(self):
         """Gets _y attribute value.
 
         >>> cell = BCell(1, 2, 'cell')
-        >>> cell.Row
+        >>> cell.row
         2
         """
-        return self.Y
+        return self.y
 
     @property
-    def Col(self):
+    def col(self):
         """Gets _x attribute value.
 
         >>> cell = BCell(1, 2, 'cell')
-        >>> cell.Col
+        >>> cell.col
         1
         """
-        return self.X
+        return self.x
 
     @property
-    def Static(self):
-        """Gets _static attribute value.
-
-        >>> cell = BCell(1, 2, 'cell')
-        >>> cell.Static
-        True
-        """
-        return self._static
-
-    @Static.setter
-    def Static(self, theValue):
-        """Sets _static attribute value.
-
-        >>> cell = BCell(1, 2, 'cell')
-        >>> cell.Static
-        True
-        >>> cell.Static = False
-        >>> cell.Static
-        False
-        """
-        self._static = theValue
-
-    @property
-    def Walkable(self):
-        """Gets _walkable attribute value.
-
-        >>> cell = BCell(1, 2, 'cell')
-        >>> cell.Walkable
-        True
-        """
-        return self._walkable
-
-    @Walkable.setter
-    def Walkable(self, theValue):
-        """Sets _walkable attribute value.
-
-        >>> cell = BCell(1, 2, 'cell')
-        >>> cell.Walkable
-        True
-        >>> cell.Walkable = False
-        >>> cell.Walkable
-        False
-        """
-        self._walkable = theValue
-
-    @property
-    def Solid(self):
-        """Gets _solid attribute value.
-
-        >>> cell = BCell(1, 2, 'cell')
-        >>> cell.Solid
-        True
-        """
-        return self._solid
-
-    @Solid.setter
-    def Solid(self, theValue):
-        """Set _solid attribute value.
-
-        >>> cell = BCell(1, 2, 'cell')
-        >>> cell.Solid
-        True
-        >>> cell.Solid = False
-        >>> cell.Solid
-        False
-        """
-        self._solid = theValue
-
-    @property
-    def Sprite(self):
-        """Gets _sprite attribute value.
-
-        >>> cell = BCell(0, 0, 'cell', theSprite='*')
-        >>> cell.Sprite
-        Text[*] Graph[None]
-        """
-        return self._sprite
-
-    @Sprite.setter
-    def Sprite(self, theValue):
-        """Sets _sprite attribute value.
-
-        It the value given is not a BSprite instance, but a string, it creates
-        a text BSprite using the given value as the string.
-
-        >>> cell = BCell(0, 0, 'cell')
-        >>> cell.Sprite
-        >>> cell.Sprite = '*'
-        Text[*] Graph[None]
-        >>> cell.Sprite = BSprite(theSprGraph=True)
-        Text[None] Graph[<GRAPH>]
-        >>> cell.Sprite = BSprite(theSprGraph=True, theSprText='*')
-        Text[*] Graph[<GRAPH>]
-        """
-        self._sprite = BSprite(theSprText=theValue) if isinstance(theValue, str) else theValue
-
-    @property
-    def Layer(self):
-        """Gets _layer attribute value.
-
-        >>> cell = BCell(0, 0, 'cell')
-        >>> cell.Layer
-        """
-        return self._layer
-
-    @Layer.setter
-    def Layer(self, theValue):
-        """Sets _layer attribute value.
-
-        >>> cell = BCell(0, 0, 'cell')
-        >>> cell.Layer
-        >>> cell.Layer = True
-        >>> cell.Layer
-        True
-        """
-        self._layer = theValue
-
-    @property
-    def Klass(self):
+    def klass(self):
         """
         >>> cell = BCell(0, 0, 'cell')
-        >>> cell.Klass
+        >>> cell.klass
         <class 'bpoint.BPoint'>
         """
         return BPoint
 
-    def getPoint(self):
+    def set_sprite(self, value):
+        """Sets sprite attribute value.
+
+        It the value given is not a BSprite instance, but a string, it creates
+        a text BSprite using the given value as the string.
+
+        Args:
+            value (:class:`str` or :class:`BSprite`) : New sprite to set
+
+        Example:
+            >>> cell = BCell(0, 0, 'cell', sprite='*')
+            >>> cell.sprite
+            Text[*] Graph[None]
+            >>> cell = BCell(0, 0, 'cell')
+            >>> cell.sprite
+            >>> cell.set_sprite('*')
+            >>> cell.sprite
+            Text[*] Graph[None]
+            >>> cell.set_sprite(BSprite(spr_graph=True))
+            >>> cell.sprite
+            Text[None] Graph[<GRAPH>]
+            >>> cell.set_sprite(BSprite(spr_graph=True, spr_text='*'))
+            >>> cell.sprite
+            Text[*] Graph[<GRAPH>]
+        """
+        self.sprite = BSprite(spr_text=value) if isinstance(value, str) else value
+
+    def get_point(self):
         """Gets a point instance to be used on mathematical operations.
 
         >>> cell = BCell(0, 0, 'cell')
-        >>> cell.getPoint()
+        >>> cell.get_point()
         (0, 0)
         """
-        return self.Klass(self.X, self.Y)
+        return self.klass(self.x, self.y)
 
-    def __eq__(self, theOther):
+    def __eq__(self, other):
         """Overload method for the 'equal to' operation between BCell
         instances.
 
-        Two BCell instances are equal if X and Y coordinates values are
+        Two BCell instances are equal if x and Y coordinates values are
         equal and name is the same.
 
         Args:
-            theOther (BCell) : the other BCell instance to check if is equal.
+            other (BCell) : the other BCell instance to check if is equal.
 
         Returns:
             boolean : True if BCell instaces are equal, False else.
@@ -457,20 +213,20 @@ class BCell(BPoint):
         >>> BCell(0, 0, "A") in [BCell(0, 0, "B"), BCell(0, 1, "A"), BCell(1, 1, "A")]
         False
         """
-        if isinstance(theOther, BCell):
-            return super(BCell, self).__eq__(theOther) and self.Name == theOther.Name
+        if isinstance(other, BCell):
+            return super(BCell, self).__eq__(other) and self.name == other.name
         return NotImplemented
 
-    def render(self, theRender=BRender.DEFAULT):
+    def render(self, brender=BRender.DEFAULT):
         """Render the cell.
 
-        >>> cell = BCell(0, 0, 'cell', theSprite=BSprite(theSprGraph=True, theSprText='*'))
+        >>> cell = BCell(0, 0, 'cell', sprite=BSprite(spr_graph=True, spr_text='*'))
         >>> cell.render()
         '*'
         >>> cell.render(BRender.TEXT)
         '*'
         """
-        return self.Sprite.render(theRender)
+        return self.sprite.render(brender)
 
     def __repr__(self):
         """String representation for the BCell instance.
@@ -481,4 +237,4 @@ class BCell(BPoint):
         >>> str(BCell(0, 0, 'cell'))
         '(0, 0) : cell'
         """
-        return '{0} : {1}'.format(super(BCell, self).__repr__(), self.Name)
+        return '{0} : {1}'.format(super(BCell, self).__repr__(), self.name)

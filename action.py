@@ -19,80 +19,49 @@ class AoE(object):
     """AoE class is used to represent the Area of Effect.
     """
 
-    def __init__(self, theCenter, theWidth, theHeight, theShape):
+    def __init__(self, center, width, height, shape):
         """AoE class initialization method.
         """
-        self._shape = theShape(theCenter, theWidth, theHeight)
-
-    def getShape(self):
-        """Gets _shape attribute.
-
-        Returns:
-            Shape : Shape instance used for aero of effect.
-
-        Examples:
-            >>> from shapes import Quad
-            >>> aoe = AoE(None, 0, 0, Quad)
-            >>> aoe.getShape() # doctest: +ELLIPSIS
-            <shapes.Quad object at 0x...>
-        """
-        return self._shape
-
-    def setShape(self, theShape):
-        """Sets _shape attribute value.
-
-        Args:
-            theShape (Shape) : Shape instance to be use as area of effect.
-
-        Examples:
-            >>> from shapes import Quad
-            >>> aoe = AoE(None, 0, 0, Quad)
-            >>> aoe.getShape() # doctest: +ELLIPSIS
-            <shapes.Quad object at 0x...>
-            >>> aoe.setShape('shape')
-            >>> aoe.getShape()
-            'shape'
-        """
-        self._shape = theShape
+        self.shape = shape(center, width, height)
 
 
 class Action(GObject):
     """Action class contains all required information to execute an action.
 
-    Action are initiated by an Originator and they are executed against a
-    Target. Originator must be unique, but Target could be one or multiple.
+    Action are initiated by an originator and they are executed against a
+    Target. originator must be unique, but Target could be one or multiple.
 
     Action takes place in an AoE (Area Of Effect) and targets must in
     inside that AoE
     """
 
-    def __init__(self, theName, theType=AType.NONE, **kwargs):
+    def __init__(self, name, type_=AType.NONE, **kwargs):
         """Action class initializaton method.
 
         Args:
-            theName (str) : string with the action name.
+            name (str) : string with the action name.
 
-            theType (AType) : AType that represents the action type. Default is\
+            type_ (AType) : AType that represents the action type. Default is\
                     AType.NONE
 
         Example:
             >>> acto = Action('new', AType.SKILL)
-            >>> acto.Name
+            >>> acto.name
             'new'
         """
-        kwargs.setdefault('theName', theName)
+        kwargs.setdefault('name', name)
         super(Action, self).__init__(**kwargs)
-        self.Type = theType
+        self.type = type_
         self._originator = None
         self._target = []
-        self._aoe = None
+        self.aoe = None
         self._execCb = None
         self._preExecCb = None
         self._postExecCb = None
         self._resultCb = None
 
     @property
-    def Type(self):
+    def type(self):
         """Property for _type attribute.
 
         :getter: Gets _type attribute value.
@@ -103,23 +72,23 @@ class Action(GObject):
 
         Example:
             >>> acto = Action('new', AType.SKILL)
-            >>> acto.Type
+            >>> acto.type
             <AType.SKILL: 3>
-            >>> acto.Type = AType.MOVEMENT
-            >>> acto.Type
+            >>> acto.type = AType.MOVEMENT
+            >>> acto.type
             <AType.MOVEMENT: 1>
         """
         return self._type
 
-    @Type.setter
-    def Type(self, theValue):
+    @type.setter
+    def type(self, value):
         """Set property for _type attribute.
         """
-        assert isinstance(theValue, AType)
-        self._type = theValue
+        assert isinstance(value, AType)
+        self._type = value
 
     @property
-    def Originator(self):
+    def originator(self):
         """Property for _originator attribute.
 
         :getter: Gets _originator attribute value.
@@ -130,21 +99,21 @@ class Action(GObject):
 
         Example:
             >>> acto = Action('new', AType.SKILL)
-            >>> acto.Originator
-            >>> acto.Originator = 'me'
-            >>> acto.Originator
+            >>> acto.originator
+            >>> acto.originator = 'me'
+            >>> acto.originator
             'me'
         """
         return self._originator
 
-    @Originator.setter
-    def Originator(self, theValue):
+    @originator.setter
+    def originator(self, value):
         """Set property for _originator attribute.
         """
-        self._originator = theValue
+        self._originator = value
 
     @property
-    def Target(self):
+    def target(self):
         """Property for _target attribute.
 
         :getter: Gets _target attribute.
@@ -156,56 +125,29 @@ class Action(GObject):
 
         Example:
             >>> acto = Action('new', AType.SKILL)
-            >>> acto.Target
+            >>> acto.target
             []
-            >>> acto.Target = 'me'
-            >>> acto.Target
+            >>> acto.target = 'me'
+            >>> acto.target
             ['me']
         """
         return self._target
 
-    @Target.setter
-    def Target(self, theValue):
+    @target.setter
+    def target(self, value):
         """Set property for _target attribute. It appends the given value to
         the _target attribute list.
         """
-        self._target.append(theValue)
+        self._target.append(value)
 
-    def getAoE(self):
-        """Gets _aoe attribute value.
-
-        Returns:
-            AoE : AoE instance with the area of effect.
-
-        Example:
-            >>> acto = Action('new', AType.SKILL)
-            >>> acto.getAoE()
-        """
-        return self._aoe
-
-    def setAoE(self, theAoE):
-        """Sets _aoe attribute value.
-
-        Args:
-            theAoE (AoE) : AoE instance to set as area of effect.
-
-        Example:
-            >>> acto = Action('new', AType.SKILL)
-            >>> acto.getAoE()
-            >>> acto.setAoE('aoe')
-            >>> acto.getAoE()
-            'aoe'
-        """
-        self._aoe = theAoE
-
-    def isValidTarget(self, theTarget):
+    def is_valid_target(self, target):
         """Checks if the target is valid.
 
         By default a valid target should be different from the
-        Originator and it should be an Actor derived.
+        originator and it should be an Actor derived.
 
         Args:
-            theTarget (Actor) : Actor to check if it is valid.
+            target (Actor) : Actor to check if it is valid.
 
         Returns:
             bool : True is Actor is a valid target.
@@ -217,30 +159,30 @@ class Action(GObject):
             >>> o = Actor(0, 0, 'me')
             >>> t = Actor(1, 1, 'you')
             >>> s = BSurface(2, 2, 'surface')
-            >>> acto.Originator = o
-            >>> acto.isValidTarget(t)
+            >>> acto.originator = o
+            >>> acto.is_valid_target(t)
             True
-            >>> acto.isValidTarget(o)
+            >>> acto.is_valid_target(o)
             False
-            >>> acto.isValidTarget(s)
+            >>> acto.is_valid_target(s)
             False
             """
-        return theTarget.isActor() and theTarget != self.Originator
+        return target.is_actor() and target != self.originator
 
-    def wait(self, theGame):
+    def wait(self, game):
         """Yields until user provides input..
 
         Args:
-            theGame (Game) : Game instance.
+            game (Game) : Game instance.
         """
         target = yield
         yield target
 
-    def requires(self, theGame):
+    def requires(self, game):
         """Method that returns requirements for the action.
 
         Args:
-            theGame (Game) : Game instance.
+            game (Game) : Game instance.
         """
         return None
 
@@ -249,7 +191,7 @@ class Action(GObject):
         """
         return None
 
-    def requiresTarget(self):
+    def requires_target(self):
         """Returns if action requires a target.
 
         Returns:
@@ -257,7 +199,7 @@ class Action(GObject):
         """
         return True
 
-    def requiresMovement(self):
+    def requires_movement(self):
         """Returns if action requires a movements.
 
         Returns:
@@ -265,7 +207,7 @@ class Action(GObject):
         """
         return False
 
-    def layerToTarget(self):
+    def layer_to_target(self):
         """Returns layers that can be targeted by the action.
 
         Returns:
@@ -273,63 +215,63 @@ class Action(GObject):
         """
         return None
 
-    def filterTarget(self, theCells):
+    def filter_target(self, cells):
         """Filter the given list with cell and return possible
         cells to be targeted by the action.
 
         Args:
-            theCells (list[BCell]) : List of cells available to be targeted.
+            cells (list[BCell]) : List of cells available to be targeted.
 
         Returns:
             list[BCell] : List of cells that can be targeted.
         """
         return None
 
-    def drySelect(self):
+    def dry_select(self):
         """Method that show possible targets to be selected.
         """
         pass
 
-    def selectTarget(self, theGame):
+    def select_target(self, game):
         """Method that returns action targets.
 
         Args:
-            theGame (Game) : Game instance.
+            game (Game) : Game instance.
         """
         target = yield
         yield target
 
-    def selectMove(self, theGame):
+    def select_move(self, game):
         """Method that returns requirements for the action.
 
         Args:
-            theGame (Game) : Game instance.
+            game (Game) : Game instance.
         """
         target = yield
         yield target
 
-    def selected(self, theTarget):
+    def selected(self, target):
         """Sets the given actor as the target.
 
         Args:
-            theTarget (Actor) : Set this actor as the action target.
+            target (Actor) : Set this actor as the action target.
         """
-        self.Target = theTarget
+        self.target = target
 
-    def dryExecute(self):
+    def dry_execute(self):
         """Method that returns possible actions execution.
         """
         pass
 
-    def execute(self, theGame, **kwargs):
+    def execute(self, game, **kwargs):
         """Method that executes the action.
 
         Args:
-            theGame (Game) : Game instance.
+            game (Game) : Game instance.
         """
         pass
 
-    def dryResult(self):
+    def dry_result(self):
         """Method that returns possible action results.
         """
         pass
@@ -345,7 +287,7 @@ class Action(GObject):
         Returns:
             str : string with the Action instance representation.
         """
-        return '{0}: {1}'.format(self.__class__.__name__, self.Name)
+        return '{0}: {1}'.format(self.__class__.__name__, self.name)
 
 
 class TargetAction(Action):
@@ -353,17 +295,17 @@ class TargetAction(Action):
     that requires a target selection.
     """
 
-    def __init__(self, theName, theType=AType.NONE, **kwargs):
+    def __init__(self, name, type_=AType.NONE, **kwargs):
         """TargetAction class initialization method.
 
         Args:
-            theName (str) : string with the action name.
-            theType (AType) : AType that represents the action type. Default is\
+            name (str) : string with the action name.
+            type_ (AType) : AType that represents the action type. Default is\
                     AType.NONE
         """
-        super(TargetAction, self).__init__(theName, theType, **kwargs)
+        super(TargetAction, self).__init__(name, type_, **kwargs)
 
-    def layerToTarget(self):
+    def layer_to_target(self):
         """Returns the layer OBJECT as valid layer.
 
         Returns:
@@ -371,17 +313,17 @@ class TargetAction(Action):
         """
         return [LType.OBJECT, ]
 
-    def filterTarget(self, theCells):
+    def filter_target(self, cells):
         """Filter the given list with cell and return possible
         cells to be targeted by the action.
 
         Args:
-            theCells (list[BCell]) : List of cells available to be targeted.
+            cells (list[BCell]) : List of cells available to be targeted.
 
         Returns:
             list[BCell] : List of cells that can be targeted.
         """
-        return [x for x in theCells if self.isValidTarget(x)]
+        return [x for x in cells if self.is_valid_target(x)]
 
 
 class AoETargetAction(TargetAction):
@@ -389,49 +331,49 @@ class AoETargetAction(TargetAction):
     actions with an Area of Effect where target will be found.
     """
 
-    def __init__(self, theName, theType=AType.NONE, **kwargs):
+    def __init__(self, name, type_=AType.NONE, **kwargs):
         """AoETargetAction class initialization method.
 
         Args:
-            theName (str) : string with the action name.
-            theType (AType) : AType that represents the action type. Default is\
+            name (str) : string with the action name.
+            type_ (AType) : AType that represents the action type. Default is\
                     AType.NONE
 
         Keyword Args:
-            theWidth (int) : Area of effect width.
-            theHeight (int) : Area of effect height.
-            theShape (Shape) : Area of effect shape class.
+            width (int) : Area of effect width.
+            height (int) : Area of effect height.
+            shape (Shape) : Area of effect shape class.
         """
-        super(AoETargetAction, self).__init__(theName, theType, **kwargs)
-        width = kwargs.get('theWidth')
-        height = kwargs.get('theHeight')
-        shape = kwargs.get('theShape')
-        self.setAoE(AoE(None, width, height, shape))
+        super(AoETargetAction, self).__init__(name, type_, **kwargs)
+        width = kwargs.get('width')
+        height = kwargs.get('height')
+        shape = kwargs.get('shape')
+        self.aoe = (AoE(None, width, height, shape))
 
-    @Action.Originator.setter
-    def Originator(self, theValue):
+    @Action.originator.setter
+    def originator(self, value):
         """Sets _originator attribute value. Center shape to originator.
 
         Args:
-            theValue (Actor) : Actor that will be the originator for action.
+            value (Actor) : Actor that will be the originator for action.
         """
-        Action.Originator.fset(self, theValue)
-        self.getAoE().getShape().Center = theValue
+        Action.originator.fset(self, value)
+        self.aoe.shape.Center = value
 
-    def filterTarget(self, theCells):
+    def filter_target(self, cells):
         """Filter the given list with cell and return possible
         cells to be targeted by the action.
 
-        Movement will be done by the originator, so only the Originator cell
+        Movement will be done by the originator, so only the originator cell
         should be returned.
 
         Args:
-            theCells (list[BCell]) : List of cells available to be targeted.
+            cells (list[BCell]) : List of cells available to be targeted.
 
         Returns:
-            list[BCell] : List with the Originator cell.
+            list[BCell] : List with the originator cell.
         """
-        return [x for x in theCells if self.isValidTarget(x) and self.getAoE().getShape().isInside(x)]
+        return [x for x in cells if self.is_valid_target(x) and self.aoe.shape.is_inside(x)]
 
 
 class MoveAction(Action):
@@ -445,28 +387,28 @@ class MoveAction(Action):
     .. [1] Jose Carlos Recuero, "This is a draft version" 2017
     """
 
-    def __init__(self, theName, theType=AType.NONE, **kwargs):
+    def __init__(self, name, type_=AType.NONE, **kwargs):
         """MoveAction class initialization method.
 
         Args:
-            theName (str) : string with the action name.
+            name (str) : string with the action name.
 
-            theType (AType) : AType that represents the action type. Default is\
+            type_ (AType) : AType that represents the action type. Default is\
                     AType.NONE
         """
-        super(MoveAction, self).__init__(theName, theType, **kwargs)
+        super(MoveAction, self).__init__(name, type_, **kwargs)
 
-    @Action.Originator.setter
-    def Originator(self, theValue):
+    @Action.originator.setter
+    def originator(self, value):
         """Sets _originator and _target attribute with the given value.
 
         Args:
-            theValue (Actor) : Actor that will be the originator for action.
+            value (Actor) : Actor that will be the originator for action.
         """
-        self._originator = theValue
-        self.Target = theValue
+        self._originator = value
+        self.target = value
 
-    def requiresTarget(self):
+    def requires_target(self):
         """Returns if action requires a target.
 
         Returns:
@@ -474,7 +416,7 @@ class MoveAction(Action):
         """
         return False
 
-    def requiresMovement(self):
+    def requires_movement(self):
         """Returns if action requires a movements.
 
         Returns:
@@ -482,29 +424,29 @@ class MoveAction(Action):
         """
         return True
 
-    def filterTarget(self, theCells):
+    def filter_target(self, cells):
         """Filter the given list with cell and return possible
         cells to be targeted by the action.
 
-        Movement will be done by the originator, so only the Originator cell
+        Movement will be done by the originator, so only the originator cell
         should be returned.
 
         Args:
-            theCells (list[BCell]) : List of cells available to be targeted.
+            cells (list[BCell]) : List of cells available to be targeted.
 
         Returns:
-            list[BCell] : List with the Originator cell.
+            list[BCell] : List with the originator cell.
         """
-        return [self.Originator, ]
+        return [self.originator, ]
 
-    def selected(self, theTarget):
+    def selected(self, target):
         """Sets the given actor as the target.
 
         Movement action can not select a target, because the target is
-        always the Originator.
+        always the originator.
 
         Args:
-            theTarget (Actor) : Set this actor as the action target.
+            target (Actor) : Set this actor as the action target.
         """
         pass
 
@@ -517,22 +459,22 @@ class Actions(Itero):
         """Actions class initialization method.
 
         Keyword Args:
-            theSize (int) : maximum number of actions. Default is None.
+            size (int) : maximum number of actions. Default is None.
         """
-        super(Actions, self).__init__(Action, kwargs.get('theSize', None))
+        super(Actions, self).__init__(Action, kwargs.get('size', None))
 
-    def getById(self, theId):
-        """Returns an action by the given ID.
+    def get_by_id(self, id):
+        """Returns an action by the given Id.
 
         Args:
-            theId (int) : Integer with the action ID.
+            id (int) : Integer with the action Id.
 
         Returns:
-            Action : Action instance with the given ID. None if no action\
+            Action : Action instance with the given Id. None if no action\
                     was found.
         """
         for _action in self:
-            if _action.ID == theId:
+            if _action.id == id:
                 return _action
         return None
 
@@ -542,4 +484,4 @@ class Actions(Itero):
         Returns:
             str : string with the Actions instance representation.
         """
-        return " | ".join([x.Name for x in self])
+        return " | ".join([x.name for x in self])
