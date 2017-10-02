@@ -376,7 +376,7 @@ if __name__ == '__main__':
 
     cli = Play()
     try:
-        # cli.Prompt = 'rpgRun> '
+        # cli.Prompt = '[rpgRun]> '
         cli.cmdloop(prompt='rpgRun> ',
                     toolbar=cli.set_toolbar,
                     rprompt=cli.set_rprompt,
