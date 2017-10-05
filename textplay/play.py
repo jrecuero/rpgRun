@@ -20,6 +20,7 @@ from targs import T_Target, T_Actor, T_Equip, T_Attr, T_Action, T_Location, T_St
 import loggerator
 
 MODULE = 'Play'
+EXPORT = 'Play'
 
 
 class Play(Cli):
