@@ -5,7 +5,7 @@ import game
 from blayer import LType
 from bpoint import Point, Location
 from shapes import Quad, Rhomboid
-from base import Cli
+from cli import Cli
 from decorators import argo, syntax, setsyntax
 from argtypes import Int
 from brow import BRow
@@ -18,6 +18,8 @@ from assets.actions import WeaponAction, MeleAction, RangeAction, MoveAction
 from assets.equips import Weapon, Armor, Shield
 from targs import T_Target, T_Actor, T_Equip, T_Attr, T_Action, T_Location, T_Step
 import loggerator
+
+MODULE = 'Play'
 
 
 class Play(Cli):
@@ -375,12 +377,7 @@ class Play(Cli):
 if __name__ == '__main__':
 
     cli = Play()
-    try:
-        # cli.Prompt = '[rpgRun]> '
-        cli.cmdloop(prompt='rpgRun> ',
-                    toolbar=cli.set_toolbar,
-                    rprompt=cli.set_rprompt,
-                    precmd=True)
-    except KeyboardInterrupt:
-        cli._logger.display("")
-        pass
+    cli.run(prompt='rpgRun> ',
+            toolbar=cli.set_toolbar,
+            rprompt=cli.set_rprompt,
+            precmd=True)
