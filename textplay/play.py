@@ -369,10 +369,16 @@ class Play(Cli):
             sys.stdout.flush()
 
     def set_toolbar(self):
-        return " | ".join(cli.STAGES[cli._stage])
+        return " | ".join(self.STAGES[self._stage])
 
     def set_rprompt(self):
         return "<{0}>".format(self._stage)
+
+    def run(self, **kwargs):
+        super(Play, self).run(prompt='rpgRun> ',
+                              toolbar=self.set_toolbar,
+                              rprompt=self.set_rprompt,
+                              precmd=True)
 
 
 if __name__ == '__main__':
