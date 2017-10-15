@@ -2,29 +2,15 @@ import pygame
 from base_scene import BaseScene
 
 
-class Car(pygame.sprite.Sprite):
-
-    def __init__(self):
-        super(Car, self).__init__()
-        self.image = pygame.image.load('examples/racecar.png')
-        self.rect = self.image.get_rect()
-        width, height = pygame.display.get_surface().get_size()
-        self.rect.x = width * 0.45
-        self.rect.y = height * 0.8
-
-
 class GameScene(BaseScene):
 
     def __init__(self):
         super(GameScene, self).__init__()
-        # self.car_image = pygame.image.load('examples/racecar.png')
+        self.car_image = pygame.image.load('examples/racecar.png')
         width, height = pygame.display.get_surface().get_size()
         self.x = width * 0.45
         self.y = height * 0.8
         self.x_change = 0
-        self.sprites = pygame.sprite.Group()
-        self.car = Car()
-        self.sprites.add(self.car)
 
     def process_input(self, events, pressed_keys):
         for event in events:
@@ -43,9 +29,5 @@ class GameScene(BaseScene):
 
     def render(self, screen):
         screen.fill((0, 0, 255))
-        # screen.blit(self.car_image, (self.x, self.y))
-        # self.y -= 1
-        self.car.rect.x = self.x
-        self.car.rect.y = self.y
+        screen.blit(self.car_image, (self.x, self.y))
         self.y -= 1
-        self.sprites.draw(screen)
