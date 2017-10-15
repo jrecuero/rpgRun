@@ -1,33 +1,33 @@
 import pygame
 from base_scene import BaseScene
+from game import Game
+from blayer import LType
+from bcell import BCell, BSprite
+from assets.surfaces import GreenSprite
 
 
 class GameScene(BaseScene):
 
     def __init__(self):
         super(GameScene, self).__init__()
-        self.car_image = pygame.image.load('examples/racecar.png')
-        width, height = pygame.display.get_surface().get_size()
-        self.x = width * 0.45
-        self.y = height * 0.8
-        self.x_change = 0
+        self._width = 8
+        self._height = 8
+        self._game = Game(self._width, self._height)
+        iheight = self._height
+        self.sprites = pygame.sprite.Group()
+        for row in self._game.board:
+            iheight -= 1
+            for iwidth in range(self._width):
+                spr = GreenSprite(self._width, self._height)
+                bspr = BSprite(spr_graph=spr)
+                row.add_cell_to_layer(BCell(iwidth, iheight, 'None', sprite=bspr), LType.SURFACE)
+                self.sprites.add(spr)
 
     def process_input(self, events, pressed_keys):
-        for event in events:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    self.x_change -= 5
-                elif event.key == pygame.K_RIGHT:
-                    self.x_change += 5
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                    self.x_change = 0
-        self.x += self.x_change
+        pass
 
     def update(self):
-        pass
+        self.sprites.update()
 
     def render(self, screen):
         screen.fill((0, 0, 255))
-        screen.blit(self.car_image, (self.x, self.y))
-        self.y -= 1

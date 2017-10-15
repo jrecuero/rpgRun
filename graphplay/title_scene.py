@@ -8,7 +8,7 @@ class TitleScene(BaseScene):
     def __init__(self):
         super(TitleScene, self).__init__()
         self.font = pygame.font.SysFont("marion", 72)
-        self.text = self.font.render('This Is My Game', True, (0, 128, 0))
+        self.text = self.font.render('rpgRun', True, (0, 128, 0))
 
     def process_input(self, events, pressed_keys):
         for event in events:
