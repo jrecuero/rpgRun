@@ -1,6 +1,7 @@
 from itero import Itero
 from blayer import BLayer, LType
-from bcell import BCell, BRender
+from brender import BRender
+from bcell import BCell
 from collections import OrderedDict
 
 
@@ -219,17 +220,33 @@ class BRow(Itero):
     def render(self, **kwargs):
         """Render the row.
 
-        TODO: JUST RENDER ON TEXT FROM NOW.
+        When rendering in text format, it returns a string where every cell is
+        just a set of characters.
+
+        When rendering in graph format, we have to pass the row position with
+        x and y values, so sprites are properly located, and it has to return
+        a list of sprites, which should be included in a sprite group from the
+        graphical framework.
+
+        Keyword Args:
+            render (BRender) : Render type (graphical or text).
+            width (int) : Width for text rendering for cell width.
+
+        Returns:
+            object : Instance to be rendered.
         """
-        render = kwargs.get('theRender', BRender.DEFAULT)
-        width = kwargs.get('theWidth', 5)
-        cells = OrderedDict()
-        for layer in [x for x in self if len(x)]:
-            for cell in layer:
-                key = '{0},{1}'.format(cell.col, cell.row)
-                cells.update({key: cell})
-        cell_str = ['{0}'.format(x.render(render).center(width)) for x in cells.values()]
-        return " ".join(cell_str)
+        render = kwargs.get('render', BRender.DEFAULT)
+        if render == BRender.TEXT:
+            width = kwargs.get('width', 5)
+            cells = OrderedDict()
+            for layer in [x for x in self if len(x)]:
+                for cell in layer:
+                    key = '{0},{1}'.format(cell.col, cell.row)
+                    cells.update({key: cell})
+            cell_str = ['{0}'.format(x.render(render).center(width)) for x in cells.values()]
+            return " ".join(cell_str)
+        else:
+            raise NotImplementedError
 
     def __repr__(self):
         """String representation for BRow instance.

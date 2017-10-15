@@ -10,7 +10,7 @@ class TitleScene(BaseScene):
         self.font = pygame.font.SysFont("marion", 72)
         self.text = self.font.render('rpgRun', True, (0, 128, 0))
 
-    def process_input(self, events, pressed_keys):
+    def process_input(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 # Move to the next scene when the user pressed Enter

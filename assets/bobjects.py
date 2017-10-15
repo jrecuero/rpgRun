@@ -1,4 +1,4 @@
-from bcell import BSprite
+from bsprite import BSprite
 from bobject import BObject
 
 

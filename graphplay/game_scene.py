@@ -2,7 +2,8 @@ import pygame
 from base_scene import BaseScene
 from game import Game
 from blayer import LType
-from bcell import BCell, BSprite
+from bsprite import BSprite
+from bcell import BCell
 from assets.surfaces import GreenSprite
 
 
@@ -23,7 +24,7 @@ class GameScene(BaseScene):
                 row.add_cell_to_layer(BCell(iwidth, iheight, 'None', sprite=bspr), LType.SURFACE)
                 self.sprites.add(spr)
 
-    def process_input(self, events, pressed_keys):
+    def process_input(self, events):
         pass
 
     def update(self):

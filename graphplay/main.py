@@ -12,27 +12,22 @@ class GameRun(object):
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.clock = pygame.time.Clock()
 
-    def process_input_for_quit(self, event, pressed_keys):
+    def process_input_for_quit(self, event):
         if event.type == pygame.QUIT:
             return True
-        elif event.type == pygame.KEYDOWN:
-            alt_pressed = pressed_keys[pygame.K_LALT] or pressed_keys[pygame.K_RALT]
-            if event.key == pygame.K_ESCAPE:
-                return True
-            elif event.key == pygame.K_F4 and alt_pressed:
-                return True
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            return True
         return False
 
     def process_input(self):
-        pressed_keys = pygame.key.get_pressed()
         # Event filtering
         filtered_events = []
         for event in pygame.event.get():
-            if self.process_input_for_quit(event, pressed_keys):
+            if self.process_input_for_quit(event):
                 self.active_scene.terminate()
             else:
                 filtered_events.append(event)
-        self.active_scene.process_input(filtered_events, pressed_keys)
+        self.active_scene.process_input(filtered_events)
 
     def update(self):
         self.active_scene.update()

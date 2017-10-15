@@ -1,5 +1,6 @@
 from itero import Itero
 from collections import deque
+from brender import BRender
 from brow import BRow
 
 
@@ -285,12 +286,28 @@ class Board(Itero):
     def render(self, **kwargs):
         """Render the board.
 
-        TODO: JUST RENDER ON TEXT FROM NOW.
+        When rendering in text format, it returns a string where every cell is
+        just a set of characters.
+
+        When rendering in graph format, we have to pass the row position with
+        x and y values, so sprites are properly located, and it has to return
+        a list of sprites, which should be included in a sprite group from the
+        graphical framework.
+
+        Keyword Args:
+            render (BRender) : Render type (graphical or text).
+
+        Returns:
+            object : Instance to be rendered.
         """
-        st = ''
-        for row in self:
-            st += '{0} {1}\n'.format(row.cellrow, row.render(**kwargs))
-        return st
+        render = kwargs.get('render', BRender.DEFAULT)
+        if render == BRender.TEXT:
+            st = ''
+            for row in self:
+                st += '{0} {1}\n'.format(row.cellrow, row.render(**kwargs))
+            return st
+        else:
+            raise NotImplementedError
 
     def __repr__(self):
         """String representation for Board instance.
