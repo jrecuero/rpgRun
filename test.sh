@@ -2,4 +2,4 @@
 
 source ./setup.sh
 
-py.test . --doctest-modules --ignore=textplay --cov-report html --cov=.
+py.test test/ --doctest-modules --ignore=textplay --cov-report html --cov=./rpgrun

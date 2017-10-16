@@ -20,7 +20,7 @@
 import os
 import sys
 paths = [
-    '../../',
+    '../../rpgrun',
     '../../../jc2li',
 ]
 for path in paths:
