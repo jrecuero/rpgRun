@@ -1,6 +1,7 @@
 from bsprite import BSprite
 from actor import Actor
 from pactor import PActor
+import pygame
 
 PLAYER_ATTRS = '''[{"hp": {"base": 10, "delta": 2, "buffs": "None"}},
                    {"str": {"base": 9, "delta": 1, "buffs": "None"}},
@@ -48,3 +49,37 @@ class MageActor(Actor):
         super(MageActor, self).__init__(x, y, name, **kwargs)
         self.sprite = BSprite(spr_text='o$o', width=width, color="\x1b[32m" + "\x1b[40m")
         self.attrs.setup_attrs_from_json(MAGE_ATTRS)
+
+
+class PlayerSprite(pygame.sprite.Sprite):
+
+    def __init__(self, width, height):
+        super(PlayerSprite, self).__init__()
+        self.image = pygame.Surface((width, height))
+        self.image.fill((255, 0, 255))
+        self.rect = self.image.get_rect()
+
+
+class GraphPlayerActor(PActor):
+
+    def __init__(self, x, y, **kwargs):
+        super(GraphPlayerActor, self).__init__(x, y, 'PLAYER', **kwargs)
+        self.sprite = BSprite(spr_graph=PlayerSprite(32, 32))
+        self.attrs.setup_attrs_from_json(PLAYER_ATTRS)
+
+
+class EnemySprite(pygame.sprite.Sprite):
+
+    def __init__(self, width, height):
+        super(EnemySprite, self).__init__()
+        self.image = pygame.Surface((width, height))
+        self.image.fill((55, 125, 55))
+        self.rect = self.image.get_rect()
+
+
+class GraphEnemyActor(Actor):
+
+    def __init__(self, x, y, width, name='ENEMY', **kwargs):
+        super(GraphEnemyActor, self).__init__(x, y, name, **kwargs)
+        self.sprite = BSprite(spr_graph=EnemySprite(32, 32))
+        self.attrs.setup_attrs_from_json(ACTOR_ATTRS)

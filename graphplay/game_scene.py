@@ -2,27 +2,38 @@ import pygame
 from base_scene import BaseScene
 from game import Game
 from blayer import LType
-from bsprite import BSprite
-from bcell import BCell
-from assets.surfaces import GreenSprite
+from brender import BRender
+from assets.surfaces import GraphGreenSurface
+from assets.bobjects import GraphPillar
+from assets.actors import GraphPlayerActor, GraphEnemyActor
 
 
 class GameScene(BaseScene):
 
     def __init__(self):
         super(GameScene, self).__init__()
-        self._width = 8
-        self._height = 8
-        self._game = Game(self._width, self._height)
-        iheight = self._height
+        self.board_width = 8
+        self.board_height = 8
+        self._game = Game(self.board_width, self.board_height)
+        iheight = self.board_height
         self.sprites = pygame.sprite.Group()
         for row in self._game.board:
             iheight -= 1
-            for iwidth in range(self._width):
-                spr = GreenSprite(self._width, self._height)
-                bspr = BSprite(spr_graph=spr)
-                row.add_cell_to_layer(BCell(iwidth, iheight, 'None', sprite=bspr), LType.SURFACE)
-                self.sprites.add(spr)
+            for iwidth in range(self.board_width):
+                row.add_cell_to_layer(GraphGreenSurface(iwidth, iheight), LType.SURFACE)
+                # self.sprites.add(spr)
+        pillar = GraphPillar(0, 6)
+        self._game.board.get_row_from_cell(pillar).add_cell_to_layer(pillar, LType.OBJECT)
+        player = GraphPlayerActor(2, 5)
+        self._game.add_actor(player, True)
+        self._game.board.get_row_from_cell(player).add_cell_to_layer(player, LType.OBJECT)
+        enemies = []
+        enemies.append(GraphEnemyActor(4, 6, 'GOBLIN'))
+        enemies.append(GraphEnemyActor(3, 5, 'ORC'))
+        enemies.append(GraphEnemyActor(1, 0, 'TROLL'))
+        for x in enemies:
+            self._game.add_actor(x)
+            self._game.board.get_row_from_cell(x).add_cell_to_layer(x, LType.OBJECT)
 
     def process_input(self, events):
         pass
@@ -32,3 +43,13 @@ class GameScene(BaseScene):
 
     def render(self, screen):
         screen.fill((0, 0, 255))
+        x, y = 32, 32
+        render_board = self._game.board.render(render=BRender.GRAPH)
+        for row in render_board:
+            for key, sprite in row.items():
+                # sprite.rect.x = x
+                # sprite.rect.y = y
+                screen.blit(sprite.image, (x, y))
+                x += 34
+            x = 32
+            y += 34

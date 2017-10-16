@@ -236,15 +236,17 @@ class BRow(Itero):
             object : Instance to be rendered.
         """
         render = kwargs.get('render', BRender.DEFAULT)
+        cells = OrderedDict()
+        for layer in [x for x in self if len(x)]:
+            for cell in layer:
+                key = '{0},{1}'.format(cell.col, cell.row)
+                cells.update({key: cell.render(render)})
         if render == BRender.TEXT:
             width = kwargs.get('width', 5)
-            cells = OrderedDict()
-            for layer in [x for x in self if len(x)]:
-                for cell in layer:
-                    key = '{0},{1}'.format(cell.col, cell.row)
-                    cells.update({key: cell})
-            cell_str = ['{0}'.format(x.render(render).center(width)) for x in cells.values()]
+            cell_str = ['{0}'.format(x.center(width)) for x in cells.values()]
             return " ".join(cell_str)
+        elif render == BRender.GRAPH:
+            return cells
         else:
             raise NotImplementedError
 

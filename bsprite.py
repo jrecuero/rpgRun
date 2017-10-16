@@ -49,7 +49,7 @@ class BSprite(object):
         """Renders the sprite for the given render type.
         """
         if brender == BRender.GRAPH:
-            raise NotImplementedError
+            return self.graph
         elif brender == BRender.TEXT:
             return '{0}{1}{2}'.format(self.color if self.color else '',
                                       self.text.center(self.width) if self.width else self.text,

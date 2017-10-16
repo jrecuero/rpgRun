@@ -306,6 +306,8 @@ class Board(Itero):
             for row in self:
                 st += '{0} {1}\n'.format(row.cellrow, row.render(**kwargs))
             return st
+        elif render == BRender.GRAPH:
+            return [x.render(**kwargs) for x in self]
         else:
             raise NotImplementedError
 
