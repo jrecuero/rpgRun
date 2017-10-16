@@ -3,9 +3,9 @@ from base_scene import BaseScene
 from game import Game
 from blayer import LType
 from brender import BRender
-from assets.surfaces import GraphGreenSurface
-from assets.bobjects import GraphPillar
-from assets.actors import GraphPlayerActor, GraphEnemyActor
+from assets.graph.surfaces import GreenSurface
+from assets.graph.bobjects import Pillar
+from assets.graph.actors import PlayerActor, EnemyActor
 
 
 class GameScene(BaseScene):
@@ -20,17 +20,17 @@ class GameScene(BaseScene):
         for row in self._game.board:
             iheight -= 1
             for iwidth in range(self.board_width):
-                row.add_cell_to_layer(GraphGreenSurface(iwidth, iheight), LType.SURFACE)
+                row.add_cell_to_layer(GreenSurface(iwidth, iheight), LType.SURFACE)
                 # self.sprites.add(spr)
-        pillar = GraphPillar(0, 6)
+        pillar = Pillar(0, 6)
         self._game.board.get_row_from_cell(pillar).add_cell_to_layer(pillar, LType.OBJECT)
-        player = GraphPlayerActor(2, 5)
+        player = PlayerActor(2, 5)
         self._game.add_actor(player, True)
         self._game.board.get_row_from_cell(player).add_cell_to_layer(player, LType.OBJECT)
         enemies = []
-        enemies.append(GraphEnemyActor(4, 6, 'GOBLIN'))
-        enemies.append(GraphEnemyActor(3, 5, 'ORC'))
-        enemies.append(GraphEnemyActor(1, 0, 'TROLL'))
+        enemies.append(EnemyActor(4, 6, 'GOBLIN'))
+        enemies.append(EnemyActor(3, 5, 'ORC'))
+        enemies.append(EnemyActor(1, 0, 'TROLL'))
         for x in enemies:
             self._game.add_actor(x)
             self._game.board.get_row_from_cell(x).add_cell_to_layer(x, LType.OBJECT)

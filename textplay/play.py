@@ -11,11 +11,11 @@ from argtypes import Int
 from brow import BRow
 from action import AType
 from actor import Actor
-from assets.surfaces import GreenSurface
-from assets.actors import PlayerActor, EnemyActor, MageActor, BossActor
-from assets.bobjects import Pillar
-from assets.actions import WeaponAction, MeleAction, RangeAction, MoveAction
-from assets.equips import Weapon, Armor, Shield
+from assets.text.surfaces import GreenSurface
+from assets.text.actors import PlayerActor, EnemyActor, MageActor, BossActor
+from assets.text.bobjects import Pillar
+from assets.text.actions import WeaponAction, MeleAction, RangeAction, MoveAction
+from assets.text.equips import Weapon, Armor, Shield
 from targs import T_Target, T_Actor, T_Equip, T_Attr, T_Action, T_Location, T_Step
 import loggerator
 
