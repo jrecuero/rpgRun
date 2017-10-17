@@ -14,6 +14,6 @@ class GreenSprite(pygame.sprite.Sprite):
 
 class GreenSurface(BSurface):
 
-    def __init__(self, x, y, **kwargs):
+    def __init__(self, x, y, width, height, **kwargs):
         super(GreenSurface, self).__init__(x, y, 'GREEN', **kwargs)
-        self.sprite = BSprite(spr_graph=GreenSprite(32, 32))
+        self.sprite = BSprite(spr_graph=GreenSprite(width, height))

@@ -30,9 +30,9 @@ class PlayerSprite(pygame.sprite.Sprite):
 
 class PlayerActor(PActor):
 
-    def __init__(self, x, y, **kwargs):
+    def __init__(self, x, y, width, height, **kwargs):
         super(PlayerActor, self).__init__(x, y, 'PLAYER', **kwargs)
-        self.sprite = BSprite(spr_graph=PlayerSprite(32, 32))
+        self.sprite = BSprite(spr_graph=PlayerSprite(width, height))
         self.attrs.setup_attrs_from_json(PLAYER_ATTRS)
 
 
@@ -47,7 +47,7 @@ class EnemySprite(pygame.sprite.Sprite):
 
 class EnemyActor(Actor):
 
-    def __init__(self, x, y, width, name='ENEMY', **kwargs):
+    def __init__(self, x, y, width, height, name='ENEMY', **kwargs):
         super(EnemyActor, self).__init__(x, y, name, **kwargs)
-        self.sprite = BSprite(spr_graph=EnemySprite(32, 32))
+        self.sprite = BSprite(spr_graph=EnemySprite(width, height))
         self.attrs.setup_attrs_from_json(ACTOR_ATTRS)

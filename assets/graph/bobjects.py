@@ -14,6 +14,6 @@ class PillarSprite(pygame.sprite.Sprite):
 
 class Pillar(BObject):
 
-    def __init__(self, x, y, **kwargs):
+    def __init__(self, x, y, width, height, **kwargs):
         super(Pillar, self).__init__(x, y, 'PILLAR', **kwargs)
-        self.sprite = BSprite(spr_graph=PillarSprite(32, 32))
+        self.sprite = BSprite(spr_graph=PillarSprite(width, height))
