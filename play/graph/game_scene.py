@@ -8,6 +8,28 @@ from assets.graph.bobjects import Pillar
 from assets.graph.actors import PlayerActor, EnemyActor
 
 
+class MenuItem(pygame.sprite.Sprite):
+
+    def __init__(self):
+        super(MenuItem, self).__init__()
+        font = pygame.font.Font(None, 19)
+        surface = pygame.Surface((200, 100))
+        rendered = font.render('Right Click', 0, (255, 0, 0))
+        surface.blit(rendered, (10, 10))
+        self.image = surface
+        self.rect = self.image.get_rect()
+        self.rect.x = 400
+        self.rect.y = 100
+
+    def update(self):
+        # self.sprites.update()
+        mouse_pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(mouse_pos):
+            right, middle, left = pygame.mouse.get_pressed()
+            if right:
+                print('Click on Menu Item: {0} {1}'.format(self.rect, mouse_pos))
+
+
 class GameScene(BaseScene):
 
     def __init__(self):
@@ -37,6 +59,7 @@ class GameScene(BaseScene):
             self._game.add_actor(x)
             self._game.board.get_row_from_cell(x).add_cell_to_layer(x, LType.OBJECT)
         self._game.run_init()
+        self.menu_img = None
 
     def process_input(self, events):
         pass
@@ -45,11 +68,19 @@ class GameScene(BaseScene):
         # self.sprites.update()
         mouse_pos = pygame.mouse.get_pos()
         player_rect = self._game.player.sprite.graph.rect
+        if self.menu_img:
+            self.menu_img.update()
         if player_rect.collidepoint(mouse_pos):
             right, middle, left = pygame.mouse.get_pressed()
             if right:
+                # self.menu_img = pygame.Surface((200, 200))
+                # font = pygame.font.Font(None, 19)
+                # rendered = font.render('Right Click', 0, (255, 0, 0))
+                # self.menu_img.blit(rendered, (10, 10))
+                self.menu_img = MenuItem()
                 self._game.player.sprite.graph.image.fill((0, 0, 205))
             elif left:
+                self.menu_img = None
                 self._game.player.sprite.graph.image.fill((255, 165, 0))
 
     def render(self, screen):
@@ -64,3 +95,5 @@ class GameScene(BaseScene):
                 x += self.width + 2
             x = 32
             y += self.height + 2
+        if self.menu_img:
+            screen.blit(self.menu_img.image, (400, 100))
