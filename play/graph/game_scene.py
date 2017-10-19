@@ -1,33 +1,58 @@
 import pygame
 from base_scene import BaseScene
-from game import Game
-from blayer import LType
-from brender import BRender
+from rpgrun.game import Game
+from rpgrun.blayer import LType
+from rpgrun.brender import BRender
 from assets.graph.surfaces import GreenSurface
 from assets.graph.bobjects import Pillar
 from assets.graph.actors import PlayerActor, EnemyActor
 
 
 class MenuItem(pygame.sprite.Sprite):
+    """MenuItem class provides a graphical menu to the program.
 
-    def __init__(self):
+    TODO: This has to be created as a Generic Class to be used as a menu.
+    """
+
+    def __init__(self, pos):
         super(MenuItem, self).__init__()
-        font = pygame.font.Font(None, 19)
-        surface = pygame.Surface((200, 100))
-        rendered = font.render('Right Click', 0, (255, 0, 0))
-        surface.blit(rendered, (10, 10))
-        self.image = surface
+        self.font = pygame.font.SysFont("arial", 20)
+        self.surface = pygame.Surface((200, 100))
+        self.surface.fill((0, 250, 0))
+        self.action_item = self.font.render('Action     ', 0, (255, 0, 0), (0, 0, 255))
+        self.move_item = self.font.render('Move       ', 0, (255, 0, 0), (0, 0, 255))
+        self.surface.blit(self.action_item, (10, 10))
+        self.surface.blit(self.move_item, (10, 35))
+        self.image = self.surface
         self.rect = self.image.get_rect()
-        self.rect.x = 400
-        self.rect.y = 100
+        self.rect.x, self.rect.y = pos
 
     def update(self):
         # self.sprites.update()
         mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos):
-            right, middle, left = pygame.mouse.get_pressed()
-            if right:
-                print('Click on Menu Item: {0} {1}'.format(self.rect, mouse_pos))
+        # action_box = self.action_item.get_rect().move(self.rect.x + 10, self.rect.y + 10)
+        # move_box = self.action_item.get_rect().move(self.rect.x + 10, self.rect.y + 35)
+        action_box = self.action_item.get_rect().move(self.rect.x + 10, self.rect.y + 10)
+        move_box = self.action_item.get_rect().move(self.rect.x + 10, self.rect.y + 35)
+        left, middle, right = pygame.mouse.get_pressed()
+        if left:
+            print('self.rect: {}'.format(self.rect))
+            if action_box.collidepoint(mouse_pos):
+                print('Click on Action Item: {0} {1}'.format(action_box, mouse_pos))
+                self.surface.fill((0, 250, 0))
+                self.action_item = self.font.render('Action <---', 0, (255, 0, 0), (0, 0, 255))
+                self.move_item = self.font.render('Move       ', 0, (255, 0, 0), (0, 0, 255))
+                self.surface.blit(self.action_item, (10, 10))
+                self.surface.blit(self.move_item, (10, 35))
+                self.image = self.surface
+            elif move_box.collidepoint(mouse_pos):
+                print('Click on Move Item: {0} {1}'.format(move_box, mouse_pos))
+                self.surface.fill((0, 250, 0))
+                self.action_item = self.font.render('Action     ', 0, (255, 0, 0), (0, 0, 255))
+                self.move_item = self.font.render('Move <-----', 0, (255, 0, 0), (0, 0, 255))
+                self.surface.blit(self.action_item, (10, 10))
+                self.surface.blit(self.move_item, (10, 35))
+                self.image = self.surface
 
 
 class GameScene(BaseScene):
@@ -60,6 +85,7 @@ class GameScene(BaseScene):
             self._game.board.get_row_from_cell(x).add_cell_to_layer(x, LType.OBJECT)
         self._game.run_init()
         self.menu_img = None
+        self.left_disable = False
 
     def process_input(self, events):
         pass
@@ -71,16 +97,20 @@ class GameScene(BaseScene):
         if self.menu_img:
             self.menu_img.update()
         if player_rect.collidepoint(mouse_pos):
-            right, middle, left = pygame.mouse.get_pressed()
-            if right:
+            left, middle, right = pygame.mouse.get_pressed()
+            if not self.left_disable and left:
+                self.left_disable = True
                 # self.menu_img = pygame.Surface((200, 200))
                 # font = pygame.font.Font(None, 19)
-                # rendered = font.render('Right Click', 0, (255, 0, 0))
+                # rendered = font.render('left Click', 0, (255, 0, 0))
                 # self.menu_img.blit(rendered, (10, 10))
-                self.menu_img = MenuItem()
+                self.menu_pos = mouse_pos
+                self.menu_img = MenuItem(mouse_pos)
                 self._game.player.sprite.graph.image.fill((0, 0, 205))
-            elif left:
+            elif right:
                 self.menu_img = None
+                self.menu_pos = None
+                self.left_disable = False
                 self._game.player.sprite.graph.image.fill((255, 165, 0))
 
     def render(self, screen):
@@ -96,4 +126,4 @@ class GameScene(BaseScene):
             x = 32
             y += self.height + 2
         if self.menu_img:
-            screen.blit(self.menu_img.image, (400, 100))
+            screen.blit(self.menu_img.image, (self.menu_pos[0], self.menu_pos[1]))
