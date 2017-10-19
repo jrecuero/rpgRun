@@ -1,10 +1,10 @@
-from board import Board
-from bhandler import BoardHandler
-from bpoint import Location
-from brow import BRow
-from blayer import LType
-from action import Action
-import loggerator
+from rpgrun.board import Board
+from rpgrun.bhandler import BoardHandler
+from rpgrun.bpoint import Location
+from rpgrun.brow import BRow
+from rpgrun.blayer import LType
+from rpgrun.action import Action
+import jc2li.loggerator as loggerator
 
 
 class Game(object):

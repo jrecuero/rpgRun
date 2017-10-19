@@ -1,5 +1,5 @@
-from bcell import BCell
-from attr import Attributes
+from rpgrun.bcell import BCell
+from rpgrun.attr import Attributes
 
 
 @staticmethod

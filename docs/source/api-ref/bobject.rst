@@ -5,6 +5,5 @@ bobject
 bobject module
 ==============
 
-.. automodule:: bobject
+.. automodule:: rpgrun.bobject
    :members:
-

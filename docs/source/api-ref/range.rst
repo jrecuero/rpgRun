@@ -5,6 +5,5 @@ range
 range module
 ============
 
-.. automodule:: range
+.. automodule:: rpgrun.range
    :members:
-

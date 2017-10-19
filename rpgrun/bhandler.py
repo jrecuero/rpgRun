@@ -1,4 +1,4 @@
-from board import Board
+from rpgrun.board import Board
 
 
 class BoardHandler(object):

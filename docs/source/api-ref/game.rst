@@ -5,6 +5,5 @@ game
 game module
 ===========
 
-.. automodule:: game
+.. automodule:: rpgrun.game
    :members:
-

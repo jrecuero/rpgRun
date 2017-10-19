@@ -5,6 +5,5 @@ blayer
 blayer module
 =============
 
-.. automodule:: blayer
+.. automodule:: rpgrun.blayer
    :members:
-

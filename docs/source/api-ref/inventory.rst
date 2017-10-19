@@ -5,6 +5,5 @@ inventory
 inventory module
 ================
 
-.. automodule:: inventory
+.. automodule:: rpgrun.inventory
    :members:
-

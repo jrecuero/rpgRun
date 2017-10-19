@@ -5,6 +5,5 @@ equipment
 equipment module
 ================
 
-.. automodule:: equipment
+.. automodule:: rpgrun.equipment
    :members:
-

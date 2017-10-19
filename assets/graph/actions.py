@@ -1,5 +1,5 @@
-from bpoint import Location
-from action import AType, TargetAction, MoveAction, AoETargetAction
+from rpgrun.bpoint import Location
+from rpgrun.action import AType, TargetAction, MoveAction, AoETargetAction
 
 
 class WeaponAction(TargetAction):

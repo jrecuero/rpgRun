@@ -7,6 +7,5 @@ itero
 itero module
 ============
 
-.. automodule:: itero
+.. automodule:: rpgrun.itero
    :members:
-

@@ -5,6 +5,5 @@ bsurface
 bsurface module
 ===============
 
-.. automodule:: bsurface
+.. automodule:: rpgrun.bsurface
    :members:
-

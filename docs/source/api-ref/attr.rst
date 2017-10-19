@@ -5,6 +5,5 @@ attr
 attr module
 ===========
 
-.. automodule:: attr
+.. automodule:: rpgrun.attr
    :members:
-

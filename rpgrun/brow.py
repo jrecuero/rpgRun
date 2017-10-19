@@ -1,8 +1,7 @@
-from itero import Itero
-from blayer import BLayer, LType
-from brender import BRender
-from bcell import BCell
 from collections import OrderedDict
+from rpgrun.itero import Itero
+from rpgrun.blayer import BLayer, LType
+from rpgrun.brender import BRender
 
 
 class BRow(Itero):
@@ -42,6 +41,7 @@ class BRow(Itero):
     def cellrow(self):
         """Gets _cellrow attribute value using the underlying layer.
 
+        >>> from rpgrun.bcell import BCell
         >>> row = BRow(2)
         >>> row.cellrow
         >>> row[0].append(BCell(0, 1, None))
@@ -94,14 +94,13 @@ class BRow(Itero):
     def add_cell_to_layer(self, cell, layer):
         """Adds a new cell to the given layer.
 
+        >>> from rpgrun.bcell import BCell
         >>> row = BRow(2)
         >>> row.add_cell_to_layer(BCell(0, 0, None), LType.SURFACE)
         True
         >>> row[LType.SURFACE.value]
         [LType.SURFACE]  <0>   cell# 1
         """
-        assert isinstance(cell, BCell)
-        assert isinstance(layer, LType)
         self.cellrow = cell.row
         self[layer.value].append(cell)
         cell.Layer = layer
@@ -110,6 +109,7 @@ class BRow(Itero):
     def remove_cell_from_layer(self, cell, layer):
         """Removes a cell from the given layer.
 
+        >>> from rpgrun.bcell import BCell
         >>> row = BRow(2)
         >>> cell = BCell(0, 0, None)
         >>> row.add_cell_to_layer(cell, LType.SURFACE)
@@ -123,13 +123,12 @@ class BRow(Itero):
         >>> row.remove_cell_from_layer(cell, LType.SURFACE)
         False
         """
-        assert isinstance(cell, BCell)
-        assert isinstance(layer, LType)
         return self[layer.value].remove(cell)
 
     def populate_layer(self, cell, layer):
         """Populate a layer with the same cell.
 
+        >>> from rpgrun.bcell import BCell
         >>> row = BRow(2)
         >>> cell = BCell(0, 0, None)
         >>> row.populate_layer(cell, LType.SURFACE)
@@ -151,6 +150,7 @@ class BRow(Itero):
     def clear_layer(self, layer):
         """Clear all cells from a layer.
 
+        >>> from rpgrun.bcell import BCell
         >>> row = BRow(2)
         >>> cell = BCell(0, 0, None)
         >>> row.populate_layer(cell, LType.SURFACE)
@@ -162,7 +162,6 @@ class BRow(Itero):
         >>> len(row[LType.SURFACE.value])
         0
         """
-        assert isinstance(layer, LType)
         for index in range(len(self[layer.value])):
             del self[layer.value]
         return True
@@ -187,6 +186,7 @@ class BRow(Itero):
                     was found.
 
         Example:
+            >>> from rpgrun.bcell import BCell
             >>> row = BRow(2)
             >>> c1 = BCell(0, 0, None)
             >>> c2 = BCell(1, 0, None)
@@ -241,11 +241,11 @@ class BRow(Itero):
             for cell in layer:
                 key = '{0},{1}'.format(cell.col, cell.row)
                 cells.update({key: cell.render(render)})
-        if render == BRender.TEXT:
+        if render is BRender.TEXT:
             width = kwargs.get('width', 5)
             cell_str = ['{0}'.format(x.center(width)) for x in cells.values()]
             return " ".join(cell_str)
-        elif render == BRender.GRAPH:
+        elif render is BRender.GRAPH:
             return cells
         else:
             raise NotImplementedError

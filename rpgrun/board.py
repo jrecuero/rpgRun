@@ -1,7 +1,7 @@
-from itero import Itero
 from collections import deque
-from brender import BRender
-from brow import BRow
+from rpgrun.itero import Itero
+from rpgrun.brender import BRender
+from rpgrun.brow import BRow
 
 
 class Board(Itero):
@@ -301,12 +301,12 @@ class Board(Itero):
             object : Instance to be rendered.
         """
         render = kwargs.get('render', BRender.DEFAULT)
-        if render.value == BRender.TEXT.value:
+        if render is BRender.TEXT:
             st = ''
             for row in self:
                 st += '{0} {1}\n'.format(row.cellrow, row.render(**kwargs))
             return st
-        elif render.value == BRender.GRAPH.value:
+        elif render is BRender.GRAPH:
             return [x.render(**kwargs) for x in self]
         else:
             raise NotImplementedError

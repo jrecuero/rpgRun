@@ -1,5 +1,5 @@
-from bsprite import BSprite
-from bsurface import BSurface
+from rpgrun.bsprite import BSprite
+from rpgrun.bsurface import BSurface
 import pygame
 
 

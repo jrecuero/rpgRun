@@ -5,6 +5,5 @@ gequip
 gequip module
 =============
 
-.. automodule:: gequip
+.. automodule:: rpgrun.gequip
    :members:
-

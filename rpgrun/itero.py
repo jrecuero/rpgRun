@@ -77,7 +77,6 @@ class Itero(Iterator):
             'ONE'
         """
         assert key < len(self.__stream)
-        assert isinstance(value, self.__stream_class)
         self.__stream[key] = value
 
     def __delitem__(self, key):
@@ -175,7 +174,6 @@ class Itero(Iterator):
         """
         if self.maxlen is not None and len(self) >= self.maxlen:
             raise NotImplementedError
-        assert isinstance(value, self.__stream_class)
         self.__stream.append(value)
 
     def extend(self, theList):
@@ -198,8 +196,6 @@ class Itero(Iterator):
             raise NotImplementedError
         if type(theList) in [list, tuple]:
             _list = theList
-            for x in _list:
-                assert isinstance(x, self.__stream_class)
         elif isinstance(theList, self.__class__):
             _list = self._Itero__stream
         else:
@@ -238,7 +234,6 @@ class Itero(Iterator):
             >>> it.remove('one')
             False
         """
-        assert isinstance(value, self.__stream_class)
         try:
             index = self.__stream.index(value)
             del self[index]
@@ -300,7 +295,6 @@ class StrItero(Iterator):
             2
         """
         assert isinstance(key, str)
-        assert isinstance(value, self.__stream_class)
         key_ = self.__processKey(key) if self.__processKey else key
         OrderedDict.__setitem__(self.__stream, key_, value)
 
@@ -423,7 +417,6 @@ class StrItero(Iterator):
             1
         """
         assert isinstance(key, str)
-        assert isinstance(value, self.__stream_class)
         key_ = self.__processKey(key) if self.__processKey else key
         OrderedDict.update(self.__stream, {key_: value})
 

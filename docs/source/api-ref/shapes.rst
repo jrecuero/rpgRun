@@ -5,6 +5,5 @@ shapes
 shapes module
 =============
 
-.. automodule:: shapes
+.. automodule:: rpgrun.shapes
    :members:
-

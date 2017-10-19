@@ -1,5 +1,5 @@
-from gitem import GItem, ItemType
-from action import Actions
+from rpgrun.gitem import GItem, ItemType
+from rpgrun.action import Actions
 
 
 @staticmethod

@@ -1,8 +1,5 @@
-# import sys
-# sys.path.append('../jc2li')
-
-from bpoint import Location
-from argtypes import Int, Str
+from rpgrun.bpoint import Location
+from jc2li.argtypes import Int, Str
 
 
 class T_Target(Str):

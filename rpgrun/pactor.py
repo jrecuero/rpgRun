@@ -1,5 +1,5 @@
-from bcell import BCell
-from actor import Actor
+from rpgrun.bcell import BCell
+from rpgrun.actor import Actor
 
 
 @staticmethod

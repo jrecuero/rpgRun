@@ -1,5 +1,5 @@
-from gitem import GItem
-from gcatalog import Catalog
+from rpgrun.gitem import GItem
+from rpgrun.gcatalog import Catalog
 
 
 class Inventory(Catalog):

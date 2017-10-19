@@ -1,23 +1,20 @@
-# import sys
-# sys.path.append('../jc2li')
-
-import game
-from blayer import LType
-from bpoint import Point, Location
-from shapes import Quad, Rhomboid
-from cli import Cli
-from decorators import argo, syntax, setsyntax
-from argtypes import Int
-from brow import BRow
-from action import AType
-from actor import Actor
+from jc2li.cli import Cli
+from jc2li.decorators import argo, syntax, setsyntax
+from jc2li.argtypes import Int
+import jc2li.loggerator as loggerator
+import rpgrun.game as game
+from rpgrun.blayer import LType
+from rpgrun.bpoint import Point, Location
+from rpgrun.shapes import Quad, Rhomboid
+from rpgrun.brow import BRow
+from rpgrun.action import AType
+from rpgrun.actor import Actor
 from assets.text.surfaces import GreenSurface
 from assets.text.actors import PlayerActor, EnemyActor, MageActor, BossActor
 from assets.text.bobjects import Pillar
 from assets.text.actions import WeaponAction, MeleAction, RangeAction, MoveAction
 from assets.text.equips import Weapon, Armor, Shield
 from targs import T_Target, T_Actor, T_Equip, T_Attr, T_Action, T_Location, T_Step
-import loggerator
 
 MODULE = 'Play'
 EXPORT = 'Play'

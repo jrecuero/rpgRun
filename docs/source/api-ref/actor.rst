@@ -5,6 +5,5 @@ actor
 actor module
 ============
 
-.. automodule:: actor
+.. automodule:: rpgrun.actor
    :members:
-

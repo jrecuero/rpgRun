@@ -5,6 +5,5 @@ pactor
 pactor module
 =============
 
-.. automodule:: pactor
+.. automodule:: rpgrun.pactor
    :members:
-

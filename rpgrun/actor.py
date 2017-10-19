@@ -1,8 +1,8 @@
-from bcell import BCell
-from bobject import BObject
-from action import Actions
-from inventory import Inventory
-from equipment import Equipment
+from rpgrun.bcell import BCell
+from rpgrun.bobject import BObject
+from rpgrun.action import Actions
+from rpgrun.inventory import Inventory
+from rpgrun.equipment import Equipment
 
 
 @staticmethod
@@ -136,9 +136,9 @@ def __integration_doctest():
     """
     Test Inventory can hold GItem and GEquip.
 
-    >>> from equipment import GEquip
-    >>> from gitem import GItem
-    >>> from attr import Attr
+    >>> from rpgrun.equipment import GEquip
+    >>> from rpgrun.gitem import GItem
+    >>> from rpgrun.attr import Attr
     >>> a = Actor(0, 0, 'me')
     >>> it = GItem(name='box')
     >>> sw1 = GEquip(name='sword', attr_buff={'hp': 5})

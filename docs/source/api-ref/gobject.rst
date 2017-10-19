@@ -5,6 +5,5 @@ gobject
 gobject module
 ==============
 
-.. automodule:: gobject
+.. automodule:: rpgrun.gobject
    :members:
-

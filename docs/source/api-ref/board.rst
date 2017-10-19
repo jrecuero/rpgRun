@@ -5,6 +5,5 @@ board
 board module
 ============
 
-.. automodule:: board
+.. automodule:: rpgrun.board
    :members:
-

@@ -1,5 +1,5 @@
-from gequip import GEquip
-from gcatalog import Catalog
+from rpgrun.gequip import GEquip
+from rpgrun.gcatalog import Catalog
 
 
 class Equipment(Catalog):

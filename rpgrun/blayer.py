@@ -1,6 +1,6 @@
-from itero import Itero
-from bcell import BCell
 from enum import Enum
+from rpgrun.itero import Itero
+from rpgrun.bcell import BCell
 
 
 class LType(Enum):
@@ -29,7 +29,6 @@ class BLayer(Itero):
         >>> layer.maxlen
         10
         """
-        assert isinstance(type_, LType)
         super(BLayer, self).__init__(BCell, maxlen)
         self.type = type_
         self.cellrow = None
@@ -60,7 +59,6 @@ class BLayer(Itero):
         ...     print('Assert')
         Assert
         """
-        assert isinstance(theCell, BCell)
         if self.cellrow is None:
             self.cellrow = theCell.row
         else:

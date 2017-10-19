@@ -5,6 +5,5 @@ brow
 brow module
 ===========
 
-.. automodule:: brow
+.. automodule:: rpgrun.brow
    :members:
-

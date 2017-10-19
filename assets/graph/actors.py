@@ -1,6 +1,6 @@
-from bsprite import BSprite
-from actor import Actor
-from pactor import PActor
+from rpgrun.bsprite import BSprite
+from rpgrun.actor import Actor
+from rpgrun.pactor import PActor
 import pygame
 
 PLAYER_ATTRS = '''[{"hp": {"base": 10, "delta": 2, "buffs": "None"}},

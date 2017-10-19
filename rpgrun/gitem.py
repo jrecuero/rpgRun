@@ -1,4 +1,4 @@
-from gobject import GObject
+from rpgrun.gobject import GObject
 
 
 class ItemType(object):

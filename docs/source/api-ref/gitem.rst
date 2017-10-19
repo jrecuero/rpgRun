@@ -5,6 +5,5 @@ gitem
 gitem module
 ============
 
-.. automodule:: gitem
+.. automodule:: rpgrun.gitem
    :members:
-

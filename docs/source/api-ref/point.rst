@@ -5,5 +5,5 @@ point
 point module
 ============
 
-.. automodule:: point
+.. automodule:: rpgrun.point
    :members:

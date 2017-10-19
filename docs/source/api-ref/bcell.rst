@@ -5,6 +5,5 @@ bcell
 bcell module
 ============
 
-.. automodule:: bcell
+.. automodule:: rpgrun.bcell
    :members:
-

@@ -1,7 +1,7 @@
-import ids
-from bpoint import BPoint
-from brender import BRender
-from bsprite import BSprite
+import rpgrun.ids as ids
+from rpgrun.bpoint import BPoint
+from rpgrun.brender import BRender
+from rpgrun.bsprite import BSprite
 
 
 class BCell(BPoint):
@@ -69,7 +69,7 @@ class BCell(BPoint):
         """
         >>> cell = BCell(0, 0, 'cell')
         >>> cell.klass
-        <class 'bpoint.BPoint'>
+        <class 'rpgrun.bpoint.BPoint'>
         """
         return BPoint
 

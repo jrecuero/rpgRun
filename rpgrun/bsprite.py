@@ -1,4 +1,4 @@
-from brender import BRender
+from rpgrun.brender import BRender
 
 
 class BSprite(object):
@@ -48,14 +48,14 @@ class BSprite(object):
     def render(self, brender=BRender.DEFAULT):
         """Renders the sprite for the given render type.
         """
-        if brender == BRender.GRAPH:
+        if brender is BRender.GRAPH:
             return self.graph
-        elif brender == BRender.TEXT:
+        elif brender is BRender.TEXT:
             return '{0}{1}{2}'.format(self.color if self.color else '',
                                       self.text.center(self.width) if self.width else self.text,
                                       '\x1b[0m' if self.color else '')
             return self.text
-        elif brender == BRender.NONE:
+        elif brender is BRender.NONE:
             raise NotImplementedError
         else:
             raise NotImplementedError

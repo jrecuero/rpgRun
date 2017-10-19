@@ -1,8 +1,8 @@
 import pygame
 from base_scene import BaseScene
-from game import Game
-from blayer import LType
-from brender import BRender
+from rpgrun.game import Game
+from rpgrun.blayer import LType
+from rpgrun.brender import BRender
 from assets.graph.surfaces import GreenSurface
 from assets.graph.bobjects import Pillar
 from assets.graph.actors import PlayerActor, EnemyActor
@@ -132,14 +132,27 @@ class GameScene(BaseScene):
         self.selected = False
 
     def process_input(self, events):
-        pass
+        # FIXME If there is a menu active in the display it has to receive
+        # control from the parent with remaining events.
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONUP:
+                mouse_pos = pygame.mouse.get_pos()
+                player_rect = self._game.player.sprite.graph.rect
+                if player_rect.collidepoint(mouse_pos):
+                    if event.button == 1:
+                        self.left_disable = True
+                        self.menu_pos = (player_rect.left, player_rect.bottom)
+                        self.menu_img = PopUpMenu(self.menu_pos, ['Action', 'Movement'])
+                    elif event.button == 3:
+                        self.menu_img = None
+                        self.menu_pos = None
+                        self.left_disable = False
+                        self._game.player.sprite.graph.image.fill((255, 165, 0))
 
     def update(self):
         if self.selected:
             return
 
-        mouse_pos = pygame.mouse.get_pos()
-        player_rect = self._game.player.sprite.graph.rect
         if self.menu_img:
             if not self.menu_img.update():
                 # TODO: When action or movement are selected, they have to be
@@ -150,21 +163,23 @@ class GameScene(BaseScene):
                 self._game.player.sprite.graph.image.fill((255, 165, 0))
                 # self.selected = True
 
-        left, middle, right = pygame.mouse.get_pressed()
-        if not self.left_disable and left:
-            if player_rect.collidepoint(mouse_pos):
-                self.left_disable = True
-                # self.menu_pos = mouse_pos
-                self.menu_pos = (player_rect.left, player_rect.bottom)
-                # self.menu_img = MenuItem(self.menu_pos)
-                self.menu_img = PopUpMenu(self.menu_pos, ['Action', 'Movement'])
-                # self._game.player.sprite.graph.image.fill((0, 0, 205))
-        elif right:
-            if player_rect.collidepoint(mouse_pos):
-                self.menu_img = None
-                self.menu_pos = None
-                self.left_disable = False
-                self._game.player.sprite.graph.image.fill((255, 165, 0))
+        # mouse_pos = pygame.mouse.get_pos()
+        # player_rect = self._game.player.sprite.graph.rect
+        # left, middle, right = pygame.mouse.get_pressed()
+        # if not self.left_disable and left:
+        #     if player_rect.collidepoint(mouse_pos):
+        #         self.left_disable = True
+        #         # self.menu_pos = mouse_pos
+        #         self.menu_pos = (player_rect.left, player_rect.bottom)
+        #         # self.menu_img = MenuItem(self.menu_pos)
+        #         self.menu_img = PopUpMenu(self.menu_pos, ['Action', 'Movement'])
+        #         # self._game.player.sprite.graph.image.fill((0, 0, 205))
+        # elif right:
+        #     if player_rect.collidepoint(mouse_pos):
+        #         self.menu_img = None
+        #         self.menu_pos = None
+        #         self.left_disable = False
+        #         self._game.player.sprite.graph.image.fill((255, 165, 0))
 
     def render(self, screen):
         screen.fill((0, 0, 255))

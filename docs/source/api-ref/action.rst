@@ -5,6 +5,5 @@ action
 action module
 =============
 
-.. automodule:: action
+.. automodule:: rpgrun.action
    :members:
-

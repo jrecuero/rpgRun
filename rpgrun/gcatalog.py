@@ -1,4 +1,4 @@
-from itero import StrItero
+from rpgrun.itero import StrItero
 
 
 class Catalog(StrItero):

@@ -5,6 +5,5 @@ gcatalog
 gcatalog module
 ===============
 
-.. automodule:: gcatalog
+.. automodule:: rpgrun.gcatalog
    :members:
-

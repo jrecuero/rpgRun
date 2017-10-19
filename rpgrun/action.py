@@ -1,7 +1,7 @@
 from enum import Enum
-from gobject import GObject
-from itero import Itero
-from blayer import LType
+from rpgrun.gobject import GObject
+from rpgrun.itero import Itero
+from rpgrun.blayer import LType
 
 
 class AType(Enum):

@@ -1,5 +1,5 @@
-from itero import StrItero
 import json
+from rpgrun.itero import StrItero
 
 
 class Attr(object):

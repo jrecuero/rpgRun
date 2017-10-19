@@ -1,5 +1,5 @@
-import ids
-from attr import Attributes
+import rpgrun.ids as ids
+from rpgrun.attr import Attributes
 
 
 class GObject(object):

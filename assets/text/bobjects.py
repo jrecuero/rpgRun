@@ -1,5 +1,5 @@
-from bsprite import BSprite
-from bobject import BObject
+from rpgrun.bsprite import BSprite
+from rpgrun.bobject import BObject
 
 
 class Pillar(BObject):

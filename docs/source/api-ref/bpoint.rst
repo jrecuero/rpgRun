@@ -5,6 +5,5 @@ bpoint
 bpoint module
 =============
 
-.. automodule:: bpoint
+.. automodule:: rpgrun.bpoint
    :members:
-
