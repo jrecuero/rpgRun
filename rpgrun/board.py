@@ -211,7 +211,7 @@ class Board(Itero):
         """Gets all cell for the given layer.
 
         """
-        cells  = []
+        cells = []
         for row in self:
             cellsFromRow = row.get_cells_from_layer(layers)
             if cellsFromRow:
@@ -301,12 +301,12 @@ class Board(Itero):
             object : Instance to be rendered.
         """
         render = kwargs.get('render', BRender.DEFAULT)
-        if render == BRender.TEXT:
+        if render.value == BRender.TEXT.value:
             st = ''
             for row in self:
                 st += '{0} {1}\n'.format(row.cellrow, row.render(**kwargs))
             return st
-        elif render == BRender.GRAPH:
+        elif render.value == BRender.GRAPH.value:
             return [x.render(**kwargs) for x in self]
         else:
             raise NotImplementedError

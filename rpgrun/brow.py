@@ -171,7 +171,7 @@ class BRow(Itero):
         """Returns all cells from the given layer.
 
         """
-        cells  = []
+        cells = []
         for layer in [x for x in self if x.type in layers]:
             cells.extend([cell for cell in layer])
         return cells
