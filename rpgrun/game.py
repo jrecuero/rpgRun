@@ -4,6 +4,7 @@ from rpgrun.bpoint import Location
 from rpgrun.brow import BRow
 from rpgrun.blayer import LType
 from rpgrun.action import Action
+from gstages import Stages
 import jc2li.loggerator as loggerator
 
 
@@ -26,6 +27,7 @@ class Game(object):
         self.__action_select_target = None
         self.__action_select_move = None
         self._logger = loggerator.getLoggerator('GAME')
+        self.stage = Stages.INIT
 
     def add_actor(self, actor, player=False):
         """Adds the given actor to the game.
@@ -123,6 +125,13 @@ class Game(object):
             the cycle.
         """
         while True:
+            self.stage = Stages.TURN_START
+
+            # Select Actor
+            self.stage = Stages.SEL_ACTOR
+
+            # Select Action
+            self.stage = Stages.SEL_ACTION
             # Yield for user to select an action.
             # Required call: run_select_action()
             self._action = yield
@@ -130,6 +139,9 @@ class Game(object):
             self._logger.debug('action: {}'.format(self._action.type))
 
             if self._action.requires_target():
+                # Select target
+                self.stage = Stages.SEL_TARGET
+
                 # When action has been selected, ask for cells for target
                 # selection.
                 layer = self._action.layer_to_target()
@@ -148,6 +160,9 @@ class Game(object):
             self._logger.debug('target: {}'.format(target))
 
             if self._action.requires_movement():
+                # Select Movement
+                self.stage = Stages.SEL_MOVE
+
                 # Yield for the user to enter any additional data required by the
                 # action.
                 # Required call: run_select_movement()
@@ -156,15 +171,25 @@ class Game(object):
                 _actionKwargs = yield self.__action_select_move
             else:
                 _actionKwargs = {}
+
+            # Execute action
+            self.stage = Stages.PLAY_ACTION
+
             self._logger.debug('action kwargs: {}'.format(_actionKwargs))
             self._action.execute(self, **_actionKwargs)
 
             if self._action.requires_movement():
+                # Update the board
+                self.stage = Stages.UPDATE_BOARD
+
                 # Yield to receive the new row to be added to the board.
                 # Required call: run_scroll()
                 new_row = yield
                 self.scroll_board(new_row)
                 self._logger.debug('scroll new row: {}'.format(new_row))
+
+            # Update actors
+            self.stage = Stages.UPDATE_ACTORS
 
             self._update_actors()
 

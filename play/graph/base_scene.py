@@ -20,3 +20,6 @@ class BaseScene(object):
 
     def next_scene(self):
         return self._next
+
+    def run(self, **kwargs):
+        return True
