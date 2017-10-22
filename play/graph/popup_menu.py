@@ -36,6 +36,7 @@ class PopUpMenu(pygame.sprite.Sprite):
         self.in_focus = True
 
     def update(self):
+        # FIXME: This has to be moved to process_input method.
         if self.in_focus:
             mouse_pos = pygame.mouse.get_pos()
             boxes = []

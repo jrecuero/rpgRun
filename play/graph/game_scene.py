@@ -33,6 +33,7 @@ class GameScene(BaseScene):
         player = PlayerActor(2, 5, self.width, self.height)
         self.game.add_actor(player, True)
         self.game.board.get_row_from_cell(player).add_cell_to_layer(player, LType.OBJECT)
+        # TODO: add actions to the player to be used by the user interface.
 
         enemies = []
         enemies.append(EnemyActor(4, 6, self.width, self.height, 'GOBLIN'))
@@ -56,6 +57,7 @@ class GameScene(BaseScene):
                 player_rect = self.game.player.sprite.graph.rect
                 if player_rect.collidepoint(mouse_pos):
                     if event.button == 1:
+                        #
                         self.actions = ['ATTACK', 'MOVE']
                         self.left_disable = True
                         self.menu_pos = (player_rect.left, player_rect.bottom)
