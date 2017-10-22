@@ -6,7 +6,10 @@ from rpgrun.brender import BRender
 from assets.graph.surfaces import GreenSurface
 from assets.graph.bobjects import Pillar
 from assets.graph.actors import PlayerActor, EnemyActor
+from rpgrun.action import AType
+from assets.text.actions import WeaponAction, MoveAction
 from popup_menu import PopUpMenu
+from command_display import CommandDisplay
 
 
 class GameScene(BaseScene):
@@ -14,6 +17,10 @@ class GameScene(BaseScene):
     def __init__(self):
         super(GameScene, self).__init__()
         self.create_game()
+        self.command_display = CommandDisplay(self.game,
+                                              (10, 600),
+                                              sprite_size=(780, 275),
+                                              font_size=12)
 
     def create_game(self):
         self.board_width, self.board_height = 8, 8
@@ -31,9 +38,10 @@ class GameScene(BaseScene):
         self.game.board.get_row_from_cell(pillar).add_cell_to_layer(pillar, LType.OBJECT)
 
         player = PlayerActor(2, 5, self.width, self.height)
+        player.actions.append(WeaponAction('weapon', AType.WEAPONIZE))
+        player.actions.append(MoveAction('move', AType.MOVEMENT))
         self.game.add_actor(player, True)
         self.game.board.get_row_from_cell(player).add_cell_to_layer(player, LType.OBJECT)
-        # TODO: add actions to the player to be used by the user interface.
 
         enemies = []
         enemies.append(EnemyActor(4, 6, self.width, self.height, 'GOBLIN'))
@@ -57,14 +65,12 @@ class GameScene(BaseScene):
                 player_rect = self.game.player.sprite.graph.rect
                 if player_rect.collidepoint(mouse_pos):
                     if event.button == 1:
-                        #
-                        self.actions = ['ATTACK', 'MOVE']
+                        self.actions = [x.name for x in self.game.player.actions]
                         self.left_disable = True
-                        self.menu_pos = (player_rect.left, player_rect.bottom)
-                        self.menu_img = PopUpMenu(self.game, self.menu_pos, self.actions)
+                        menu_pos = (player_rect.left, player_rect.bottom)
+                        self.menu_img = PopUpMenu(self.game, menu_pos, self.actions)
                     elif event.button == 3:
                         self.menu_img = None
-                        self.menu_pos = None
                         self.left_disable = False
                         self.game.player.sprite.graph.image.fill((255, 165, 0))
 
@@ -77,12 +83,14 @@ class GameScene(BaseScene):
             if action is not None:
                 # TODO: When action or movement are selected, they have to be
                 # sent to the game to be prcessed.
-                print('Player will {}'.format(self.actions[action]))
+                self.command_display.add_text('Player will {}'.format(self.actions[action]))
                 self.menu_img = None
-                self.menu_pos = None
                 self.left_disable = False
                 self.game.player.sprite.graph.image.fill((255, 165, 0))
                 # self.selected = True
+
+        if self.command_display:
+            self.command_display.update()
 
     def render(self, screen):
         screen.fill((0, 0, 255))
@@ -96,5 +104,10 @@ class GameScene(BaseScene):
                 x += self.width + 2
             x = 32
             y += self.height + 2
+        # TODO: We have to create a display for logging information related with
+        # the game for debugging purposes. That panel will be used in the
+        # future to display information relevant to the player.
         if self.menu_img:
-            screen.blit(self.menu_img.image, (self.menu_pos[0], self.menu_pos[1]))
+            self.menu_img.render(screen)
+        if self.command_display:
+            self.command_display.render(screen)
