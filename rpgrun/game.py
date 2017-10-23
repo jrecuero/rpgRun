@@ -145,7 +145,8 @@ class Game(object):
                 # When action has been selected, ask for cells for target
                 # selection.
                 layer = self._action.layer_to_target()
-                cells = self.board.get_cells_from_layer(layer) if layer else None
+                cells = self.board.get_cells_from_layer(
+                    layer) if layer else None
                 self.target_choice = self._action.filter_target(cells)
 
                 # Yield for user to select the target.

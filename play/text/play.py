@@ -23,7 +23,8 @@ EXPORT = 'Play'
 class Play(Cli):
 
     SYSTEM = ['exit', 'help', 'syntax', 'debug', 'HIT']
-    COMMON = ['PRINT', 'ACTORS', 'PLAYER', 'EQUIPMENT', 'INVENTORY', 'EQUIP', 'UNEQUIP']
+    COMMON = ['PRINT', 'ACTORS', 'PLAYER',
+              'EQUIPMENT', 'INVENTORY', 'EQUIP', 'UNEQUIP']
     STAGES = {'wait': ['INIT'],
               'init': ['RUN'] + COMMON,
               'run': ['ACTION'] + COMMON,
@@ -40,7 +41,8 @@ class Play(Cli):
         if cmd in self.STAGES[self._stage] + self.SYSTEM:
             return True
         else:
-            print('command <{0}> not valid in stage <{1}>'.format(cmd, self._stage))
+            print('command <{0}> not valid in stage <{1}>'.format(
+                cmd, self._stage))
             return False
 
     def _new_row(self):
@@ -50,7 +52,8 @@ class Play(Cli):
         row = BRow(width)
         newHeight = self._game.board.top_cell_row + 1
         for iwidth in range(width):
-            row.add_cell_to_layer(GreenSurface(iwidth, newHeight, self._spr_width), LType.SURFACE)
+            row.add_cell_to_layer(GreenSurface(
+                iwidth, newHeight, self._spr_width), LType.SURFACE)
         return row
 
     def _scroll(self):
@@ -72,7 +75,8 @@ class Play(Cli):
         for row in self._game.board:
             iheight -= 1
             for iwidth in range(self._width):
-                row.add_cell_to_layer(GreenSurface(iwidth, iheight, self._spr_width), LType.SURFACE)
+                row.add_cell_to_layer(GreenSurface(
+                    iwidth, iheight, self._spr_width), LType.SURFACE)
 
         Actor.LIFE = 'hp'
         player = PlayerActor(2, 4, self._spr_width)
@@ -88,9 +92,11 @@ class Play(Cli):
         pillar = Pillar(0, 6, self._spr_width)
 
         sword = Weapon(name='sword', attr_buff={'str': 5})
-        sword.actions.append(MeleAction('mele', AType.WEAPONIZE, width=2, height=2, shape=Quad))
+        sword.actions.append(MeleAction(
+            'mele', AType.WEAPONIZE, width=2, height=2, shape=Quad))
         bow = Weapon(name='bow', attr_buff={'str': 2})
-        bow.actions.append(RangeAction('range', AType.WEAPONIZE, width=3, height=3, shape=Rhomboid))
+        bow.actions.append(RangeAction(
+            'range', AType.WEAPONIZE, width=3, height=3, shape=Rhomboid))
         armor = Armor(attr_buff={'hp': 10})
         shield = Shield(attr_buff={'hp': 7, 'str': 1})
         player.inventory.append(sword)
@@ -105,10 +111,13 @@ class Play(Cli):
         for x in enemies:
             self._game.add_actor(x)
 
-        self._game.board.get_row_from_cell(player).add_cell_to_layer(player, LType.OBJECT)
-        self._game.board.get_row_from_cell(pillar).add_cell_to_layer(pillar, LType.OBJECT)
+        self._game.board.get_row_from_cell(
+            player).add_cell_to_layer(player, LType.OBJECT)
+        self._game.board.get_row_from_cell(
+            pillar).add_cell_to_layer(pillar, LType.OBJECT)
         for x in enemies:
-            self._game.board.get_row_from_cell(x).add_cell_to_layer(x, LType.OBJECT)
+            self._game.board.get_row_from_cell(
+                x).add_cell_to_layer(x, LType.OBJECT)
 
         self._logger.display('Init rpgRun')
 
@@ -171,7 +180,8 @@ class Play(Cli):
         """
         for actor in self._game.actors:
             self._logger.display("Data for  : {0}".format(actor.name))
-            self._logger.display("Position  : {0}".format(Point.__repr__(actor)))
+            self._logger.display(
+                "Position  : {0}".format(Point.__repr__(actor)))
             self._logger.display("Attributes:\n{0}".format(actor.attrs))
 
     @Cli.command('PRINT')

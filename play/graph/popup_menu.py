@@ -14,7 +14,8 @@ class PopUpMenu(CustomSprite):
 
         y = self.menu_y
         for item in items:
-            entry = self.font.render(item, 0, self.font_fg_color, self.font_bg_color)
+            entry = self.font.render(
+                item, 0, self.font_fg_color, self.font_bg_color)
             self.menu_items.append(entry)
             self.surface.blit(entry, (self.menu_x, y))
             y += self.menu_inc
@@ -26,7 +27,8 @@ class PopUpMenu(CustomSprite):
             boxes = []
             y = self.rect.y + self.menu_y
             for item in self.menu_items:
-                boxes.append(item.get_rect().move(self.rect.x + self.menu_x, y))
+                boxes.append(item.get_rect().move(
+                    self.rect.x + self.menu_x, y))
                 y += self.menu_inc
 
             left, middle, right = pygame.mouse.get_pressed()
