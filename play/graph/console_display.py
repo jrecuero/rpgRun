@@ -2,10 +2,10 @@
 from custom_sprite import CustomSprite
 
 
-class CommandDisplay(CustomSprite):
+class ConsoleDisplay(CustomSprite):
 
     def __init__(self, game, pos, **kwargs):
-        super(CommandDisplay, self).__init__(game, pos, **kwargs)
+        super(ConsoleDisplay, self).__init__(game, pos, **kwargs)
         self.text = []
         self.add_text('Command Line Display')
 
@@ -16,6 +16,7 @@ class CommandDisplay(CustomSprite):
         if self.in_focus:
             x, y = 10, 10
             for text in self.text:
-                entry = self.font.render(text, 0, self.font_fg_color, self.font_bg_color)
+                entry = self.font.render(
+                    text, 0, self.font_fg_color, self.font_bg_color)
                 self.surface.blit(entry, (x, y))
                 y += self.font_size
