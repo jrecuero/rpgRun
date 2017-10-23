@@ -1,13 +1,15 @@
 import pygame
 from base_scene import BaseScene
 from rpgrun.game import Game
+from rpgrun.shapes import Quad, Rhomboid
 from rpgrun.blayer import LType
 from rpgrun.brender import BRender
 from assets.graph.surfaces import GreenSurface
 from assets.graph.bobjects import Pillar
 from assets.graph.actors import PlayerActor, EnemyActor
+from assets.graph.actions import WeaponAction, MoveAction, MeleAction, RangeAction
+from assets.graph.equips import Weapon, Armor, Shield
 from rpgrun.action import AType
-from assets.text.actions import WeaponAction, MoveAction
 from popup_menu import PopUpMenu
 from command_display import CommandDisplay
 
@@ -43,6 +45,20 @@ class GameScene(BaseScene):
         self.game.add_actor(player, True)
         self.game.board.get_row_from_cell(player).add_cell_to_layer(player, LType.OBJECT)
 
+        sword = Weapon(name='sword', attr_buff={'str': 5})
+        sword.actions.append(MeleAction('mele', AType.WEAPONIZE, width=2, height=2, shape=Quad))
+        bow = Weapon(name='bow', attr_buff={'str': 2})
+        bow.actions.append(RangeAction('range', AType.WEAPONIZE, width=3, height=3, shape=Rhomboid))
+        armor = Armor(attr_buff={'hp': 10})
+        shield = Shield(attr_buff={'hp': 7, 'str': 1})
+        player.inventory.append(sword)
+        player.inventory.append(bow)
+        player.inventory.append(armor)
+        player.inventory.append(shield)
+        player.equipment.append(sword)
+        player.equipment.append(armor)
+        player.equipment.append(sword)
+
         enemies = []
         enemies.append(EnemyActor(4, 6, self.width, self.height, 'GOBLIN'))
         enemies.append(EnemyActor(3, 5, self.width, self.height, 'ORC'))
@@ -65,7 +81,7 @@ class GameScene(BaseScene):
                 player_rect = self.game.player.sprite.graph.rect
                 if player_rect.collidepoint(mouse_pos):
                     if event.button == 1:
-                        self.actions = [x.name for x in self.game.player.actions]
+                        self.actions = [x.name for x in self.game.player.all_actions]
                         self.left_disable = True
                         menu_pos = (player_rect.left, player_rect.bottom)
                         self.menu_img = PopUpMenu(self.game, menu_pos, self.actions)
