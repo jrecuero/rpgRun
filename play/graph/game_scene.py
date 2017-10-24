@@ -22,6 +22,11 @@ class GameScene(BaseScene):
                                               (10, 600),
                                               sprite_size=(780, 275),
                                               font_size=12)
+        self.pane_display = ConsoleDisplay(self.game,
+                                           (600, 10),
+                                           sprite_size=(190, 700),
+                                           font_size=12)
+        self.pane_display.add_text('Player Information')
 
     def create_game(self):
         self.board_width, self.board_height = 8, 8
@@ -116,6 +121,9 @@ class GameScene(BaseScene):
         if self.command_display:
             self.command_display.update()
 
+        if self.pane_display:
+            self.pane_display.update()
+
     def render(self, screen):
         screen.fill((0, 0, 255))
         x, y = 32, 32
@@ -135,3 +143,5 @@ class GameScene(BaseScene):
             self.menu_img.render(screen)
         if self.command_display:
             self.command_display.render(screen)
+        if self.pane_display:
+            self.pane_display.render(screen)
