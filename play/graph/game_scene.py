@@ -18,22 +18,35 @@ class GameScene(BaseScene):
     def __init__(self):
         super(GameScene, self).__init__()
         self.create_game()
-        self.command_display = ConsoleDisplay(self.game,
-                                              (10, 600),
-                                              sprite_size=(780, 275),
-                                              font_size=12)
-        self.pane_display = ConsoleDisplay(self.game,
-                                           (600, 10),
-                                           sprite_size=(190, 700),
-                                           font_size=12)
-        self.pane_display.add_text('Player Information')
+        self.resources = {}
+        self.resources['menu'] = self._create_res()
+        command_display = ConsoleDisplay(
+            self.game, (10, 600), sprite_size=(780, 275), font_size=12)
+        self.resources['command'] = self._create_res(command_display)
+        pane_display = ConsoleDisplay(
+            self.game, (600, 10), sprite_size=(190, 700), font_size=12)
+        self.resources['pane'] = self._create_res(pane_display)
+        self._get_res('pane').add_text('Player Information')
+
+    def _create_res(self, instance=None, update_resource=None):
+        resource = {'instance': instance, 'update': update_resource}
+        return resource
+
+    def _get_res(self, name):
+        return self.resources[name]['instance']
+
+    def _get_res_update(self, name):
+        return self.resources[name]['update']
+
+    def _traverse_res(self):
+        for resource in [x for _, x in self.resources.items() if x['instance']]:
+            yield (resource['instance'], resource['update'])
 
     def create_game(self):
         self.board_width, self.board_height = 8, 8
         self.width, self.height = 64, 64
         self.game = Game(self.board_width, self.board_height)
         iheight = self.board_height
-        # self.sprites = pygame.sprite.Group()
 
         # Create all objects in the game here (cells, actors, ...)
         for row in self.game.board:
@@ -78,7 +91,6 @@ class GameScene(BaseScene):
                 x).add_cell_to_layer(x, LType.OBJECT)
 
         self.game.run_init()
-        self.menu_img = None
         self.left_disable = False
         self.selected = False
 
@@ -95,34 +107,33 @@ class GameScene(BaseScene):
                             x.name for x in self.game.player.all_actions]
                         self.left_disable = True
                         menu_pos = (player_rect.left, player_rect.bottom)
-                        self.menu_img = PopUpMenu(
-                            self.game, menu_pos, self.actions)
+                        menu = PopUpMenu(self.game, menu_pos, self.actions)
+                        self.resources['menu'] = self._create_res(
+                            menu, self._update_menu)
                     elif event.button == 3:
-                        self.menu_img = None
+                        self.resources['menu'] = self._create_res()
                         self.left_disable = False
                         self.game.player.sprite.graph.image.fill((255, 165, 0))
+
+    def _update_menu(self, action):
+        if action is not None:
+            # TODO: When action or movement are selected, they have to be
+            # sent to the game to be prcessed.
+            self._get_res('command').add_text(
+                'Player will {}'.format(self.actions[action]))
+            self.resources['menu'] = self._create_res()
+            self.left_disable = False
+            self.game.player.sprite.graph.image.fill((255, 165, 0))
+            # self.selected = True
 
     def update(self):
         if self.selected:
             return
 
-        if self.menu_img:
-            action = self.menu_img.update()
-            if action is not None:
-                # TODO: When action or movement are selected, they have to be
-                # sent to the game to be prcessed.
-                self.command_display.add_text(
-                    'Player will {}'.format(self.actions[action]))
-                self.menu_img = None
-                self.left_disable = False
-                self.game.player.sprite.graph.image.fill((255, 165, 0))
-                # self.selected = True
-
-        if self.command_display:
-            self.command_display.update()
-
-        if self.pane_display:
-            self.pane_display.update()
+        for res_instance, res_update in self._traverse_res():
+            result = res_instance.update()
+            if res_update:
+                res_update(result)
 
     def render(self, screen):
         screen.fill((0, 0, 255))
@@ -136,12 +147,5 @@ class GameScene(BaseScene):
                 x += self.width + 2
             x = 32
             y += self.height + 2
-        # TODO: We have to create a display for logging information related with
-        # the game for debugging purposes. That panel will be used in the
-        # future to display information relevant to the player.
-        if self.menu_img:
-            self.menu_img.render(screen)
-        if self.command_display:
-            self.command_display.render(screen)
-        if self.pane_display:
-            self.pane_display.render(screen)
+        for res_instance, _ in self._traverse_res():
+            res_instance.render(screen)
