@@ -115,12 +115,22 @@ class GameScene(BaseScene):
                         self.left_disable = False
                         self.game.player.sprite.graph.image.fill((255, 165, 0))
 
-    def _update_menu(self, action):
-        if action is not None:
+    def _update_menu(self, action_index):
+        if action_index is not None:
             # TODO: When action or movement are selected, they have to be
             # sent to the game to be prcessed.
-            self._get_res('command').add_text(
-                'Player will {}'.format(self.actions[action]))
+            action_name = self.actions[action_index]
+            self._get_res('command').add_text('Action {}'.format(action_name))
+            action = self.game.player.get_action_by_name(action_name)
+            action.originator = self.game.player
+            action_type = self.game.run_select_action(action)
+            if action_type == AType.WEAPONIZE:
+                self._get_res('command').add_text('Action is {}'.format(AType.WEAPONIZE))
+                self._get_res('command').add_text('Targets: {}'.format(self.game.target_choice))
+                for target in self.game.target_choice:
+                    target.selected = True
+                    # target_sprite = target.sprite.get(BRender.GRAPH)
+                    # target_sprite.image.fill((255, 255, 255))
             self.resources['menu'] = self._create_res()
             self.left_disable = False
             self.game.player.sprite.graph.image.fill((255, 165, 0))

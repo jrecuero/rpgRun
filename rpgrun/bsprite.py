@@ -21,6 +21,17 @@ class BSprite(object):
         self.text = kwargs.get('spr_text', None)
         self.color = kwargs.get('color', None)
         self.width = kwargs.get('width', None)
+        self._selected = False
+
+    @property
+    def selected(self):
+        return self._selected
+
+    @selected.setter
+    def selected(self, value):
+        self._selected = value
+        if self.graph and hasattr(self.graph, 'selected'):
+            self.graph.selected = value
 
     def get(self, brender=BRender.DEFAULT):
         """Gets the sprite to render based on the render type.

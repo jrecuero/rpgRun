@@ -73,6 +73,15 @@ class BCell(BPoint):
         """
         return BPoint
 
+    @property
+    def selected(self):
+        return self.sprite.selected
+
+    @selected.setter
+    def selected(self, value):
+        if self.sprite:
+            self.sprite.selected = value
+
     def set_sprite(self, value):
         """Sets sprite attribute value.
 

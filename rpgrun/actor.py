@@ -131,6 +131,20 @@ class Actor(BObject):
         except KeyError:
             return True
 
+    def get_action_by_name(self, name):
+        """Gets the action for the given action name.
+
+        Args:
+            name (str) : action name.
+
+        Returns:
+            Action : action for the action name.
+        """
+        for action in self.all_actions:
+            if action.name == name:
+                return action
+        return None
+
 
 def __integration_doctest():
     """
