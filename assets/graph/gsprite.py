@@ -23,3 +23,12 @@ class GameSprite(pygame.sprite.Sprite):
 
     def set_image_selected(self, value):
         self._image_selected = value
+
+    def process_input(self, events, game_scene=None):
+        pass
+
+    def update(self, game_scene=None):
+        pass
+
+    def render(self, screen, game_scene=None):
+        pass

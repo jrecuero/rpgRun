@@ -1,7 +1,8 @@
 import pygame
+from assets.graph.gsprite import GameSprite
 
 
-class CustomSprite(pygame.sprite.Sprite):
+class CustomSprite(GameSprite):
 
     def __init__(self, game, pos, **kwargs):
         super(CustomSprite, self).__init__()
