@@ -63,6 +63,14 @@ class Game(object):
             else:
                 self._remove_actor(actor, False)
 
+    def other_actors(self):
+        """Return all actors but the player.
+
+        Returns:
+            list : List with all actors but the player.
+        """
+        return [x for x in self.actors if x != self.player]
+
     def move_player(self, direction, move_val):
         """Moves the player (PActor instace) in the given direction and the
         given value.

@@ -28,19 +28,19 @@ class GameScene(BaseScene):
         self.resources['pane'] = self._create_res(pane_display)
         self._get_res('pane').add_text('Player Information')
 
-    def _create_res(self, instance=None, update_resource=None):
-        resource = {'instance': instance, 'update': update_resource}
+    def _create_res(self, instance=None, post_update_cb=None):
+        resource = {'instance': instance, 'pos-update': post_update_cb}
         return resource
 
     def _get_res(self, name):
         return self.resources[name]['instance']
 
-    def _get_res_update(self, name):
-        return self.resources[name]['update']
+    def _get_res_post_update(self, name):
+        return self.resources[name]['pos-update']
 
     def _traverse_res(self):
         for resource in [x for _, x in self.resources.items() if x['instance']]:
-            yield (resource['instance'], resource['update'])
+            yield (resource['instance'], resource['pos-update'])
 
     def create_game(self):
         self.board_width, self.board_height = 8, 8
@@ -92,7 +92,24 @@ class GameScene(BaseScene):
 
         self.game.run_init()
         self.left_disable = False
-        self.selected = False
+
+    def _click_on_player(self, event, mouse_pos):
+        player_rect = self.game.player.sprite.graph.rect
+        if event.button == 1 and player_rect.collidepoint(mouse_pos):
+            self.actions = [x.name for x in self.game.player.all_actions]
+            self.left_disable = True
+            menu_pos = (player_rect.left, player_rect.bottom)
+            menu = PopUpMenu(self.game, menu_pos, self.actions)
+            self.resources['menu'] = self._create_res(menu, self._post_update_menu)
+            return True
+        return False
+
+    def _click_on_actor(self, actor, event, mouse_pos):
+        actor_rect = actor.sprite.graph.rect
+        if event.button == 1 and actor_rect.collidepoint(mouse_pos):
+            self._get_res('command').add_text('Click on {}'.format(actor.name))
+            return True
+        return False
 
     def process_input(self, events):
         # FIXME If there is a menu active in the display it has to receive
@@ -100,22 +117,16 @@ class GameScene(BaseScene):
         for event in events:
             if event.type == pygame.MOUSEBUTTONUP:
                 mouse_pos = pygame.mouse.get_pos()
-                player_rect = self.game.player.sprite.graph.rect
-                if player_rect.collidepoint(mouse_pos):
-                    if event.button == 1:
-                        self.actions = [
-                            x.name for x in self.game.player.all_actions]
-                        self.left_disable = True
-                        menu_pos = (player_rect.left, player_rect.bottom)
-                        menu = PopUpMenu(self.game, menu_pos, self.actions)
-                        self.resources['menu'] = self._create_res(
-                            menu, self._update_menu)
-                    elif event.button == 3:
-                        self.resources['menu'] = self._create_res()
-                        self.left_disable = False
-                        self.game.player.sprite.graph.image.fill((255, 165, 0))
+                if self._click_on_player(event, mouse_pos):
+                    return
 
-    def _update_menu(self, action_index):
+                for actor in self.game.other_actors():
+                    if self._click_on_actor(actor, event, mouse_pos):
+                        for target in self.game.target_choice:
+                            target.selected = (target == actor)
+                        return
+
+    def _post_update_menu(self, action_index):
         if action_index is not None:
             # TODO: When action or movement are selected, they have to be
             # sent to the game to be prcessed.
@@ -134,16 +145,12 @@ class GameScene(BaseScene):
             self.resources['menu'] = self._create_res()
             self.left_disable = False
             self.game.player.sprite.graph.image.fill((255, 165, 0))
-            # self.selected = True
 
     def update(self):
-        if self.selected:
-            return
-
-        for res_instance, res_update in self._traverse_res():
+        for res_instance, post_update_cb in self._traverse_res():
             result = res_instance.update()
-            if res_update:
-                res_update(result)
+            if post_update_cb:
+                post_update_cb(result)
 
     def render(self, screen):
         screen.fill((0, 0, 255))
