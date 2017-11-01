@@ -9,6 +9,7 @@ from assets.graph.actors import PlayerActor, EnemyActor
 from assets.graph.actions import WeaponAction, MoveAction, MeleAction, RangeAction
 from assets.graph.equips import Weapon, Armor, Shield
 from rpgrun.action import AType
+from rpgrun.actor import Actor
 from base_scene import BaseScene
 from popup_menu import PopUpMenu
 from console_display import ConsoleDisplay
@@ -17,47 +18,35 @@ from console_display import ConsoleDisplay
 class GameScene(BaseScene):
     def __init__(self):
         super(GameScene, self).__init__()
+        self._out_buffer = []
         self.create_game()
         self.resources = {}
         self.resources['menu'] = self._create_res()
-        command_display = ConsoleDisplay(
-            self.game, (10, 600), sprite_size=(780, 275), font_size=12)
+        command_display = ConsoleDisplay(self.game, (10, 600), sprite_size=(780, 275), font_size=12)
         self.resources['command'] = self._create_res(command_display)
-        pane_display = ConsoleDisplay(
-            self.game, (600, 10), sprite_size=(190, 700), font_size=12)
+        pane_display = ConsoleDisplay(self.game, (600, 10), sprite_size=(190, 700), font_size=12)
         self.resources['pane'] = self._create_res(pane_display)
         self._get_res('pane').add_text('Player Information')
 
-    def _create_res(self, instance=None, post_update_cb=None):
-        resource = {'instance': instance, 'pos-update': post_update_cb}
-        return resource
-
-    def _get_res(self, name):
-        return self.resources[name]['instance']
-
-    def _get_res_post_update(self, name):
-        return self.resources[name]['pos-update']
-
-    def _traverse_res(self):
-        for resource in [x for _, x in self.resources.items() if x['instance']]:
-            yield (resource['instance'], resource['pos-update'])
-
     def create_game(self):
+        """Create game instances. It creates and initializes some instance attributes.
+        """
         self.board_width, self.board_height = 8, 8
         self.width, self.height = 64, 64
-        self.game = Game(self.board_width, self.board_height)
+        self.game = Game(self.board_width,
+                         self.board_height,
+                         capture=self._out_buffer)
         iheight = self.board_height
 
         # Create all objects in the game here (cells, actors, ...)
         for row in self.game.board:
             iheight -= 1
             for iwidth in range(self.board_width):
-                row.add_cell_to_layer(GreenSurface(
-                    iwidth, iheight, self.width, self.height), LType.SURFACE)
+                row.add_cell_to_layer(GreenSurface(iwidth, iheight, self.width, self.height), LType.SURFACE)
         pillar = Pillar(0, 6, self.width, self.height)
-        self.game.board.get_row_from_cell(
-            pillar).add_cell_to_layer(pillar, LType.OBJECT)
+        self.game.board.get_row_from_cell(pillar).add_cell_to_layer(pillar, LType.OBJECT)
 
+        Actor.LIFE = 'hp'
         player = PlayerActor(2, 5, self.width, self.height)
         player.actions.append(WeaponAction('weapon', AType.WEAPONIZE))
         player.actions.append(MoveAction('move', AType.MOVEMENT))
@@ -87,11 +76,24 @@ class GameScene(BaseScene):
         enemies.append(EnemyActor(1, 0, self.width, self.height, 'TROLL'))
         for x in enemies:
             self.game.add_actor(x)
-            self.game.board.get_row_from_cell(
-                x).add_cell_to_layer(x, LType.OBJECT)
+            self.game.board.get_row_from_cell(x).add_cell_to_layer(x, LType.OBJECT)
 
         self.game.run_init()
         self.left_disable = False
+
+    def _create_res(self, instance=None, post_update_cb=None):
+        resource = {'instance': instance, 'pos-update': post_update_cb}
+        return resource
+
+    def _get_res(self, name):
+        return self.resources[name]['instance']
+
+    def _get_res_post_update(self, name):
+        return self.resources[name]['pos-update']
+
+    def _traverse_res(self):
+        for resource in [x for _, x in self.resources.items() if x['instance']]:
+            yield (resource['instance'], resource['pos-update'])
 
     def _click_on_player(self, event, mouse_pos):
         player_rect = self.game.player.sprite.graph.rect
@@ -108,6 +110,7 @@ class GameScene(BaseScene):
         actor_rect = actor.sprite.graph.rect
         if event.button == 1 and actor_rect.collidepoint(mouse_pos):
             self._get_res('command').add_text('Click on {}'.format(actor.name))
+            self.game.run_select_target(actor)
             return True
         return False
 
@@ -147,6 +150,11 @@ class GameScene(BaseScene):
             self.game.player.sprite.graph.image.fill((255, 165, 0))
 
     def update(self):
+        if self._out_buffer:
+            for entry in self._out_buffer[-1].split('\n'):
+                self._get_res('command').add_text(entry)
+            self._out_buffer.clear()
+
         for res_instance, post_update_cb in self._traverse_res():
             result = res_instance.update()
             if post_update_cb:

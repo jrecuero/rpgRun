@@ -13,7 +13,7 @@ class Game(object):
     game.
     """
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, **kwargs):
         """Game class initialization method.
         """
         self._bwidth = width
@@ -26,8 +26,58 @@ class Game(object):
         self.target_choice = None
         self.__action_select_target = None
         self.__action_select_move = None
-        self._logger = loggerator.getLoggerator('GAME')
-        self.stage = Stages.INIT
+        self.logger = loggerator.getLoggerator('GAME')
+        capture = kwargs.get('capture', None)
+        if capture is not None:
+            self.logger.redirect_out_to(capture)
+        self._stage_cb = {}
+        self._stage = Stages.INIT
+
+    @property
+    def stage(self):
+        """Gets _stage attribute value.
+
+        Returns:
+            Stage : stage attribute value.
+        """
+        return self._stage
+
+    @stage.setter
+    def stage(self, value):
+        """Sets _stage attribute value.
+        Args:
+            value (Stage) : new stage value.
+        """
+        old_stage = self._stage
+        self._stage = value
+        self.logger.display('New Stage: {}'.format(self._stage))
+        for stage_cb, stages in self._stage_cb.items():
+            if stages is None or old_stage in stages or self._stage in stages:
+                stage_cb(self._stage, old_stage)
+
+    def register_stage_cb(self, stage_cb, stages=None):
+        """Regsiters callback for stage change.
+
+        Args:
+            stage_cb (func) : callback to be call when stage changed.
+            stages (list) : list of stages when calling callback.
+
+        Returns:
+            bool : True if registered properly.
+        """
+        self._stage_cb[stage_cb] = stages
+        return True
+
+    def deregister_stage_cb(self, stage_cb):
+        """Unregisters callback for stage change.
+        Args:
+            stage_cb (func) : callback to be deregister.
+
+        Returns:
+            bool : True if deregistered properly.
+        """
+        del self._stage_cb[stage_cb]
+        return True
 
     def add_actor(self, actor, player=False):
         """Adds the given actor to the game.
@@ -144,7 +194,7 @@ class Game(object):
             # Required call: run_select_action()
             self._action = yield
             assert isinstance(self._action, Action)
-            self._logger.debug('action: {}'.format(self._action.type))
+            self.logger.debug('action: {}'.format(self._action.type))
 
             if self._action.requires_target():
                 # Select target
@@ -166,7 +216,7 @@ class Game(object):
                 target = self._action.target
 
             self._action.selected(target)
-            self._logger.debug('target: {}'.format(target))
+            self.logger.debug('target: {}'.format(target))
 
             if self._action.requires_movement():
                 # Select Movement
@@ -184,7 +234,7 @@ class Game(object):
             # Execute action
             self.stage = Stages.PLAY_ACTION
 
-            self._logger.debug('action kwargs: {}'.format(_actionKwargs))
+            self.logger.debug('action kwargs: {}'.format(_actionKwargs))
             self._action.execute(self, **_actionKwargs)
 
             if self._action.requires_movement():
@@ -195,7 +245,7 @@ class Game(object):
                 # Required call: run_scroll()
                 new_row = yield
                 self.scroll_board(new_row)
-                self._logger.debug('scroll new row: {}'.format(new_row))
+                self.logger.debug('scroll new row: {}'.format(new_row))
 
             # Update actors
             self.stage = Stages.UPDATE_ACTORS
