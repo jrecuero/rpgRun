@@ -145,13 +145,20 @@ class GameScene(BaseScene):
                     target.selected = True
                     # target_sprite = target.sprite.get(BRender.GRAPH)
                     # target_sprite.image.fill((255, 255, 255))
+            elif action_type == AType.MOVEMENT:
+                self._get_res('command').add_text('Action is {}'.format(AType.MOVEMENT))
+                # TODO: At this time we have to select cells where player can
+                # move.
+                # We have to make use of shapes in order to get all possible
+                # cells to be selected.
             self.resources['menu'] = self._create_res()
             self.left_disable = False
             self.game.player.sprite.graph.image.fill((255, 165, 0))
 
     def update(self):
         if self._out_buffer:
-            for entry in self._out_buffer[-1].split('\n'):
+            # for entry in self._out_buffer[-1].split('\n'):
+            for entry in self._out_buffer:
                 self._get_res('command').add_text(entry)
             self._out_buffer.clear()
 
