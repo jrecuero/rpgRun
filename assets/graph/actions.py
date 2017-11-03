@@ -10,6 +10,8 @@ class WeaponAction(TargetAction):
     def execute(self, game, **kwargs):
         damage = self.originator.STR - self.target[0].CON
         self.target[0].attrs['HP'].dec(damage)
+        print("{0} damage {1} for {2}".format(self.originator.name, self.target[0].name, damage))
+        print("{0} has {1} life".format(self.target[0].name, self.target[0].attrs['HP']))
 
 
 class MeleAction(AoETargetAction):

@@ -22,7 +22,7 @@ class Game(object):
         self.bhandler = BoardHandler(self.board)
         self.player = None
         self.actors = []
-        self._action = None
+        self.action = None
         self.target_choice = None
         self.move_choice = None
         self.__action_select_target = None
@@ -133,7 +133,7 @@ class Game(object):
         Returns:
             bool : True if can move to cell, False else.
         """
-        return self._action.is_valid_move(cell)
+        return self.action.is_valid_move(cell)
 
     def move_player(self, direction, move_val):
         """Moves the player (PActor instace) in the given direction and the
@@ -206,42 +206,42 @@ class Game(object):
             self.stage = Stages.SEL_ACTION
             # Yield for user to select an action.
             # Required call: run_select_action()
-            self._action = yield
-            assert isinstance(self._action, Action)
-            self.logger.debug('action: {}'.format(self._action.type))
+            self.action = yield
+            assert isinstance(self.action, Action)
+            self.logger.debug('action: {}'.format(self.action.type))
 
-            if self._action.requires_target():
+            if self.action.requires_target():
                 # Select target
                 self.stage = Stages.SEL_TARGET
 
                 # When action has been selected, ask for cells for target
                 # selection.
-                layer = self._action.layer_to_target()
+                layer = self.action.layer_to_target()
                 cells = self.board.get_cells_from_layer(
                     layer) if layer else None
-                self.target_choice = self._action.filter_target(cells)
+                self.target_choice = self.action.filter_target(cells)
 
                 # Yield for user to select the target.
                 # Required call: run_select_target()
-                self.__action_select_target = self._action.select_target(self)
+                self.__action_select_target = self.action.select_target(self)
                 next(self.__action_select_target)
                 target = yield self.__action_select_target
             else:
-                target = self._action.target
+                target = self.action.target
 
-            self._action.selected(target)
+            self.action.selected(target)
             self.logger.debug('target: {}'.format(target))
 
-            if self._action.requires_movement():
+            if self.action.requires_movement():
                 # Select Movement
                 self.stage = Stages.SEL_MOVE
 
-                self.move_choice = self._action.move_choices()
+                self.move_choice = self.action.move_choices()
 
                 # Yield for the user to enter any additional data required by the
                 # action.
                 # Required call: run_select_movement()
-                self.__action_select_move = self._action.select_move(self)
+                self.__action_select_move = self.action.select_move(self)
                 next(self.__action_select_move)
                 _actionKwargs = yield self.__action_select_move
             else:
@@ -251,9 +251,9 @@ class Game(object):
             self.stage = Stages.PLAY_ACTION
 
             self.logger.debug('action kwargs: {}'.format(_actionKwargs))
-            self._action.execute(self, **_actionKwargs)
+            self.action.execute(self, **_actionKwargs)
 
-            if self._action.requires_movement():
+            if self.action.requires_movement():
                 # Update the board
                 self.stage = Stages.UPDATE_BOARD
 
@@ -267,6 +267,7 @@ class Game(object):
             self.stage = Stages.UPDATE_ACTORS
 
             self._update_actors()
+            self.action.done()
 
     def run_init(self):
         """Initializes the run cycle.

@@ -161,6 +161,11 @@ class Action(GObject):
         """
         return self.aoe.shape is not None
 
+    def done(self):
+        """Called when turn is done, and action is totally done.
+        """
+        self._target = []
+
     def is_valid_target(self, target):
         """Checks if the target is valid.
 
