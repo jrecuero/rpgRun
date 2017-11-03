@@ -74,6 +74,7 @@ class BLayer(Itero):
         Returns:
             BCell : Cell instance with the given ID. None if no cell\
                     was found.
+
         Example:
             >>> layer = BLayer(LType.OBJECT, 5)
             >>> c1 = BCell(0, 0, None)
@@ -85,6 +86,34 @@ class BLayer(Itero):
         """
         for cell in self:
             if cell.id == id:
+                return cell
+        return None
+
+    def get_cell_at(self, point):
+        """Gets a cell at the position for the given point.
+
+        Args:
+            point (BPoint) : point to look for the cell.
+
+        Returns:
+            BCell : cell at the position for the given point.
+
+        Example:
+            >>> layer = BLayer(LType.OBJECT, 5)
+            >>> c1 = BCell(0, 0, None)
+            >>> c2 = BCell(1, 0, None)
+            >>> layer.append(c1)
+            >>> layer.append(c2)
+            >>> from rpgrun.bpoint import BPoint
+            >>> layer.get_cell_at(BPoint(1, 0)) == c2
+            True
+            >>> layer.get_cell_at(BPoint(0, 0)) == c1
+            True
+            >>> layer.get_cell_at(BPoint(1, 1)) == c1
+            False
+        """
+        for cell in self:
+            if cell.get_point() == point:
                 return cell
         return None
 

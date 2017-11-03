@@ -1,5 +1,5 @@
 from rpgrun.bpoint import Location
-from rpgrun.action import AType, TargetAction, MoveAction, AoETargetAction
+from rpgrun.action import AType, TargetAction, AoEMoveAction, AoETargetAction
 
 
 class WeaponAction(TargetAction):
@@ -26,7 +26,7 @@ class RangeAction(AoETargetAction):
         self.target[0].attrs['HP'].dec(damage)
 
 
-class MoveAction(MoveAction):
+class MoveAction(AoEMoveAction):
 
     def __init__(self, name, type_=AType.NONE, **kwargs):
         super(MoveAction, self).__init__(name, type_, **kwargs)

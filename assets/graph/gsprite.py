@@ -21,6 +21,10 @@ class GameSprite(pygame.sprite.Sprite):
         self._image = value
         self._image_selected = value
 
+    def set_image(self, image, image_selected=None):
+        self.image = image
+        self.set_image_selected(image_selected)
+
     def set_image_selected(self, value):
         self._image_selected = value
 

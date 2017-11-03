@@ -10,7 +10,9 @@ class GreenSprite(GameSprite):
         super(GreenSprite, self).__init__()
         image = pygame.Surface((width, height))
         image.fill((255, 255, 0))
-        self.image = image
+        image_selected = pygame.Surface((width, height))
+        image_selected.fill((245, 245, 245))
+        self.set_image(image, image_selected)
         self.rect = self.image.get_rect()
 
 

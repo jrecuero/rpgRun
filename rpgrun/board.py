@@ -195,6 +195,40 @@ class Board(Itero):
         """
         return self.get_row_from_cell_row(cell.y)
 
+    def get_cells_at(self, point, layers=None):
+        """Gets all cells at the position for the given point.
+
+        Args:
+            point (BPoint) : point to look for the cell.
+            layers (list) : list of layers to look fo cells.
+
+        Returns:
+            list : all cells at the position for the given point.
+
+        Example:
+            >>> from rpgrun.bcell import BCell
+            >>> from rpgrun.blayer import LType
+            >>> from rpgrun.bpoint import BPoint
+            >>> board = Board(5, 5)
+            >>> row = BRow(5)
+            >>> c1 = BCell(0, 0, None)
+            >>> c2 = BCell(1, 0, None)
+            >>> row.add_cell_to_layer(c1, LType.SURFACE)
+            True
+            >>> row.add_cell_to_layer(c2, LType.SURFACE)
+            True
+            >>> board.appendleft(row)
+            >>> row.get_cells_at(BPoint(0, 0)) == [c1, ]
+            True
+            >>> row.get_cells_at(BPoint(1, 0)) == [c2, ]
+            True
+            >>> row.get_cells_at(BPoint(0, 1)) == []
+            True
+        """
+        row = self.get_row_from_cell_row(point.y)
+        cells = row.get_cells_at(point, layers)
+        return cells
+
     def get_index_from_cell(self, cell):
         """Gets the row index for the given Cell.
 
@@ -207,9 +241,31 @@ class Board(Itero):
         """
         return self.get_index_from_cell_row(cell.y)
 
-    def get_cells_from_layer(self, layers):
+    def get_cells_from_layer(self, layers=None):
         """Gets all cell for the given layer.
 
+        Args:
+            layers (list) : list of layers to look fo cells.
+
+        Returns:
+            list : all cells for the given layers.
+
+        Example:
+            >>> from rpgrun.bcell import BCell
+            >>> from rpgrun.blayer import LType
+            >>> board = Board(5, 5)
+            >>> row = BRow(5)
+            >>> c1 = BCell(0, 0, None)
+            >>> c2 = BCell(1, 0, None)
+            >>> row.add_cell_to_layer(c1, LType.SURFACE)
+            True
+            >>> row.add_cell_to_layer(c2, LType.SURFACE)
+            True
+            >>> board.appendleft(row)
+            >>> row.get_cells_from_layer([LType.SURFACE, ]) == [c1, c2]
+            True
+            >>> row.get_cells_from_layer([LType.OBJECT, ]) == []
+            True
         """
         cells = []
         for row in self:

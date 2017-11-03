@@ -19,10 +19,20 @@ class AoE(object):
     """AoE class is used to represent the Area of Effect.
     """
 
-    def __init__(self, center, width, height, shape):
+    def __init__(self, **kwargs):
         """AoE class initialization method.
+
+        Keyword Args:
+            center (Point) : Area of effect center.
+            width (int) : Area of effect width.
+            height (int) : Area of effect height.
+            shape (Shape) : Area of effect shape class.
         """
-        self.shape = shape(center, width, height)
+        center = kwargs.get('center', None)
+        width = kwargs.get('width', None)
+        height = kwargs.get('height', None)
+        shape = kwargs.get('shape', None)
+        self.shape = shape(center, width, height) if shape else None
 
 
 class Action(GObject):
@@ -54,7 +64,7 @@ class Action(GObject):
         self.type = type_
         self._originator = None
         self._target = []
-        self.aoe = None
+        self.aoe = AoE(**kwargs)
         self._execCb = None
         self._preExecCb = None
         self._postExecCb = None
@@ -111,6 +121,8 @@ class Action(GObject):
         """Set property for _originator attribute.
         """
         self._originator = value
+        if self.has_aoe:
+            self.aoe.shape.center = value
 
     @property
     def target(self):
@@ -135,10 +147,19 @@ class Action(GObject):
 
     @target.setter
     def target(self, value):
-        """Set property for _target attribute. It appends the given value to
+        """Sets property for _target attribute. It appends the given value to
         the _target attribute list.
         """
         self._target.append(value)
+
+    @property
+    def has_aoe(self):
+        """Checks if the action has an Area of Effect.
+
+        Returns:
+            bool : True if action has area of effect, False else.
+        """
+        return self.aoe.shape is not None
 
     def is_valid_target(self, target):
         """Checks if the target is valid.
@@ -226,6 +247,22 @@ class Action(GObject):
             list[BCell] : List of cells that can be targeted.
         """
         return None
+
+    def move_choices(self):
+        """Returns all possible cell available for the action to move.
+        """
+        if self.has_aoe:
+            return self.aoe.shape.get_all_points_inside()
+        else:
+            None
+
+    def is_valid_move(self, cell):
+        """Checks if a cell is in the range of possible moves for the action.
+
+        Returns:
+            bool : True if cell is in the move action range, False else.
+        """
+        return self.aoe.shape.is_inside(cell)
 
     def dry_select(self):
         """Method that show possible targets to be selected.
@@ -345,20 +382,6 @@ class AoETargetAction(TargetAction):
             shape (Shape) : Area of effect shape class.
         """
         super(AoETargetAction, self).__init__(name, type_, **kwargs)
-        width = kwargs.get('width')
-        height = kwargs.get('height')
-        shape = kwargs.get('shape')
-        self.aoe = (AoE(None, width, height, shape))
-
-    @Action.originator.setter
-    def originator(self, value):
-        """Sets _originator attribute value. Center shape to originator.
-
-        Args:
-            value (Actor) : Actor that will be the originator for action.
-        """
-        Action.originator.fset(self, value)
-        self.aoe.shape.Center = value
 
     def filter_target(self, cells):
         """Filter the given list with cell and return possible
@@ -405,7 +428,7 @@ class MoveAction(Action):
         Args:
             value (Actor) : Actor that will be the originator for action.
         """
-        self._originator = value
+        Action.originator.fset(self, value)
         self.target = value
 
     def requires_target(self):
@@ -449,6 +472,27 @@ class MoveAction(Action):
             target (Actor) : Set this actor as the action target.
         """
         pass
+
+
+class AoEMoveAction(MoveAction):
+    """AoEMoveAction class derives from :class:`action.MoveAction` and it
+    represents all move actions in a particular shape.
+    """
+
+    def __init__(self, name, type_=AType.NONE, **kwargs):
+        """AoEMoveAction class initialization method.
+
+        Args:
+            name (str) : string with the action name.
+            type_ (AType) : AType that represents the action type. Default is\
+                    AType.NONE
+
+        Keyword Args:
+            width (int) : Area of effect width.
+            height (int) : Area of effect height.
+            shape (Shape) : Area of effect shape class.
+        """
+        super(AoEMoveAction, self).__init__(name, type_, **kwargs)
 
 
 class Actions(Itero):

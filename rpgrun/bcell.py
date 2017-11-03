@@ -67,20 +67,52 @@ class BCell(BPoint):
     @property
     def klass(self):
         """
-        >>> cell = BCell(0, 0, 'cell')
-        >>> cell.klass
-        <class 'rpgrun.bpoint.BPoint'>
+        Example:
+            >>> cell = BCell(0, 0, 'cell')
+            >>> cell.klass
+            <class 'rpgrun.bpoint.BPoint'>
         """
         return BPoint
 
     @property
     def selected(self):
+        """Gets if the cell is selected or not.
+
+        Seleted attribute is set in the sprite.
+
+        Returns:
+            bool : True if sprite is selected, False else.
+        """
         return self.sprite.selected
 
     @selected.setter
     def selected(self, value):
+        """Sets the cell as selected or not selected.
+
+        Value is set in the sprite.
+
+        Args:
+            value (bool) : set cell as selected or not.
+        """
         if self.sprite:
             self.sprite.selected = value
+
+    @property
+    def collision(self):
+        """Checks if the cell can have a collision.
+
+        Returns:
+            bool : True if cell has collision, False else.
+
+        Example:
+            >>> cell = BCell(0, 0, 'cell')
+            >>> cell.collision
+            False
+            >>> cell.walkable = False
+            >>> cell.collision
+            True
+        """
+        return not self.walkable
 
     def set_sprite(self, value):
         """Sets sprite attribute value.

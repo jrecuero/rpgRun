@@ -166,13 +166,62 @@ class BRow(Itero):
             del self[layer.value]
         return True
 
-    def get_cells_from_layer(self, layers):
+    def get_cells_from_layer(self, layers=None):
         """Returns all cells from the given layer.
 
+        Args:
+            layers (list) : list of layers to look fo cells.
+
+        Returns:
+            list : all cells for the given layers.
+
+        Example:
+            >>> from rpgrun.bcell import BCell
+            >>> row = BRow(2)
+            >>> c1 = BCell(0, 0, None)
+            >>> c2 = BCell(1, 0, None)
+            >>> row.add_cell_to_layer(c1, LType.SURFACE)
+            True
+            >>> row.add_cell_to_layer(c2, LType.SURFACE)
+            True
+            >>> row.get_cells_from_layer([LType.SURFACE, ]) == [c1, c2 ]
+            True
+            >>> row.get_cells_from_layer([LType.OBJECT, ]) == []
+            True
         """
         cells = []
-        for layer in [x for x in self if x.type in layers]:
+        for layer in [x for x in self if layers is None or x.type in layers]:
             cells.extend([cell for cell in layer])
+        return cells
+
+    def get_cells_at(self, point, layers=None):
+        """Gets all cells at the position for the given point.
+
+        Args:
+            point (BPoint) : point to look for the cell.
+            layers (list) : list of layers to look fo cells.
+
+        Returns:
+            list : all cells at the position for the given point.
+
+        Example:
+            >>> from rpgrun.bcell import BCell
+            >>> row = BRow(2)
+            >>> c1 = BCell(0, 0, None)
+            >>> c2 = BCell(1, 0, None)
+            >>> row.add_cell_to_layer(c1, LType.SURFACE)
+            True
+            >>> row.add_cell_to_layer(c2, LType.SURFACE)
+            True
+            >>> from rpgrun.bpoint import BPoint
+            >>> row.get_cells_at(BPoint(0, 0)) == [c1, ]
+            True
+        """
+        cells = []
+        for layer in [x for x in self if layers is None or x.type in layers]:
+            cell = layer.get_cell_at(point)
+            if cell:
+                cells.append(cell)
         return cells
 
     def get_cell_by_id(self, id):

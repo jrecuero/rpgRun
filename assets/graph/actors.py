@@ -46,8 +46,7 @@ class EnemySprite(GameSprite):
         image.fill((55, 125, 55))
         image_selected = pygame.Surface((width, height))
         image_selected.fill((0, 0, 0))
-        self.image = image
-        self.set_image_selected(image_selected)
+        self.set_image(image, image_selected)
         self.rect = self.image.get_rect()
 
 

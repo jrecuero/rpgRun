@@ -25,10 +25,29 @@ class BSprite(object):
 
     @property
     def selected(self):
+        """Gets attribute _selected value.
+
+        Returns:
+            bool : Value for _selected attribute.
+
+        Example:
+            >>> sp = BSprite(spr_graph=True)
+            >>> sp.selected
+            False
+            >>> sp.selected = True
+            >>> sp.selected
+            True
+        """
         return self._selected
 
     @selected.setter
     def selected(self, value):
+        """Sets attribute _selected value. It sets the same attribute for the
+        graph instance.
+
+        Args:
+            value (bool) : New value for _selected attribute.
+        """
         self._selected = value
         if self.graph and hasattr(self.graph, 'selected'):
             self.graph.selected = value
@@ -36,16 +55,17 @@ class BSprite(object):
     def get(self, brender=BRender.DEFAULT):
         """Gets the sprite to render based on the render type.
 
-        >>> sp = BSprite(spr_text='*')
-        >>> sp.get(BRender.NONE)
-        >>> sp.get(BRender.GRAPH)
-        >>> sp.get(BRender.TEXT)
-        '*'
-        >>> sp = BSprite(spr_graph=True)
-        >>> sp.get(BRender.NONE)
-        >>> sp.get(BRender.GRAPH)
-        True
-        >>> sp.get(BRender.TEXT)
+        Example:
+            >>> sp = BSprite(spr_text='*')
+            >>> sp.get(BRender.NONE)
+            >>> sp.get(BRender.GRAPH)
+            >>> sp.get(BRender.TEXT)
+            '*'
+            >>> sp = BSprite(spr_graph=True)
+            >>> sp.get(BRender.NONE)
+            >>> sp.get(BRender.GRAPH)
+            True
+            >>> sp.get(BRender.TEXT)
         """
         if brender == BRender.GRAPH:
             return self.graph

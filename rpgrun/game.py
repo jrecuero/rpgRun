@@ -24,6 +24,7 @@ class Game(object):
         self.actors = []
         self._action = None
         self.target_choice = None
+        self.move_choice = None
         self.__action_select_target = None
         self.__action_select_move = None
         self.logger = loggerator.getLoggerator('GAME')
@@ -120,6 +121,19 @@ class Game(object):
             list : List with all actors but the player.
         """
         return [x for x in self.actors if x != self.player]
+
+    def can_move_to(self, cell):
+        """Checks if movement is allowed for the given action.
+
+        TODO: We have to check for collisions with any other solid objects.
+
+        Args:
+            cell (BCell) : Cell where to move.
+
+        Returns:
+            bool : True if can move to cell, False else.
+        """
+        return self._action.is_valid_move(cell)
 
     def move_player(self, direction, move_val):
         """Moves the player (PActor instace) in the given direction and the
@@ -221,6 +235,8 @@ class Game(object):
             if self._action.requires_movement():
                 # Select Movement
                 self.stage = Stages.SEL_MOVE
+
+                self.move_choice = self._action.move_choices()
 
                 # Yield for the user to enter any additional data required by the
                 # action.

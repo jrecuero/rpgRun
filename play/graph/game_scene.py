@@ -1,7 +1,9 @@
 import pygame
 from rpgrun.game import Game
+from rpgrun.bpoint import Location
 from rpgrun.shapes import Quad, Rhomboid
 from rpgrun.blayer import LType
+from rpgrun.brow import BRow
 from rpgrun.brender import BRender
 from assets.graph.surfaces import GreenSurface
 from assets.graph.bobjects import Pillar
@@ -49,17 +51,15 @@ class GameScene(BaseScene):
         Actor.LIFE = 'hp'
         player = PlayerActor(2, 5, self.width, self.height)
         player.actions.append(WeaponAction('weapon', AType.WEAPONIZE))
-        player.actions.append(MoveAction('move', AType.MOVEMENT))
+        player.actions.append(MoveAction('move', AType.MOVEMENT, width=2, height=2, shape=Rhomboid))
         self.game.add_actor(player, True)
         self.game.board.get_row_from_cell(
             player).add_cell_to_layer(player, LType.OBJECT)
 
         sword = Weapon(name='sword', attr_buff={'str': 5})
-        sword.actions.append(MeleAction(
-            'mele', AType.WEAPONIZE, width=2, height=2, shape=Quad))
+        sword.actions.append(MeleAction('mele', AType.WEAPONIZE, width=2, height=2, shape=Quad))
         bow = Weapon(name='bow', attr_buff={'str': 2})
-        bow.actions.append(RangeAction(
-            'range', AType.WEAPONIZE, width=3, height=3, shape=Rhomboid))
+        bow.actions.append(RangeAction('range', AType.WEAPONIZE, width=3, height=3, shape=Rhomboid))
         armor = Armor(attr_buff={'hp': 10})
         shield = Shield(attr_buff={'hp': 7, 'str': 1})
         player.inventory.append(sword)
@@ -80,6 +80,16 @@ class GameScene(BaseScene):
 
         self.game.run_init()
         self.left_disable = False
+
+    def _new_row(self):
+        """Scroll Board.
+        """
+        width = self.game.board.width
+        row = BRow(width)
+        newHeight = self.game.board.top_cell_row + 1
+        for iwidth in range(width):
+            row.add_cell_to_layer(GreenSurface(iwidth, newHeight, self.width, self.height), LType.SURFACE)
+        return row
 
     def _create_res(self, instance=None, post_update_cb=None):
         resource = {'instance': instance, 'pos-update': post_update_cb}
@@ -115,10 +125,12 @@ class GameScene(BaseScene):
         return False
 
     def process_input(self, events):
-        # FIXME If there is a menu active in the display it has to receive
-        # control from the parent with remaining events.
         for event in events:
-            if event.type == pygame.MOUSEBUTTONUP:
+            if event.type == (pygame.USEREVENT + 1):
+                pygame.time.set_timer(pygame.USEREVENT + 1, 0)
+                self.left_disable = False
+
+            if event.type == pygame.MOUSEBUTTONUP and not self.left_disable:
                 mouse_pos = pygame.mouse.get_pos()
                 if self._click_on_player(event, mouse_pos):
                     return
@@ -129,30 +141,40 @@ class GameScene(BaseScene):
                             target.selected = (target == actor)
                         return
 
+                if self.game.move_choice:
+                    clicked = False
+                    for point in self.game.move_choice:
+                        for cell in self.game.board.get_cells_at(point):
+                            cell_rect = cell.sprite.graph.rect
+                            if event.button == 1 and cell_rect.collidepoint(mouse_pos):
+                                self._get_res('command').add_text('Click for move  at {}'.format(cell))
+                                clicked = True
+                                # FIXME: This is just a fixed location movement
+                                self.game.run_select_movement(Location.FRONT, 1)
+                    if clicked:
+                        for point in self.game.move_choice:
+                            for cell in self.game.board.get_cells_at(point):
+                                cell.selected = False
+                        self.game.run_scroll(self._new_row())
+
     def _post_update_menu(self, action_index):
         if action_index is not None:
-            # TODO: When action or movement are selected, they have to be
-            # sent to the game to be prcessed.
             action_name = self.actions[action_index]
-            self._get_res('command').add_text('Action {}'.format(action_name))
             action = self.game.player.get_action_by_name(action_name)
             action.originator = self.game.player
             action_type = self.game.run_select_action(action)
             if action_type == AType.WEAPONIZE:
                 self._get_res('command').add_text('Action is {}'.format(AType.WEAPONIZE))
-                self._get_res('command').add_text('Targets: {}'.format(self.game.target_choice))
                 for target in self.game.target_choice:
                     target.selected = True
-                    # target_sprite = target.sprite.get(BRender.GRAPH)
-                    # target_sprite.image.fill((255, 255, 255))
             elif action_type == AType.MOVEMENT:
                 self._get_res('command').add_text('Action is {}'.format(AType.MOVEMENT))
-                # TODO: At this time we have to select cells where player can
-                # move.
-                # We have to make use of shapes in order to get all possible
-                # cells to be selected.
+                for point in self.game.move_choice:
+                    for cell in self.game.board.get_cells_at(point):
+                        cell.selected = True
             self.resources['menu'] = self._create_res()
-            self.left_disable = False
+            pygame.time.set_timer(pygame.USEREVENT + 1, 500)
+            # self.left_disable = False
             self.game.player.sprite.graph.image.fill((255, 165, 0))
 
     def update(self):
