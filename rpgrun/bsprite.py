@@ -22,6 +22,8 @@ class BSprite(object):
         self.color = kwargs.get('color', None)
         self.width = kwargs.get('width', None)
         self._selected = False
+        self.enabled = True
+        self.hidden = False
 
     @property
     def selected(self):
@@ -67,6 +69,9 @@ class BSprite(object):
             True
             >>> sp.get(BRender.TEXT)
         """
+        if not self.enabled or self.hidden:
+            return None
+
         if brender == BRender.GRAPH:
             return self.graph
         elif brender == BRender.TEXT:
@@ -79,6 +84,9 @@ class BSprite(object):
     def render(self, brender=BRender.DEFAULT):
         """Renders the sprite for the given render type.
         """
+        if not self.enabled or self.hidden:
+            return None
+
         if brender is BRender.GRAPH:
             return self.graph
         elif brender is BRender.TEXT:
