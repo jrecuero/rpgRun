@@ -51,4 +51,5 @@ class MainScene(BaseScene):
             self.active_scene = self.active_scene.next_scene()
             pygame.display.flip()
             self.clock.tick(fps)
+            pygame.display.set_caption(str(self.clock.get_fps()))
         pygame.quit()
