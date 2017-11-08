@@ -1,4 +1,4 @@
-from rpgrun.bsprite import BSprite
+from rpgrun.bsprite import TextSprite
 from rpgrun.actor import Actor
 from rpgrun.pactor import PActor
 
@@ -22,7 +22,7 @@ class BossActor(Actor):
 
     def __init__(self, x, y, width, name='BOSS', **kwargs):
         super(BossActor, self).__init__(x, y, name, **kwargs)
-        self.sprite = BSprite(spr_text='*&*', width=width, color="\x1b[32m" + "\x1b[45m")
+        self.sprite = TextSprite(sprite='*&*', width=width, color="\x1b[32m" + "\x1b[45m")
         self.attrs.setup_attrs_from_list(BOSS_ATTRS)
 
 
@@ -30,7 +30,7 @@ class PlayerActor(PActor):
 
     def __init__(self, x, y, width, **kwargs):
         super(PlayerActor, self).__init__(x, y, 'PLAYER', **kwargs)
-        self.sprite = BSprite(spr_text='-^-', width=width, color="\x1b[32m" + "\x1b[41m")
+        self.sprite = TextSprite(sprite='-^-', width=width, color="\x1b[32m" + "\x1b[41m")
         self.attrs.setup_attrs_from_json(PLAYER_ATTRS)
 
 
@@ -38,7 +38,7 @@ class EnemyActor(Actor):
 
     def __init__(self, x, y, width, name='ENEMY', **kwargs):
         super(EnemyActor, self).__init__(x, y, name, **kwargs)
-        self.sprite = BSprite(spr_text='oOo', width=width, color="\x1b[32m" + "\x1b[40m")
+        self.sprite = TextSprite(sprite='oOo', width=width, color="\x1b[32m" + "\x1b[40m")
         self.attrs.setup_attrs_from_json(ACTOR_ATTRS)
 
 
@@ -46,5 +46,5 @@ class MageActor(Actor):
 
     def __init__(self, x, y, width, name='MAGE', **kwargs):
         super(MageActor, self).__init__(x, y, name, **kwargs)
-        self.sprite = BSprite(spr_text='o$o', width=width, color="\x1b[32m" + "\x1b[40m")
+        self.sprite = TextSprite(sprite='o$o', width=width, color="\x1b[32m" + "\x1b[40m")
         self.attrs.setup_attrs_from_json(MAGE_ATTRS)

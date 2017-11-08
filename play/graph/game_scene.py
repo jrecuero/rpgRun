@@ -106,7 +106,7 @@ class GameScene(BaseScene):
             yield (resource['instance'], resource['pos-update'])
 
     def _click_on_player(self, event, mouse_pos):
-        player_rect = self.game.player.sprite.graph.rect
+        player_rect = self.game.player.sprite.sprite.rect
         if event.button == 1 and player_rect.collidepoint(mouse_pos):
             self.actions = [x.name for x in self.game.player.all_actions]
             self.left_disable = True
@@ -117,7 +117,7 @@ class GameScene(BaseScene):
         return False
 
     def _click_on_actor(self, actor, event, mouse_pos):
-        actor_rect = actor.sprite.graph.rect
+        actor_rect = actor.sprite.sprite.rect
         if event.button == 1 and actor_rect.collidepoint(mouse_pos):
             self._get_res('command').add_text('Click on {}'.format(actor.name))
             self.game.run_select_target(actor)
@@ -145,7 +145,7 @@ class GameScene(BaseScene):
                     clicked = False
                     for point in self.game.move_choice:
                         for cell in self.game.board.get_cells_at(point):
-                            cell_rect = cell.sprite.graph.rect
+                            cell_rect = cell.sprite.sprite.rect
                             if event.button == 1 and cell_rect.collidepoint(mouse_pos):
                                 self._get_res('command').add_text('Click for move  at {}'.format(cell))
                                 clicked = True
@@ -175,7 +175,7 @@ class GameScene(BaseScene):
             self.resources['menu'] = self._create_res()
             pygame.time.set_timer(pygame.USEREVENT + 1, 500)
             # self.left_disable = False
-            self.game.player.sprite.graph.image.fill((255, 165, 0))
+            self.game.player.sprite.sprite.image.fill((255, 165, 0))
 
     def update(self):
         if self._out_buffer:

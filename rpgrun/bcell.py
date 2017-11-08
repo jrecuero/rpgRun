@@ -1,7 +1,6 @@
 import rpgrun.ids as ids
 from rpgrun.bpoint import BPoint
 from rpgrun.brender import BRender
-from rpgrun.bsprite import BSprite
 
 
 class BCell(BPoint):
@@ -14,18 +13,6 @@ class BCell(BPoint):
 
         >>> cell = BCell(0, 0, 'cell')
         >>> cell.sprite
-        >>> cell = BCell(0, 0, 'cell', sprite='*')
-        >>> cell.sprite
-        Text[*] Graph[None]
-        >>> cell = BCell(0, 0, 'cell', sprite=BSprite(spr_text='*'))
-        >>> cell.sprite
-        Text[*] Graph[None]
-        >>> cell = BCell(0, 0, 'cell', sprite=BSprite(spr_graph=True))
-        >>> cell.sprite
-        Text[None] Graph[<GRAPH>]
-        >>> cell = BCell(0, 0, 'cell', sprite=BSprite(spr_graph=True, spr_text='*'))
-        >>> cell.sprite
-        Text[*] Graph[<GRAPH>]
         """
         super(BCell, self).__init__(x, y)
         self.__id = ids.new_id()
@@ -35,8 +22,7 @@ class BCell(BPoint):
         self.walkable = True
         self.solid = True
         self.layer = None
-        self.sprite = None
-        self.set_sprite(kwargs.get('sprite', None))
+        self.sprite = kwargs.get('sprite', None)
 
     @property
     def id(self):
@@ -114,33 +100,6 @@ class BCell(BPoint):
         """
         return not self.walkable
 
-    def set_sprite(self, value):
-        """Sets sprite attribute value.
-
-        It the value given is not a BSprite instance, but a string, it creates
-        a text BSprite using the given value as the string.
-
-        Args:
-            value (:class:`str` or :class:`BSprite`) : New sprite to set
-
-        Example:
-            >>> cell = BCell(0, 0, 'cell', sprite='*')
-            >>> cell.sprite
-            Text[*] Graph[None]
-            >>> cell = BCell(0, 0, 'cell')
-            >>> cell.sprite
-            >>> cell.set_sprite('*')
-            >>> cell.sprite
-            Text[*] Graph[None]
-            >>> cell.set_sprite(BSprite(spr_graph=True))
-            >>> cell.sprite
-            Text[None] Graph[<GRAPH>]
-            >>> cell.set_sprite(BSprite(spr_graph=True, spr_text='*'))
-            >>> cell.sprite
-            Text[*] Graph[<GRAPH>]
-        """
-        self.sprite = BSprite(spr_text=value) if isinstance(value, str) else value
-
     def get_point(self):
         """Gets a point instance to be used on mathematical operations.
 
@@ -184,12 +143,6 @@ class BCell(BPoint):
 
     def render(self, brender=BRender.DEFAULT):
         """Render the cell.
-
-        >>> cell = BCell(0, 0, 'cell', sprite=BSprite(spr_graph=True, spr_text='*'))
-        >>> cell.render()
-        '*'
-        >>> cell.render(BRender.TEXT)
-        '*'
         """
         return self.sprite.render(brender)
 

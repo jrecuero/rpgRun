@@ -9,18 +9,9 @@ class BSprite(object):
         """BSprite class initialization method.
 
         Keyword Args:
-            spr_graph (object) : sprite instance for graphical rendering.
-
-            spr_text (str) : string to be used for text rendering.
-
-            color (str) : string with the color for text rendering.
-
-            width (int) : width size for text rendering.
+            sprite (object) : sprite instance for rendering.
         """
-        self.graph = kwargs.get('spr_graph', None)
-        self.text = kwargs.get('spr_text', None)
-        self.color = kwargs.get('color', None)
-        self.width = kwargs.get('width', None)
+        self.sprite = kwargs.get('sprite', None)
         self._selected = False
         self.enabled = True
         self.hidden = False
@@ -33,7 +24,7 @@ class BSprite(object):
             bool : Value for _selected attribute.
 
         Example:
-            >>> sp = BSprite(spr_graph=True)
+            >>> sp = BSprite(sprite=True)
             >>> sp.selected
             False
             >>> sp.selected = True
@@ -51,57 +42,108 @@ class BSprite(object):
             value (bool) : New value for _selected attribute.
         """
         self._selected = value
-        if self.graph and hasattr(self.graph, 'selected'):
-            self.graph.selected = value
+
+    def get(self, brender=BRender.DEFAULT):
+        """Gets the sprite to render based on the render type.
+        """
+        raise NotImplementedError
+
+    def render(self, brender=BRender.DEFAULT):
+        """Renders the sprite for the given render type.
+        """
+        raise NotImplementedError
+
+    def __repr__(self):
+        """Returns the BSprite instance as a string.
+        """
+        raise NotImplementedError
+
+
+class TextSprite(BSprite):
+    """TextSprite class contains a sprite to be renderer on the display.
+    """
+
+    def __init__(self, **kwargs):
+        """TextSprite class initialization method.
+
+        Keyword Args:
+            color (str) : string with the color for text rendering.
+            width (int) : width size for text rendering.
+        """
+        super(TextSprite, self).__init__(**kwargs)
+        self.color = kwargs.get('color', None)
+        self.width = kwargs.get('width', None)
 
     def get(self, brender=BRender.DEFAULT):
         """Gets the sprite to render based on the render type.
 
         Example:
-            >>> sp = BSprite(spr_text='*')
+            >>> sp = TextSprite(sprite='*')
             >>> sp.get(BRender.NONE)
             >>> sp.get(BRender.GRAPH)
             >>> sp.get(BRender.TEXT)
             '*'
-            >>> sp = BSprite(spr_graph=True)
+        """
+        if not self.enabled or self.hidden or brender is not BRender.TEXT:
+            return None
+        return self.sprite
+
+    def render(self, brender=BRender.DEFAULT):
+        """Renders the sprite for the given render type.
+        """
+        if not self.enabled or self.hidden or brender is not BRender.TEXT:
+            return None
+        return '{0}{1}{2}'.format(self.color if self.color else '',
+                                  self.sprite.center(self.width) if self.width else self.sprite,
+                                  '\x1b[0m' if self.color else '')
+
+    def __repr__(self):
+        """Returns the BSprite instance as a string.
+        """
+        return '<TEXT> {0}'.format(self.sprite)
+
+
+class GraphSprite(BSprite):
+
+    def __init__(self, **kwargs):
+        """BSprite class initialization method.
+        """
+        super(GraphSprite, self).__init__(**kwargs)
+
+    @BSprite.selected.setter
+    def selected(self, value):
+        """Sets attribute _selected value. It sets the same attribute for the
+        graph instance.
+
+        Args:
+            value (bool) : New value for _selected attribute.
+        """
+        BSprite.selected.fset(self, value)
+        if hasattr(self.sprite, 'selected'):
+            self.sprite.selected = value
+
+    def get(self, brender=BRender.DEFAULT):
+        """Gets the sprite to render based on the render type.
+
+        Example:
+            >>> sp = GraphSprite(sprite=True)
             >>> sp.get(BRender.NONE)
             >>> sp.get(BRender.GRAPH)
             True
             >>> sp.get(BRender.TEXT)
         """
-        if not self.enabled or self.hidden:
+        if not self.enabled or self.hidden or brender is not BRender.GRAPH:
             return None
-
-        if brender == BRender.GRAPH:
-            return self.graph
-        elif brender == BRender.TEXT:
-            return self.text
-        elif brender == BRender.NONE:
-            return None
-        else:
-            raise NotImplementedError
+        return self.sprite
 
     def render(self, brender=BRender.DEFAULT):
         """Renders the sprite for the given render type.
         """
-        if not self.enabled or self.hidden:
+        if not self.enabled or self.hidden or brender is not BRender.GRAPH:
             return None
-
-        if brender is BRender.GRAPH:
-            return self.graph
-        elif brender is BRender.TEXT:
-            return '{0}{1}{2}'.format(self.color if self.color else '',
-                                      self.text.center(self.width) if self.width else self.text,
-                                      '\x1b[0m' if self.color else '')
-            return self.text
-        elif brender is BRender.NONE:
-            raise NotImplementedError
-        else:
-            raise NotImplementedError
+        return self.sprite
 
     def __repr__(self):
         """Returns the BSprite instance as a string.
         """
-        st = 'Text[{0}] '.format(self.text if self.text else 'None')
-        st += 'Graph[{0}]'.format('<GRAPH>' if self.graph else 'None')
-        return st
+        return '<GRAPH> {0}'.format(self.sprite)

@@ -1,4 +1,4 @@
-from rpgrun.bsprite import BSprite
+from rpgrun.bsprite import GraphSprite
 from rpgrun.bobject import BObject
 import pygame
 
@@ -16,4 +16,4 @@ class Pillar(BObject):
 
     def __init__(self, x, y, width, height, **kwargs):
         super(Pillar, self).__init__(x, y, 'PILLAR', **kwargs)
-        self.sprite = BSprite(spr_graph=PillarSprite(width, height))
+        self.sprite = GraphSprite(sprite=PillarSprite(width, height))

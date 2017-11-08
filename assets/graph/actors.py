@@ -1,4 +1,4 @@
-from rpgrun.bsprite import BSprite
+from rpgrun.bsprite import GraphSprite
 from rpgrun.actor import Actor
 from rpgrun.pactor import PActor
 from assets.graph.gsprite import GameSprite
@@ -34,7 +34,7 @@ class PlayerActor(PActor):
 
     def __init__(self, x, y, width, height, **kwargs):
         super(PlayerActor, self).__init__(x, y, 'PLAYER', **kwargs)
-        self.sprite = BSprite(spr_graph=PlayerSprite(width, height))
+        self.sprite = GraphSprite(sprite=PlayerSprite(width, height))
         self.attrs.setup_attrs_from_json(PLAYER_ATTRS)
 
 
@@ -54,5 +54,5 @@ class EnemyActor(Actor):
 
     def __init__(self, x, y, width, height, name='ENEMY', **kwargs):
         super(EnemyActor, self).__init__(x, y, name, **kwargs)
-        self.sprite = BSprite(spr_graph=EnemySprite(width, height))
+        self.sprite = GraphSprite(sprite=EnemySprite(width, height))
         self.attrs.setup_attrs_from_json(ACTOR_ATTRS)
