@@ -1,5 +1,5 @@
 from custom_pane import CustomPane
 
 
-class ActionPane(CustomPane):
+class StatPane(CustomPane):
     pass
