@@ -1,5 +1,5 @@
 import pygame
-from base_scene import BaseScene
+from scenes.base_scene import BaseScene
 
 
 class MainScene(BaseScene):

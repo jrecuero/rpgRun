@@ -1,5 +1,5 @@
 import pygame
-from custom_pane import CustomPane
+from panes.custom_pane import CustomPane
 
 
 class PopUpPane(CustomPane):

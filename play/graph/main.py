@@ -1,5 +1,5 @@
-from main_scene import MainScene
-from title_scene import TitleScene
+from scenes.main_scene import MainScene
+from scenes.title_scene import TitleScene
 
 
 if __name__ == '__main__':

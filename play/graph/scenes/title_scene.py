@@ -1,6 +1,6 @@
 import pygame
-from base_scene import BaseScene
-from game_scene import GameScene
+from scenes.base_scene import BaseScene
+from scenes.game_scene import GameScene
 
 
 class TitleScene(BaseScene):

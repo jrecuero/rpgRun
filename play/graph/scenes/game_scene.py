@@ -12,9 +12,9 @@ from assets.graph.actions import WeaponAction, MoveAction, MeleAction, RangeActi
 from assets.graph.equips import Weapon, Armor, Shield
 from rpgrun.action import AType
 from rpgrun.actor import Actor
-from base_scene import BaseScene
-from popup_pane import PopUpPane
-from console_pane import ConsolePane
+from scenes.base_scene import BaseScene
+from panes.popup_pane import PopUpPane
+from panes.console_pane import ConsolePane
 
 
 class GameScene(BaseScene):
