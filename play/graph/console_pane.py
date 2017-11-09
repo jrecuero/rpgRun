@@ -1,11 +1,11 @@
 # import pygame
-from custom_sprite import CustomSprite
+from custom_pane import CustomPane
 
 
-class ConsoleDisplay(CustomSprite):
+class ConsolePane(CustomPane):
 
     def __init__(self, game, pos, **kwargs):
-        super(ConsoleDisplay, self).__init__(game, pos, **kwargs)
+        super(ConsolePane, self).__init__(game, pos, **kwargs)
         self.text = []
         self.add_text('Command Line Display')
 

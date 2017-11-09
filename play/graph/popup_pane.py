@@ -1,11 +1,11 @@
 import pygame
-from custom_sprite import CustomSprite
+from custom_pane import CustomPane
 
 
-class PopUpMenu(CustomSprite):
+class PopUpPane(CustomPane):
 
     def __init__(self, game, pos, items, **kwargs):
-        super(PopUpMenu, self).__init__(game, pos, **kwargs)
+        super(PopUpPane, self).__init__(game, pos, **kwargs)
         self.items = items
 
         self.menu_items = []

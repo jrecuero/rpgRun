@@ -2,10 +2,10 @@ import pygame
 from assets.graph.gsprite import GameSprite
 
 
-class CustomSprite(GameSprite):
+class CustomPane(GameSprite):
 
     def __init__(self, game, pos, **kwargs):
-        super(CustomSprite, self).__init__()
+        super(CustomPane, self).__init__()
         self.game = game
         self.pos = pos
 

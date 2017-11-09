@@ -13,8 +13,8 @@ from assets.graph.equips import Weapon, Armor, Shield
 from rpgrun.action import AType
 from rpgrun.actor import Actor
 from base_scene import BaseScene
-from popup_menu import PopUpMenu
-from console_display import ConsoleDisplay
+from popup_pane import PopUpPane
+from console_pane import ConsolePane
 
 
 class GameScene(BaseScene):
@@ -24,9 +24,9 @@ class GameScene(BaseScene):
         self.create_game()
         self.resources = {}
         self.resources['menu'] = self._create_res()
-        command_display = ConsoleDisplay(self.game, (10, 600), sprite_size=(780, 275), font_size=12)
+        command_display = ConsolePane(self.game, (10, 600), sprite_size=(780, 275), font_size=12)
         self.resources['command'] = self._create_res(command_display)
-        pane_display = ConsoleDisplay(self.game, (600, 10), sprite_size=(190, 700), font_size=12)
+        pane_display = ConsolePane(self.game, (600, 10), sprite_size=(190, 700), font_size=12)
         self.resources['pane'] = self._create_res(pane_display)
         self._get_res('pane').add_text('Player Information')
 
@@ -111,7 +111,7 @@ class GameScene(BaseScene):
             self.actions = [x.name for x in self.game.player.all_actions]
             self.left_disable = True
             menu_pos = (player_rect.left, player_rect.bottom)
-            menu = PopUpMenu(self.game, menu_pos, self.actions)
+            menu = PopUpPane(self.game, menu_pos, self.actions)
             self.resources['menu'] = self._create_res(menu, self._post_update_menu)
             return True
         return False
