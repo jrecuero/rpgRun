@@ -1,4 +1,4 @@
-from rpgrun.bcell import BCell
+from rpgrun.board.bcell import BCell
 
 
 @staticmethod

@@ -1,8 +1,8 @@
-from rpgrun.bcell import BCell
-from rpgrun.bobject import BObject
-from rpgrun.action import Actions
-from rpgrun.inventory import Inventory
-from rpgrun.equipment import Equipment
+from rpgrun.board.bcell import BCell
+from rpgrun.board.bobject import BObject
+from rpgrun.game.action import Actions
+from rpgrun.game.inventory import Inventory
+from rpgrun.game.equipment import Equipment
 
 
 @staticmethod

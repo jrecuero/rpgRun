@@ -1,7 +1,7 @@
 from collections import OrderedDict
-from rpgrun.itero import Itero
-from rpgrun.blayer import BLayer, LType
-from rpgrun.brender import BRender
+from rpgrun.common.itero import Itero
+from rpgrun.board.blayer import BLayer, LType
+from rpgrun.board.brender import BRender
 
 
 class BRow(Itero):

@@ -1,6 +1,6 @@
-from rpgrun.bsprite import TextSprite
-from rpgrun.actor import Actor
-from rpgrun.pactor import PActor
+from rpgrun.board.bsprite import TextSprite
+from rpgrun.game.actor import Actor
+from rpgrun.game.pactor import PActor
 
 PLAYER_ATTRS = '''[{"hp": {"base": 10, "delta": 2, "buffs": "None"}},
                    {"str": {"base": 9, "delta": 1, "buffs": "None"}},

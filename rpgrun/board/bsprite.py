@@ -1,4 +1,4 @@
-from rpgrun.brender import BRender
+from rpgrun.board.brender import BRender
 
 
 class BSprite(object):

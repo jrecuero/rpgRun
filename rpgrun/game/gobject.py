@@ -1,5 +1,5 @@
-import rpgrun.ids as ids
-from rpgrun.attr import Attributes
+import rpgrun.common.ids as ids
+from rpgrun.game.attr import Attributes
 
 
 class GObject(object):

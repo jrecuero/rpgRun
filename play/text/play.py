@@ -2,13 +2,13 @@ from jc2li.cli import Cli
 from jc2li.decorators import argo, syntax, setsyntax
 from jc2li.argtypes import Int
 import jc2li.loggerator as loggerator
-import rpgrun.game as game
-from rpgrun.blayer import LType
-from rpgrun.bpoint import Point, Location
-from rpgrun.shapes import Quad, Rhomboid
-from rpgrun.brow import BRow
-from rpgrun.action import AType
-from rpgrun.actor import Actor
+import rpgrun.game.game as game
+from rpgrun.board.blayer import LType
+from rpgrun.board.bpoint import Point, Location
+from rpgrun.board.bshapes import Quad, Rhomboid
+from rpgrun.board.brow import BRow
+from rpgrun.game.action import AType
+from rpgrun.game.actor import Actor
 from assets.text.surfaces import GreenSurface
 from assets.text.actors import PlayerActor, EnemyActor, MageActor, BossActor
 from assets.text.bobjects import Pillar

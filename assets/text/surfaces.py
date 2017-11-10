@@ -1,5 +1,5 @@
-from rpgrun.bsprite import TextSprite
-from rpgrun.bsurface import BSurface
+from rpgrun.board.bsprite import TextSprite
+from rpgrun.board.bsurface import BSurface
 
 
 class GreenSurface(BSurface):

@@ -1,5 +1,5 @@
-from rpgrun.bcell import BCell
-from rpgrun.attr import Attributes
+from rpgrun.board.bcell import BCell
+from rpgrun.game.attr import Attributes
 
 
 @staticmethod

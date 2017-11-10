@@ -1,5 +1,5 @@
-from rpgrun.gequip import GEquip
-from rpgrun.gcatalog import Catalog
+from rpgrun.game.gequip import GEquip
+from rpgrun.game.gcatalog import Catalog
 
 
 class Equipment(Catalog):

@@ -1,5 +1,5 @@
 import abc
-from rpgrun.bpoint import BPoint
+from rpgrun.board.bpoint import BPoint
 
 
 class Shape(abc.ABC):

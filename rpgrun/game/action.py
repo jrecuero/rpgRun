@@ -1,7 +1,7 @@
 from enum import Enum
-from rpgrun.gobject import GObject
-from rpgrun.itero import Itero
-from rpgrun.blayer import LType
+from rpgrun.common.itero import Itero
+from rpgrun.board.blayer import LType
+from rpgrun.game.gobject import GObject
 
 
 class AType(Enum):

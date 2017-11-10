@@ -1,10 +1,10 @@
-from rpgrun.board import Board
-from rpgrun.bhandler import BoardHandler
-from rpgrun.bpoint import Location
-from rpgrun.brow import BRow
-from rpgrun.blayer import LType
-from rpgrun.action import Action
-from gstages import Stages
+from rpgrun.board.board import Board
+from rpgrun.board.bhandler import BoardHandler
+from rpgrun.board.bpoint import Location
+from rpgrun.board.brow import BRow
+from rpgrun.board.blayer import LType
+from rpgrun.game.action import Action
+from rpgrun.game.gstages import Stages
 import jc2li.loggerator as loggerator
 
 

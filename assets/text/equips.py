@@ -1,4 +1,4 @@
-from rpgrun.gequip import GEquip
+from rpgrun.game.gequip import GEquip
 
 
 class Weapon(GEquip):

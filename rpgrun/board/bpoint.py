@@ -1,5 +1,5 @@
 from enum import Enum
-from rpgrun.point import Point
+from rpgrun.board.point import Point
 
 
 class Location(Enum):

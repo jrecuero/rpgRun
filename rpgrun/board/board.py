@@ -1,7 +1,7 @@
 from collections import deque
-from rpgrun.itero import Itero
-from rpgrun.brender import BRender
-from rpgrun.brow import BRow
+from rpgrun.common.itero import Itero
+from rpgrun.board.brender import BRender
+from rpgrun.board.brow import BRow
 
 
 class Board(Itero):

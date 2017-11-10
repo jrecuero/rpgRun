@@ -1,5 +1,5 @@
-from rpgrun.bsprite import GraphSprite
-from rpgrun.bobject import BObject
+from rpgrun.board.bsprite import GraphSprite
+from rpgrun.board.bobject import BObject
 import pygame
 
 

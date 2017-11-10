@@ -1,6 +1,6 @@
-import rpgrun.ids as ids
-from rpgrun.bpoint import BPoint
-from rpgrun.brender import BRender
+import rpgrun.common.ids as ids
+from rpgrun.board.bpoint import BPoint
+from rpgrun.board.brender import BRender
 
 
 class BCell(BPoint):

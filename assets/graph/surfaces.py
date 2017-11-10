@@ -1,5 +1,5 @@
-from rpgrun.bsprite import GraphSprite
-from rpgrun.bsurface import BSurface
+from rpgrun.board.bsprite import GraphSprite
+from rpgrun.board.bsurface import BSurface
 from assets.graph.gsprite import GameSprite
 import pygame
 

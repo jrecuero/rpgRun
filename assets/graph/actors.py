@@ -1,6 +1,6 @@
-from rpgrun.bsprite import GraphSprite
-from rpgrun.actor import Actor
-from rpgrun.pactor import PActor
+from rpgrun.board.bsprite import GraphSprite
+from rpgrun.game.actor import Actor
+from rpgrun.game.pactor import PActor
 from assets.graph.gsprite import GameSprite
 import pygame
 

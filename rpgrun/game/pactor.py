@@ -1,5 +1,5 @@
-from rpgrun.bcell import BCell
-from rpgrun.actor import Actor
+from rpgrun.board.bcell import BCell
+from rpgrun.game.actor import Actor
 
 
 @staticmethod

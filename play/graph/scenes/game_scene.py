@@ -1,17 +1,17 @@
 import pygame
-from rpgrun.game import Game
-from rpgrun.bpoint import Location
-from rpgrun.shapes import Quad, Rhomboid
-from rpgrun.blayer import LType
-from rpgrun.brow import BRow
-from rpgrun.brender import BRender
+from rpgrun.game.game import Game
+from rpgrun.board.bpoint import Location
+from rpgrun.board.bshapes import Quad, Rhomboid
+from rpgrun.board.blayer import LType
+from rpgrun.board.brow import BRow
+from rpgrun.board.brender import BRender
 from assets.graph.surfaces import GreenSurface
 from assets.graph.bobjects import Pillar
 from assets.graph.actors import PlayerActor, EnemyActor
 from assets.graph.actions import WeaponAction, MoveAction, MeleAction, RangeAction
 from assets.graph.equips import Weapon, Armor, Shield
-from rpgrun.action import AType
-from rpgrun.actor import Actor
+from rpgrun.game.action import AType
+from rpgrun.game.actor import Actor
 from scenes.base_scene import BaseScene
 from panes.popup_pane import PopUpPane
 from panes.console_pane import ConsolePane
@@ -19,21 +19,28 @@ from panes.console_pane import ConsolePane
 
 class GameScene(BaseScene):
     def __init__(self):
+        """GameScene class initialization method.
+        """
         super(GameScene, self).__init__()
+        # "_out_buffer" buffer is used to redirect the logger output to the
+        # console pane.
         self._out_buffer = []
+        # There are several attributes created in create_game() method.
         self.create_game()
         self.resources = {}
         self.resources['menu'] = self._create_res()
-        command_display = ConsolePane(self.game, (10, 600), sprite_size=(780, 275), font_size=12)
+        command_display = ConsolePane(self.game, (10, 600), pane_size=(780, 275), font_size=12)
         self.resources['command'] = self._create_res(command_display)
-        pane_display = ConsolePane(self.game, (600, 10), sprite_size=(190, 700), font_size=12)
-        self.resources['pane'] = self._create_res(pane_display)
-        self._get_res('pane').add_text('Player Information')
+        # pane_display = ConsolePane(self.game, (600, 10), pane_size=(190, 700), font_size=12)
+        # self.resources['pane'] = self._create_res(pane_display)
+        # self._get_res('pane').add_text('Player Information')
 
     def create_game(self):
         """Create game instances. It creates and initializes some instance attributes.
         """
+        # number of rows and columns for the board.
         self.board_width, self.board_height = 8, 8
+        # sprite size (in pixels) for every cell in the board.
         self.width, self.height = 64, 64
         self.game = Game(self.board_width,
                          self.board_height,

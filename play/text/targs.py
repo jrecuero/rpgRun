@@ -1,4 +1,4 @@
-from rpgrun.bpoint import Location
+from rpgrun.board.bpoint import Location
 from jc2li.argtypes import Int, Str
 
 

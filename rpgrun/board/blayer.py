@@ -1,6 +1,6 @@
 from enum import Enum
-from rpgrun.itero import Itero
-from rpgrun.bcell import BCell
+from rpgrun.common.itero import Itero
+from rpgrun.board.bcell import BCell
 
 
 class LType(Enum):
