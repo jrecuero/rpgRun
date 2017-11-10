@@ -22,7 +22,6 @@ class CustomPane(GameSprite):
         self.image = self.surface
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = pos
-        self.in_focus = True
 
     def update(self):
         pass

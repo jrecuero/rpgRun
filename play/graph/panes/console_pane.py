@@ -19,7 +19,6 @@ class ConsolePane(CustomPane):
         if self.in_focus:
             x, y = 10, 10
             for text in self.text[-self.text_box_len:]:
-                entry = self.font.render(
-                    text, 0, self.font_fg_color, self.font_bg_color)
+                entry = self.font.render(text, 0, self.font_fg_color, self.font_bg_color)
                 self.surface.blit(entry, (x, y))
                 y += self.font_size

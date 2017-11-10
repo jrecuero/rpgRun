@@ -46,8 +46,8 @@ class Board(Itero):
             int : Integer with the top cell row.
 
         Example:
-            >>> from bcell import BCell
-            >>> from blayer import LType
+            >>> from rpgrun.board.bcell import BCell
+            >>> from rpgrun.board.blayer import LType
             >>> board = Board(5, 5)
             >>> row = BRow(5)
             >>> row.add_cell_to_layer(BCell(0, 0, None), LType.SURFACE)
@@ -70,8 +70,8 @@ class Board(Itero):
             int : Integer with the bottom cell row.
 
         Example:
-            >>> from bcell import BCell
-            >>> from blayer import LType
+            >>> from rpgrun.board.bcell import BCell
+            >>> from rpgrun.board.blayer import LType
             >>> board = Board(3, 5)
             >>> row = BRow(5)
             >>> row.add_cell_to_layer(BCell(0, 0, None), LType.SURFACE)
@@ -186,7 +186,7 @@ class Board(Itero):
     def get_row_from_cell(self, cell):
         """Gets the row for the given Cell..
 
-        >>> from bcell import BCell
+        >>> from rpgrun.board.bcell import BCell
         >>> board = Board(2, 5)
         >>> board[0].cellrow = 1
         >>> board.get_row_from_cell(BCell(0, 1, None)).cellrow
@@ -206,9 +206,9 @@ class Board(Itero):
             list : all cells at the position for the given point.
 
         Example:
-            >>> from rpgrun.bcell import BCell
-            >>> from rpgrun.blayer import LType
-            >>> from rpgrun.bpoint import BPoint
+            >>> from rpgrun.board.bcell import BCell
+            >>> from rpgrun.board.blayer import LType
+            >>> from rpgrun.board.bpoint import BPoint
             >>> board = Board(5, 5)
             >>> row = BRow(5)
             >>> c1 = BCell(0, 0, None)
@@ -232,7 +232,7 @@ class Board(Itero):
     def get_index_from_cell(self, cell):
         """Gets the row index for the given Cell.
 
-        >>> from bcell import BCell
+        >>> from rpgrun.board.bcell import BCell
         >>> board = Board(2, 5)
         >>> board[0].cellrow = 1
         >>> board.get_index_from_cell(BCell(0, 1, None))
@@ -251,8 +251,8 @@ class Board(Itero):
             list : all cells for the given layers.
 
         Example:
-            >>> from rpgrun.bcell import BCell
-            >>> from rpgrun.blayer import LType
+            >>> from rpgrun.board.bcell import BCell
+            >>> from rpgrun.board.blayer import LType
             >>> board = Board(5, 5)
             >>> row = BRow(5)
             >>> c1 = BCell(0, 0, None)
@@ -285,8 +285,8 @@ class Board(Itero):
                     was found.
 
         Example:
-            >>> from bcell import BCell
-            >>> from blayer import LType
+            >>> from rpgrun.board.bcell import BCell
+            >>> from rpgrun.board.blayer import LType
             >>> board = Board(5, 5)
             >>> row = BRow(5)
             >>> c1 = BCell(0, 0, None)
@@ -308,8 +308,8 @@ class Board(Itero):
     def add_cell_to_layer(self, cell, layer):
         """Adds a new cell to the given layer.
 
-        >>> from bcell import BCell
-        >>> from blayer import LType
+        >>> from rpgrun.board.bcell import BCell
+        >>> from rpgrun.board.blayer import LType
         >>> board = Board(2, 5)
         >>> board[0].cellrow = 0
         >>> board.add_cell_to_layer(BCell(0, 0, None), LType.SURFACE)
@@ -323,8 +323,8 @@ class Board(Itero):
     def remove_cell(self, cell):
         """Removes a cell from the board.
 
-        >>> from bcell import BCell
-        >>> from blayer import LType
+        >>> from rpgrun.board.bcell import BCell
+        >>> from rpgrun.board.blayer import LType
         >>> board = Board(2, 5)
         >>> board[0].cellrow = 0
         >>> cell = BCell(0, 0, None)

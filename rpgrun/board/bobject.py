@@ -28,7 +28,7 @@ class BObject(BCell):
         """Overwrite __getattr__ method allowing to access values inside attrs
         as regular instance attributes.
 
-        >>> from attr import Attr
+        >>> from rpgrun.game.attr import Attr
         >>> obj = BObject(0, 0, 'new')
         >>> obj.add_attr(Attr('HP'))
         HP: 0/0
@@ -51,7 +51,7 @@ class BObject(BCell):
     def add_attr(self, attr):
         """Add a new attribute to the attrs attribute.
 
-        >>> from attr import Attr
+        >>> from rpgrun.game.attr import Attr
         >>> obj = BObject(0, 0, 'new')
         >>> obj.add_attr(Attr('HP'))
         HP: 0/0

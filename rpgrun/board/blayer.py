@@ -104,7 +104,7 @@ class BLayer(Itero):
             >>> c2 = BCell(1, 0, None)
             >>> layer.append(c1)
             >>> layer.append(c2)
-            >>> from rpgrun.bpoint import BPoint
+            >>> from rpgrun.board.bpoint import BPoint
             >>> layer.get_cell_at(BPoint(1, 0)) == c2
             True
             >>> layer.get_cell_at(BPoint(0, 0)) == c1

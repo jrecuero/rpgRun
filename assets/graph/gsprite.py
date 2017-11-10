@@ -6,6 +6,9 @@ class GameSprite(pygame.sprite.Sprite):
     def __init__(self, **kwargs):
         super(GameSprite, self).__init__(**kwargs)
         self.selected = False
+        self.enabled = True
+        self.hidden = False
+        self.in_focus = True
         self._image = None
         self._image_selected = None
 

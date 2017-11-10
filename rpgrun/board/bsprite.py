@@ -13,8 +13,9 @@ class BSprite(object):
         """
         self.sprite = kwargs.get('sprite', None)
         self._selected = False
-        self.enabled = True
-        self.hidden = False
+        self._enabled = True
+        self._hidden = False
+        self._in_focus = True
 
     @property
     def selected(self):
@@ -42,6 +43,87 @@ class BSprite(object):
             value (bool) : New value for _selected attribute.
         """
         self._selected = value
+
+    @property
+    def enabled(self):
+        """Gets attribute _enabled value.
+
+        Returns:
+            bool : Value for _enabled attribute.
+
+        Example:
+            >>> sp = BSprite(sprite=True)
+            >>> sp.enabled
+            True
+            >>> sp.enabled = False
+            >>> sp.enabled
+            False
+        """
+        return self._enabled
+
+    @enabled.setter
+    def enabled(self, value):
+        """Sets attribute _enabled value. It sets the same attribute for the
+        graph instance.
+
+        Args:
+            value (bool) : New value for _enabled attribute.
+        """
+        self._enabled = value
+
+    @property
+    def hidden(self):
+        """Gets attribute _hidden value.
+
+        Returns:
+            bool : Value for _hidden attribute.
+
+        Example:
+            >>> sp = BSprite(sprite=True)
+            >>> sp.hidden
+            False
+            >>> sp.hidden = True
+            >>> sp.hidden
+            True
+        """
+        return self._hidden
+
+    @hidden.setter
+    def hidden(self, value):
+        """Sets attribute _hidden value. It sets the same attribute for the
+        graph instance.
+
+        Args:
+            value (bool) : New value for _hidden attribute.
+        """
+        self._hidden = value
+
+    @property
+    def in_focus(self):
+        """Gets attribute _in_focus value.
+
+        Returns:
+            bool : Value for _in_focus attribute.
+
+        Example:
+            >>> sp = BSprite(sprite=True)
+            >>> sp.in_focus
+            True
+            >>> sp.in_focus = False
+            >>> sp.in_focus
+            False
+        """
+        return self._in_focus
+
+    @in_focus.setter
+    def in_focus(self, value):
+        """Sets attribute _in_focus value. It sets the same attribute for the
+        graph instance.
+
+        Args:
+            value (bool) : New value for _in_focus attribute.
+        """
+        self._in_focus = value
 
     def get(self, brender=BRender.DEFAULT):
         """Gets the sprite to render based on the render type.
@@ -121,6 +203,42 @@ class GraphSprite(BSprite):
         BSprite.selected.fset(self, value)
         if hasattr(self.sprite, 'selected'):
             self.sprite.selected = value
+
+    @BSprite.enabled.setter
+    def enabled(self, value):
+        """Sets attribute _enabled value. It sets the same attribute for the
+        graph instance.
+
+        Args:
+            value (bool) : New value for _enabled attribute.
+        """
+        BSprite.enabled.fset(self, value)
+        if hasattr(self.sprite, 'enabled'):
+            self.sprite.enabled = value
+
+    @BSprite.hidden.setter
+    def hidden(self, value):
+        """Sets attribute _hidden value. It sets the same attribute for the
+        graph instance.
+
+        Args:
+            value (bool) : New value for _hidden attribute.
+        """
+        BSprite.hidden.fset(self, value)
+        if hasattr(self.sprite, 'hidden'):
+            self.sprite.hidden = value
+
+    @BSprite.in_focus.setter
+    def in_focus(self, value):
+        """Sets attribute _in_focus value. It sets the same attribute for the
+        graph instance.
+
+        Args:
+            value (bool) : New value for _in_focus attribute.
+        """
+        BSprite.in_focus.fset(self, value)
+        if hasattr(self.sprite, 'in_focus'):
+            self.sprite.in_focus = value
 
     def get(self, brender=BRender.DEFAULT):
         """Gets the sprite to render based on the render type.

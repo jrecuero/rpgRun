@@ -99,7 +99,7 @@ class Actor(BObject):
             bool : True is actor is still in the board.
 
         Example:
-            >>> from attr import Attr
+            >>> from rpgrun.game.attr import Attr
             >>> a = Actor(0, 0, 'me')
             >>> ahp = Attr('hp')
             >>> ahp.setup_attr(base=100)
@@ -117,7 +117,7 @@ class Actor(BObject):
             bool : True if Actor is alive, with life greater than zero.
 
         Example:
-            >>> from attr import Attr
+            >>> from rpgrun.game.attr import Attr
             >>> a = Actor(0, 0, 'me')
             >>> ahp = Attr('hp')
             >>> ahp.setup_attr(base=100)
@@ -150,9 +150,9 @@ def __integration_doctest():
     """
     Test Inventory can hold GItem and GEquip.
 
-    >>> from rpgrun.equipment import GEquip
-    >>> from rpgrun.gitem import GItem
-    >>> from rpgrun.attr import Attr
+    >>> from rpgrun.game.equipment import GEquip
+    >>> from rpgrun.game.gitem import GItem
+    >>> from rpgrun.game.attr import Attr
     >>> a = Actor(0, 0, 'me')
     >>> it = GItem(name='box')
     >>> sw1 = GEquip(name='sword', attr_buff={'hp': 5})

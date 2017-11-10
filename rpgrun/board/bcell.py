@@ -56,7 +56,7 @@ class BCell(BPoint):
         Example:
             >>> cell = BCell(0, 0, 'cell')
             >>> cell.klass
-            <class 'rpgrun.bpoint.BPoint'>
+            <class 'rpgrun.board.bpoint.BPoint'>
         """
         return BPoint
 

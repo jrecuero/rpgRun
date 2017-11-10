@@ -41,7 +41,7 @@ class BRow(Itero):
     def cellrow(self):
         """Gets _cellrow attribute value using the underlying layer.
 
-        >>> from rpgrun.bcell import BCell
+        >>> from rpgrun.board.bcell import BCell
         >>> row = BRow(2)
         >>> row.cellrow
         >>> row[0].append(BCell(0, 1, None))
@@ -94,7 +94,7 @@ class BRow(Itero):
     def add_cell_to_layer(self, cell, layer):
         """Adds a new cell to the given layer.
 
-        >>> from rpgrun.bcell import BCell
+        >>> from rpgrun.board.bcell import BCell
         >>> row = BRow(2)
         >>> row.add_cell_to_layer(BCell(0, 0, None), LType.SURFACE)
         True
@@ -109,7 +109,7 @@ class BRow(Itero):
     def remove_cell_from_layer(self, cell, layer):
         """Removes a cell from the given layer.
 
-        >>> from rpgrun.bcell import BCell
+        >>> from rpgrun.board.bcell import BCell
         >>> row = BRow(2)
         >>> cell = BCell(0, 0, None)
         >>> row.add_cell_to_layer(cell, LType.SURFACE)
@@ -128,7 +128,7 @@ class BRow(Itero):
     def populate_layer(self, cell, layer):
         """Populate a layer with the same cell.
 
-        >>> from rpgrun.bcell import BCell
+        >>> from rpgrun.board.bcell import BCell
         >>> row = BRow(2)
         >>> cell = BCell(0, 0, None)
         >>> row.populate_layer(cell, LType.SURFACE)
@@ -150,7 +150,7 @@ class BRow(Itero):
     def clear_layer(self, layer):
         """Clear all cells from a layer.
 
-        >>> from rpgrun.bcell import BCell
+        >>> from rpgrun.board.bcell import BCell
         >>> row = BRow(2)
         >>> cell = BCell(0, 0, None)
         >>> row.populate_layer(cell, LType.SURFACE)
@@ -176,7 +176,7 @@ class BRow(Itero):
             list : all cells for the given layers.
 
         Example:
-            >>> from rpgrun.bcell import BCell
+            >>> from rpgrun.board.bcell import BCell
             >>> row = BRow(2)
             >>> c1 = BCell(0, 0, None)
             >>> c2 = BCell(1, 0, None)
@@ -205,7 +205,7 @@ class BRow(Itero):
             list : all cells at the position for the given point.
 
         Example:
-            >>> from rpgrun.bcell import BCell
+            >>> from rpgrun.board.bcell import BCell
             >>> row = BRow(2)
             >>> c1 = BCell(0, 0, None)
             >>> c2 = BCell(1, 0, None)
@@ -213,7 +213,7 @@ class BRow(Itero):
             True
             >>> row.add_cell_to_layer(c2, LType.SURFACE)
             True
-            >>> from rpgrun.bpoint import BPoint
+            >>> from rpgrun.board.bpoint import BPoint
             >>> row.get_cells_at(BPoint(0, 0)) == [c1, ]
             True
         """
@@ -235,7 +235,7 @@ class BRow(Itero):
                     was found.
 
         Example:
-            >>> from rpgrun.bcell import BCell
+            >>> from rpgrun.board.bcell import BCell
             >>> row = BRow(2)
             >>> c1 = BCell(0, 0, None)
             >>> c2 = BCell(1, 0, None)

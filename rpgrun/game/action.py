@@ -179,8 +179,8 @@ class Action(GObject):
             bool : True is Actor is a valid target.
 
         Example:
-            >>> from actor import Actor
-            >>> from bsurface import BSurface
+            >>> from rpgrun.game.actor import Actor
+            >>> from rpgrun.board.bsurface import BSurface
             >>> acto = Action('new', AType.SKILL)
             >>> o = Actor(0, 0, 'me')
             >>> t = Actor(1, 1, 'you')
