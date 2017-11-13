@@ -15,6 +15,8 @@ from rpgrun.game.actor import Actor
 from scenes.base_scene import BaseScene
 from panes.popup_pane import PopUpPane
 from panes.console_pane import ConsolePane
+# from panes.stat_pane import StatPane
+# from panes.action_pane import ActionPane
 
 
 class GameScene(BaseScene):
@@ -29,11 +31,15 @@ class GameScene(BaseScene):
         self.create_game()
         self.resources = {}
         self.resources['menu'] = self._create_res()
-        command_display = ConsolePane(self.game, (10, 600), pane_size=(780, 275), font_size=12)
-        self.resources['command'] = self._create_res(command_display)
-        # pane_display = ConsolePane(self.game, (600, 10), pane_size=(190, 700), font_size=12)
-        # self.resources['pane'] = self._create_res(pane_display)
-        # self._get_res('pane').add_text('Player Information')
+        command_pane = ConsolePane(self.game, (32, 600), pane_size=(528, 275), font_size=12)
+        self.resources['command'] = self._create_res(command_pane)
+        self._get_res('command').add_text('Console')
+        stat_pane = ConsolePane(self.game, (580, 32), pane_size=(590, 526), font_size=12)
+        self.resources['stat'] = self._create_res(stat_pane)
+        self._get_res('stat').add_text('Player Stats')
+        action_pane = ConsolePane(self.game, (580, 600), pane_size=(590, 275), font_size=12)
+        self.resources['action'] = self._create_res(action_pane)
+        self._get_res('action').add_text('Player Actions')
 
     def create_game(self):
         """Create game instances. It creates and initializes some instance attributes.

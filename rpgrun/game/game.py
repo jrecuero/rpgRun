@@ -51,7 +51,7 @@ class Game(object):
         """
         old_stage = self._stage
         self._stage = value
-        self.logger.display('New Stage: {}'.format(self._stage))
+        # self.logger.display('New Stage: {}'.format(self._stage))
         for stage_cb, stages in self._stage_cb.items():
             if stages is None or old_stage in stages or self._stage in stages:
                 stage_cb(self._stage, old_stage)
