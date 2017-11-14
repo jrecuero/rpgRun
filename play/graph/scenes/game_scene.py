@@ -13,7 +13,7 @@ from assets.graph.equips import Weapon, Armor, Shield
 from rpgrun.game.action import AType
 from rpgrun.game.actor import Actor
 from scenes.base_scene import BaseScene
-from panes.popup_pane import PopUpPane
+from panes.menu_pane import MenuPane
 from panes.console_pane import ConsolePane
 # from panes.stat_pane import StatPane
 # from panes.action_pane import ActionPane
@@ -124,7 +124,7 @@ class GameScene(BaseScene):
             self.actions = [x.name for x in self.game.player.all_actions]
             self.left_disable = True
             menu_pos = (player_rect.left, player_rect.bottom)
-            menu = PopUpPane(self.game, menu_pos, self.actions)
+            menu = MenuPane(self.game, menu_pos, self.actions)
             self.resources['menu'] = self._create_res(menu, self._post_update_menu)
             return True
         return False
