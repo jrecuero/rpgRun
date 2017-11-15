@@ -9,6 +9,8 @@ class CustomPane(GameSprite):
         self.game = game
         self.pos = pos
 
+        self.title = kwargs.get('title', None)
+
         self.font_name = kwargs.get('font_name', 'arial')
         self.font_size = kwargs.get('font_size', 20)
         self.font_fg_color = kwargs.get('font_fg_color', (255, 255, 0))

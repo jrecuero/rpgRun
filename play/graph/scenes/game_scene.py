@@ -31,15 +31,12 @@ class GameScene(BaseScene):
         self.create_game()
         self.resources = {}
         self.resources['menu'] = self._create_res()
-        command_pane = ConsolePane(self.game, (32, 600), pane_size=(528, 275), font_size=12)
+        command_pane = ConsolePane(self.game, (32, 600), pane_size=(528, 275), font_size=12, title='Console')
         self.resources['command'] = self._create_res(command_pane)
-        self._get_res('command').add_text('Console')
-        stat_pane = ConsolePane(self.game, (580, 32), pane_size=(590, 526), font_size=12)
+        stat_pane = ConsolePane(self.game, (580, 32), pane_size=(590, 526), font_size=12, title='Player Stats')
         self.resources['stat'] = self._create_res(stat_pane)
-        self._get_res('stat').add_text('Player Stats')
-        action_pane = ConsolePane(self.game, (580, 600), pane_size=(590, 275), font_size=12)
+        action_pane = ConsolePane(self.game, (580, 600), pane_size=(590, 275), font_size=12, title='Player Actions')
         self.resources['action'] = self._create_res(action_pane)
-        self._get_res('action').add_text('Player Actions')
 
     def create_game(self):
         """Create game instances. It creates and initializes some instance attributes.

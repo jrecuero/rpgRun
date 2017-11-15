@@ -7,10 +7,9 @@ class ConsolePane(CustomPane):
     def __init__(self, game, pos, **kwargs):
         super(ConsolePane, self).__init__(game, pos, **kwargs)
         self.text = []
-        title = kwargs.get('title', None)
-        if title:
-            self.add_text(title)
         self.text_box_len = kwargs.get("text_box_len", 16)
+        if self.title:
+            self.text.append(self.title)
 
     def add_text(self, message):
         self.text.append(message)
