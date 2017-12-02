@@ -102,20 +102,40 @@ class GameScene(BaseScene):
         return row
 
     def _create_res(self, instance=None, post_update_cb=None):
+        """
+        """
         resource = {'instance': instance, 'pos-update': post_update_cb}
         return resource
 
     def _get_res(self, name):
+        """
+        """
         return self.resources[name]['instance']
 
     def _get_res_post_update(self, name):
+        """
+        """
         return self.resources[name]['pos-update']
 
     def _traverse_res(self):
+        """
+        """
         for resource in [x for _, x in self.resources.items() if x['instance']]:
             yield (resource['instance'], resource['pos-update'])
 
-    def _click_on_player(self, event, mouse_pos):
+    def _click_on_actor(self, actor, event, mouse_pos):
+        """
+        """
+        actor_rect = actor.sprite.sprite.rect
+        if event.button == 1 and actor_rect.collidepoint(mouse_pos):
+            self._get_res('command').add_text('Click on {}'.format(actor.name))
+            self.game.run_select_target(actor)
+            return True
+        return False
+
+    def _process_input_click_on_player(self, event, mouse_pos):
+        """
+        """
         player_rect = self.game.player.sprite.sprite.rect
         if event.button == 1 and player_rect.collidepoint(mouse_pos):
             self.actions = [x.name for x in self.game.player.all_actions]
@@ -126,15 +146,40 @@ class GameScene(BaseScene):
             return True
         return False
 
-    def _click_on_actor(self, actor, event, mouse_pos):
-        actor_rect = actor.sprite.sprite.rect
-        if event.button == 1 and actor_rect.collidepoint(mouse_pos):
-            self._get_res('command').add_text('Click on {}'.format(actor.name))
-            self.game.run_select_target(actor)
-            return True
+    def _process_input_all_actors(self, event, mouse_pos):
+        """
+        """
+        for actor in self.game.other_actors():
+            if self._click_on_actor(actor, event, mouse_pos):
+                for target in self.game.target_choice:
+                    target.selected = (target == actor)
+                return True
+        return False
+
+    def _process_input_move_choice(self, event, mouse_pos):
+        """
+        """
+        if self.game.move_choice:
+            clicked = False
+            for point in self.game.move_choice:
+                for cell in self.game.board.get_cells_at(point):
+                    cell_rect = cell.sprite.sprite.rect
+                    if event.button == 1 and cell_rect.collidepoint(mouse_pos):
+                        self._get_res('command').add_text('Click for move  at {}'.format(cell))
+                        clicked = True
+                        # FIXME: This is just a fixed location movement
+                        self.game.run_select_movement(Location.FRONT, 1)
+            if clicked:
+                for point in self.game.move_choice:
+                    for cell in self.game.board.get_cells_at(point):
+                        cell.selected = False
+                self.game.run_scroll(self._new_row())
+                return True
         return False
 
     def process_input(self, events):
+        """
+        """
         for event in events:
             if event.type == (pygame.USEREVENT + 1):
                 pygame.time.set_timer(pygame.USEREVENT + 1, 0)
@@ -142,32 +187,18 @@ class GameScene(BaseScene):
 
             if event.type == pygame.MOUSEBUTTONUP and not self.left_disable:
                 mouse_pos = pygame.mouse.get_pos()
-                if self._click_on_player(event, mouse_pos):
+                if self._process_input_click_on_player(event, mouse_pos):
                     return
 
-                for actor in self.game.other_actors():
-                    if self._click_on_actor(actor, event, mouse_pos):
-                        for target in self.game.target_choice:
-                            target.selected = (target == actor)
-                        return
+                if self._process_input_all_actors(event, mouse_pos):
+                    return
 
-                if self.game.move_choice:
-                    clicked = False
-                    for point in self.game.move_choice:
-                        for cell in self.game.board.get_cells_at(point):
-                            cell_rect = cell.sprite.sprite.rect
-                            if event.button == 1 and cell_rect.collidepoint(mouse_pos):
-                                self._get_res('command').add_text('Click for move  at {}'.format(cell))
-                                clicked = True
-                                # FIXME: This is just a fixed location movement
-                                self.game.run_select_movement(Location.FRONT, 1)
-                    if clicked:
-                        for point in self.game.move_choice:
-                            for cell in self.game.board.get_cells_at(point):
-                                cell.selected = False
-                        self.game.run_scroll(self._new_row())
+                if self._process_input_move_choice(event, mouse_pos):
+                    return
 
     def _post_update_menu(self, action_index):
+        """
+        """
         if action_index is not None:
             action_name = self.actions[action_index]
             action = self.game.player.get_action_by_name(action_name)
@@ -188,6 +219,8 @@ class GameScene(BaseScene):
             self.game.player.sprite.sprite.image.fill((255, 165, 0))
 
     def update(self):
+        """
+        """
         if self._out_buffer:
             # for entry in self._out_buffer[-1].split('\n'):
             for entry in self._out_buffer:
@@ -200,6 +233,8 @@ class GameScene(BaseScene):
                 post_update_cb(result)
 
     def render(self, screen):
+        """
+        """
         screen.fill((0, 0, 255))
         x, y = 32, 32
         render_board = self.game.board.render(render=BRender.GRAPH)
