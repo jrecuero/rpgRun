@@ -35,7 +35,10 @@ class GameScene(BaseScene):
         self.resources['command'] = self._create_res(command_pane)
         stat_pane = ConsolePane(self.game, (580, 32), pane_size=(590, 526), font_size=12, title='Player Stats')
         self.resources['stat'] = self._create_res(stat_pane)
-        action_pane = ConsolePane(self.game, (580, 600), pane_size=(590, 275), font_size=12, title='Player Actions')
+        # action_pane = ConsolePane(self.game, (580, 600), pane_size=(590, 275), font_size=12, title='Player Actions')
+        # self.resources['action'] = self._create_res(action_pane)
+        self.actions = [x.name for x in self.game.player.all_actions]
+        action_pane = MenuPane(self.game, (580, 600), self.actions)
         self.resources['action'] = self._create_res(action_pane)
 
     def create_game(self):
