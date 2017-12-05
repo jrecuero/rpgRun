@@ -45,6 +45,6 @@ class MenuPane(CustomPane):
             if left:
                 for index, box in enumerate(boxes):
                     if box.collidepoint(mouse_pos):
-                        self.in_focus = False
+                        # self.in_focus = False
                         return index
         return None
