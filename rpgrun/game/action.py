@@ -69,6 +69,7 @@ class Action(GObject):
         self._preExecCb = None
         self._postExecCb = None
         self._resultCb = None
+        self._report = list()
 
     @property
     def type(self):
@@ -330,6 +331,14 @@ class Action(GObject):
             str : string with the Action instance representation.
         """
         return '{0}: {1}'.format(self.__class__.__name__, self.name)
+
+    def report(self):
+        """reports returns information about the last action execution.
+
+        Returns:
+            string : last action execution information.
+        """
+        return self._report[-1]
 
 
 class TargetAction(Action):

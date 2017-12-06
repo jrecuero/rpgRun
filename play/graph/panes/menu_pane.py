@@ -1,5 +1,5 @@
 import pygame
-from panes.custom_pane import CustomPane
+from panes.custom_pane import CustomPane, update
 
 
 class MenuPane(CustomPane):
@@ -31,6 +31,7 @@ class MenuPane(CustomPane):
     def enable_item(self, item):
         return self._set_item(item, True)
 
+    @update
     def update(self):
         # FIXME: This has to be moved to process_input method.
         if self.in_focus:

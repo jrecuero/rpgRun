@@ -212,6 +212,7 @@ class Game(object):
 
             if self.action.requires_target():
                 # Select target
+                self.logger.debug('action requires target')
                 self.stage = Stages.SEL_TARGET
 
                 # When action has been selected, ask for cells for target
@@ -234,6 +235,7 @@ class Game(object):
 
             if self.action.requires_movement():
                 # Select Movement
+                self.logger.debug('action requires movement')
                 self.stage = Stages.SEL_MOVE
 
                 self.move_choice = self.action.move_choices()
@@ -278,31 +280,37 @@ class Game(object):
     def run_select_action(self, action):
         """Steps on the action selection.
         """
+        self.logger.debug('run_select_action: {}'.format(action))
         self._runner.send(action)
         return action.type
 
     def run_select_target(self, target):
         """Steps on the action target selection.
         """
+        self.logger.debug('run_select_target: {}'.format(target))
         self._runner.send(self.__action_select_target.send(target))
 
     def run_select_requires(self, **kwargs):
         """Steps on the requires selection.
         """
+        self.logger.debug('run_select_requires: {}'.format(kwargs))
         self._runner.send(self.__action_select_move.send({}))
 
     def run_select_movement(self, location=None, position=None):
         """Steps on the action movement selection.
         """
+        self.logger.debug('run_select_movement: {0} {1}'.format(location, position))
         self._runner.send(self.__action_select_move.send({'location': location,
                                                           'position': position}))
 
     def run_scroll(self, new_row):
         """Steps on the run cycle.
         """
+        self.logger.debug('run_scroll: {}'.format(new_row))
         self._runner.send(new_row)
 
     def runner(self, value):
         """Steps on the run cycle.
         """
+        self.logger.debug('runner: {}'.format(value))
         self._runner.send(value)

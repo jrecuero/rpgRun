@@ -38,8 +38,13 @@ class GameScene(BaseScene):
         # action_pane = ConsolePane(self.game, (580, 600), pane_size=(590, 275), font_size=12, title='Player Actions')
         # self.resources['action'] = self._new_resource(action_pane)
         self.actions = [x.name for x in self.game.player.all_actions]
-        action_pane = MenuPane(self.game, (580, 600), self.actions, pane_size=(590, 275))
-        self.resources['action'] = self._new_resource(action_pane, self._post_update_menu, True)
+        action_pane = MenuPane(self.game,
+                               (580, 600),
+                               self.actions,
+                               pane_size=(590, 275),
+                               post_update_cb=self._post_update_menu)
+        # self.resources['action'] = self._new_resource(action_pane, self._post_update_menu, True)
+        self.resources['action'] = self._new_resource(action_pane, None, True)
 
     def _create_environment(self):
         """
@@ -255,8 +260,8 @@ class GameScene(BaseScene):
                 for point in self.game.move_choice:
                     for cell in self.game.board.get_cells_at(point):
                         cell.selected = True
-            self.resources['menu'] = self._new_resource()
-            pygame.time.set_timer(pygame.USEREVENT + 1, 500)
+            # self.resources['menu'] = self._new_resource()
+            # pygame.time.set_timer(pygame.USEREVENT + 1, 500)
             self.game.player.sprite.sprite.image.fill((255, 165, 0))
 
     def update(self):
@@ -270,6 +275,8 @@ class GameScene(BaseScene):
 
         for resource_instance, post_update_cb, _ in self._traverse_resource():
             result = resource_instance.update()
+            # TODO: We shoudl move this post-update to the update callback per
+            # se.
             if post_update_cb:
                 post_update_cb(result)
 
